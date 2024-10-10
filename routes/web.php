@@ -16,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('admin', function () {
+    return view('layouts.admin');
+});
+Route::get('product', function () {
+    return view('admin.products.table');
+})->name("product");
+Route::get('form', function () {
+    return view('admin.products.form');
+})->name("form");
+
