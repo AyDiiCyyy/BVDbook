@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Requests\StoreVoucherRequest;
-use App\Http\Requests\Requests\UpdateVoucherRequest;
+use App\Http\Requests\Voucher\StoreVoucherRequest;
+use App\Http\Requests\Voucher\UpdateVoucherRequest;
 use App\Models\Voucher;
 use Exception;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class VoucherController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->input('status', 'active'); 
+        $status = $request->input('status', 'active');
 
         if ($status == 'deleted') {
             // Lấy các voucher đã bị xóa mềm
