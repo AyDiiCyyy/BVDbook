@@ -26,6 +26,27 @@
 
                     </ul>
                 </li>
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link active"> <i class="nav-icon fas fa-ticket-alt"></i>
+                        <p>
+                            Vouchers
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a href="{{ route('vouchers.index') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item"> <a href="{{ route('vouchers.create') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Thêm mới</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
 
             </ul> <!--end::Sidebar Menu-->
         </nav>
