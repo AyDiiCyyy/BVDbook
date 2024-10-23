@@ -39,7 +39,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
-                                            <input type="text" class="form-control" name="name" value="">
+                                            <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                                             @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -48,7 +48,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Slug sản phẩm</label>
-                                            <input type="text" class="form-control" name="slug">
+                                            <input type="text" class="form-control" name="slug" value="{{ old('slug') }}">
                                             @error('slug')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Giá sản phẩm</label>
-                                            <input type="number" class="form-control" name="price">
+                                            <input type="number" class="form-control" name="price" value="{{ old('price') }}">
                                             @error('price')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Giảm giá</label>
-                                            <input type="number" class="form-control" name="sale">
+                                            <input type="number" class="form-control" name="sale" value="{{ old('sale') }}">
                                             @error('sale')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -75,7 +75,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả ngắn</label>
-                                            <input type="text" class="form-control" name="short_description">
+                                            <input type="text" class="form-control" name="short_description" value="{{ old('short_description') }}">
                                         </div>
                                         @error('short_description')
                                             <div class="alert alert-danger mt-2">
@@ -84,7 +84,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control" name="long_description" cols="" rows=""></textarea>
+                                            <textarea class="form-control" name="long_description" cols="" rows="" >{{ old('long_description') }}</textarea>
                                         </div>
                                         @error('long_description')
                                             <div class="alert alert-danger mt-2">
@@ -93,7 +93,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Tác giả</label>
-                                            <input type="text" class="form-control" name="author">
+                                            <input type="text" class="form-control" name="author" value="{{ old('author') }}" >
                                         </div>
                                         @error('author')
                                             <div class="alert alert-danger mt-2">
@@ -102,7 +102,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Nhà xuất bản</label>
-                                            <input type="text" class="form-control" name="publisher">
+                                            <input type="text" class="form-control" name="publisher" {{ old('publisher') }}> 
                                         </div>
                                         @error('publisher')
                                             <div class="alert alert-danger mt-2">
@@ -125,7 +125,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Năm xuất bản</label>
-                                            <input type="number" class="form-control" name="released">
+                                            <input type="number" class="form-control" name="released" value="{{ old('released') }}">
                                         </div>
                                         @error('released')
                                             <div class="alert alert-danger mt-2">
@@ -134,7 +134,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Cân nặng</label>
-                                            <input type="text" class="form-control" name="weight">
+                                            <input type="text" class="form-control" name="weight"  value="{{ old('weight') }}" >
                                         </div>
                                         @error('weight')
                                             <div class="alert alert-danger mt-2">
@@ -143,7 +143,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Số trang</label>
-                                            <input type="number" class="form-control" name="page">
+                                            <input type="number" class="form-control" name="page"  value="{{ old('page') }}">
                                         </div>
                                          @error('page')
                                             <div class="alert alert-danger mt-2">
@@ -152,7 +152,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Số lượng</label>
-                                            <input type="number" class="form-control" name="quantity">
+                                            <input type="number" class="form-control" name="quantity"  value="{{ old('quantity') }}">
                                         </div>
                                         @error('page')
                                             <div class="alert alert-danger mt-2">
