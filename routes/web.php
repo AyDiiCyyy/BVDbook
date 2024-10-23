@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,16 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('client.layouts');
-});
-Route::get('admin', function () {
-    return view('layouts.admin');
-});
-Route::get('product', function () {
-    return view('admin.products.table');
-})->name("product");
-Route::get('form', function () {
-    return view('admin.products.form');
-})->name("form");
 
+Route::prefix('admin')->as('admin.')->group(function(){
+    Route::prefix('category')->as('category.')->group(function (){
+
+    });
+    Route::prefix('product')->as('product.')->controller(ProductController::class)->group(function (){
+        Route::get('/','index')->name('index');
+        Route::get('create','create')->name('create');
+        Route::post('/','store')->name('store');
+        Route::post('/change-best','changeBest')->name('changeBest');
+        Route::post('/change-active','changeActive')->name('changeActive');
+        Route::post('/change-order','changeOrder')->name('changeOrder');
+    });
+
+});
