@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,16 +14,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('client.layouts');
-});
-Route::get('admin', function () {
-    return view('layouts.admin');
-});
-Route::get('product', function () {
-    return view('admin.products.table');
-})->name("product");
-Route::get('form', function () {
-    return view('admin.products.form');
-})->name("form");
 
+Route::prefix('admin')->as('admin.')->group(function(){
+    // Route::get('/', DashboardController::class,'index')->name('dashboard');
+    Route::prefix('category')->as('category.')->group(function (){
+    });
+    Route::prefix('product')->as('product.')->group(function (){
+        Route::get('/',[ProductController::class,'index'])->name('index');
+        Route::get('/create',[ProductController::class,'create'])->name('create');
+        Route::post('/create',[ProductController::class,'store'])->name('store');
+        Route::get('/edit/{slug}',[ProductController::class,'edit'])->name('edit');
+        Route::get('/edit/{slug}',[ProductController::class,'update'])->name('update');
+        Route::delete('/destroy',[ProductController::class,'destroy'])->name('destroy');
+    });
+});
