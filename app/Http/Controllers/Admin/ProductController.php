@@ -22,6 +22,7 @@ class ProductController extends Controller
     }
     public function store(StoreProductRequest $request){
         $data = $request->all();
+        dd($data);
         Product::create($data);
         return redirect()->route('admin.products.index')->with('message','Create successfully');
     }

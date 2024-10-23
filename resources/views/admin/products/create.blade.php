@@ -39,7 +39,7 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
-                                            <input type="text" class="form-control" name="name">
+                                            <input type="text" class="form-control" name="name" value="">
                                             @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -173,7 +173,7 @@
                                         @enderror
                                         <div class="mb-3">
                                             <label class="form-label">Ảnh sản phẩm</label>
-                                            <input type="file" class="form-control" name="product_image">
+                                            <input type="file" class="form-control" name="product_image[]">
                                         </div>
                                         @error('product_image')
                                             <div class="alert alert-danger mt-2">

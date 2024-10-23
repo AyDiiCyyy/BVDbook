@@ -40,7 +40,7 @@ class StoreProductRequest extends FormRequest
             "page" => "required|integer|min:1|max:10000",
             "quantity" => "required|integer|min:0|max:100000",
             "categories" => "required",
-            "product" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:2048",
+            "product_image" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:2048",
 
 
             // "order" => "nullable|numeric",
