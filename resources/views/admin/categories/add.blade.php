@@ -17,45 +17,57 @@
     <div class="app-content">
         <div class="container-fluid">
             <div class="row g-4">
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card card-primary card-outline mb-4">
                         <form method="POST" action="{{ route('admin.category.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Tên danh mục: </label>
+                                    <input type="text" class="form-control" name="name" onkeyup="ChangeToSlug()" id="slug" value="{{ old('name') }}">
+                                    @error('name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Slug danh mục: </label>
+                                    <input type="text" class="form-control" name="slug" id="convert_slug" value="{{ old('slug') }}">
+                                    @error('slug')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label">Ảnh danh mục: </label>
+                                    <input type="file" class="form-control" name="image">
+                                    @error('image')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                
                                 <div class="mb-3">
                                     <label class="form-label">Danh mục cha: </label>
                                     <select name="parent_id" id="parent_category" class="form-select">
                                         <option value="">Chọn danh mục cha</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}" 
-                                                {{ request('parent_id') == $category->id ? 'selected' : '' }}>
+                                                {{ old('parent_id') == $category->id ? 'selected' : '' }}>
                                                 {{ $category->name }}
                                             </option>
                                             @if ($category->childrenRecursive->isNotEmpty())
                                                 @include('admin.components.child-category', [
                                                     'children' => $category->childrenRecursive,
                                                     'depth' => 1,
-                                                    'selectedParentId' => request('parent_id')
+                                                    'selectedParentId' => old('parent_id')
                                                 ])
                                             @endif
                                         @endforeach
                                     </select>
+                                    @error('parent_id')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label">Tên danh mục: </label>
-                                    <input type="text" class="form-control" name="name" onkeyup="ChangeToSlug()" id="slug">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Slug danh mục: </label>
-                                    <input type="text" class="form-control" name="slug" id="convert_slug">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Ảnh danh mục: </label>
-                                    <input type="file" class="form-control" name="image">
-                                </div>
-
-                            </div>
                             <div class="card-footer">
                                 <button type="submit" class="btn btn-primary">Thêm mới</button>
                             </div>

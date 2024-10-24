@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,42 +47,38 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        try {
-            DB::beginTransaction();
-    
-            // Xử lý hình ảnh
-            $image = null;
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('uploads/categories', $fileName, 'public');
-                $image = $filePath;
-            }
-    
-            // Lưu danh mục
-            $category = Category::create([
-                'name' => $request->name,
-                'slug' => $request->slug,
-                'parent_id' => $request->parent_id ?? 0,
-                'image' => $image,
-            ]);
-    
-            // Commit the transaction
-            DB::commit();
-    
-            // Luôn trả về trang index với thông báo thành công
-            return redirect()->route('admin.category.index')->with('status_succeed', "Thêm danh mục thành công");
-        } catch (\Exception $e) {
-            // Rollback nếu có lỗi
-            DB::rollBack();
-    
-            // Log lỗi và trả về thông báo lỗi
-            Log::error($e->getMessage());
-            return back()->with(['status_failed' => $e->getMessage()]);
+    public function store(CategoryRequest $request)
+{
+    try {
+        DB::beginTransaction();
+
+        // Xử lý hình ảnh
+        $image = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('uploads/categories', $fileName, 'public');
+            $image = $filePath;
         }
+
+        // Lưu danh mục
+        $category = Category::create([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'parent_id' => $request->parent_id ?? 0,
+            'image' => $image,
+        ]);
+
+        // Commit the transaction
+        DB::commit();
+
+        return redirect()->route('admin.category.index')->with('status_succeed', "Thêm danh mục thành công");
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error($e->getMessage());
+        return back()->with(['status_failed' => $e->getMessage()]);
     }
+}
     
     
 
