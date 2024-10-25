@@ -21,11 +21,13 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
+         // Lấy thông tin sản phẩm hiện tại
+        $product = $this->currentProduct;
         return [
             "name" => "required|min:1|max:250",
             "slug" => [
                 'required',
-                Rule::unique('products', 'slug')->whereNull('deleted_at'),
+                Rule::unique('products', 'slug')->whereNull('deleted_at')->ignore($this->route('id')),
             ],
             "price" => "required|numeric|min:0|max:99999999.99",
             "sale" => "nullable|numeric|min:0|max:99999999.99|lt:price",
@@ -93,7 +95,7 @@ class UpdateProductRequest extends FormRequest
             "publisher.min" => "Nhà xuất lớn hơn 5 kí tự.",
             "publisher.max" => "Tên nhà xuất bản không được vượt quá 250 ký tự.",
             //Image 
-            "image.mimes" => "Ảnh đại diện phải là định dạng jpeg,jpg,png,svg,webp <= 2MB",
+            "image.mimes" => "Ảnh đại diện phải là định dạng jpeg,jpg,png,svg,webp ",
             "image.max" => "Kích cỡ ảnh đại diện phải nhỏ hơn < 2MB",
             //Released
             "released.required" => "Năm phát hành bắt buộc nhập.",
@@ -116,7 +118,7 @@ class UpdateProductRequest extends FormRequest
             //Categories
             "categories.required" => "Phải chọn ít nhất 1 danh mục.",
             //Product_image
-            "product_image.mimes" => "Ảnh sản phẩm phải là định dạng jpeg,jpg,png,svg,webp <= 2MB",
+            "product_image.mimes" => "Ảnh sản phẩm phải là định dạng jpeg,jpg,png,svg,webp ",
             "product_image.max" => "Kích cỡ ảnh sản phẩm phải nhỏ hơn < 2MB",
            
           
