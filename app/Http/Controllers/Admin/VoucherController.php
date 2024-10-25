@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Voucher\StoreVoucherRequest;
 use App\Http\Requests\Voucher\UpdateVoucherRequest;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -26,12 +27,15 @@ class VoucherController extends Controller
         $currentDate = now();
 
         foreach ($data['vouchers'] as $voucher) {
-            if ($voucher->start > $currentDate) {
+            $startDate = Carbon::parse($voucher->start);
+            $endDate = Carbon::parse($voucher->end);
+
+            if ($startDate->greaterThan($currentDate)) {
                 // Nếu ngày bắt đầu lớn hơn ngày hiện tại, voucher sắp ra mắt
                 $voucher->isUpcoming = true;
                 $voucher->isExpired = false;
-            } elseif ($voucher->end < $currentDate) {
-                // Nếu ngày kết thúc nhỏ hơn ngày hiện tại, voucher đã hết hạn
+            } elseif ($endDate->endOfDay()->lessThan($currentDate)) {
+                // Nếu ngày kết thúc (đến cuối ngày) nhỏ hơn ngày hiện tại, voucher đã hết hạn
                 $voucher->isExpired = true;
                 $voucher->isUpcoming = false;
             } else {
@@ -39,8 +43,7 @@ class VoucherController extends Controller
                 $voucher->isExpired = false;
                 $voucher->isUpcoming = false;
             }
-        }
-        $data['status'] = $status;
+        }        $data['status'] = $status;
 
         return view('admin.vouchers.index', $data);
     }
