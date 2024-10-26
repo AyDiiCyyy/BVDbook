@@ -21,11 +21,10 @@ Route::prefix('admin')->as('admin.')->group(function(){
     });
     Route::prefix('product')->as('product.')->controller(ProductController::class)->group(function (){
         Route::get('/','index')->name('index');
-        Route::get('create','create')->name('create');
-        Route::post('/','store')->name('store');
-        Route::post('/change-best','changeBest')->name('changeBest');
-        Route::post('/change-active','changeActive')->name('changeActive');
-        Route::post('/change-order','changeOrder')->name('changeOrder');
+        Route::post('/changeBest', 'changeBest')->name('changeBest');
+        Route::post('/changeActive', 'changeActive')->name('changeActive');
+        Route::post('changeOrder', 'changeOrder')->name('changeOrder');
     });
+    
 
 });

@@ -10,11 +10,10 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    const PAGINATION = 1;
+    const PAGINATION = 2;
     public function index(){
-        // $categories = Category::query()->where('parent_id',0)->get();
         $products = Product::query()->orderBy('order')->paginate(self::PAGINATION);
-        return view('admin.products.index',compact('products'));
+        return view('admin/products/index', compact('products'));
     }
     public function changeBest(Request $request){
         $item = Product::find($request->id);
