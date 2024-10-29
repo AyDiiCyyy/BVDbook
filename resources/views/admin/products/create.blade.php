@@ -2,8 +2,8 @@
 @section('title')
 @endsection
 @section('css')
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
-{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/10.23.0/css/jquery.fileupload.css" rel="stylesheet" /> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/10.23.0/css/jquery.fileupload.css" rel="stylesheet" /> --}}
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -41,8 +41,27 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
-                                            <input type="text" class="form-control" name="name">
+                                            <input type="text" class="form-control" name="name" id="slug"
+                                                onkeyup="ChangeToSlug()">
                                             @error('name')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Slug</label>
+                                            <input type="text" class="form-control" name="slug" id="convert_slug">
+                                            @error('slug')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Mã sản phẩm</label>
+                                            <input type="text" class="form-control" name="sku">
+                                            @error('sku')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
                                                 </div>
@@ -74,14 +93,7 @@
                                             <label class="form-label">Mô tả dài</label>
                                             <textarea class="form-control" name="long_description" cols="" rows=""></textarea>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Tác giả</label>
-                                            <input type="text" class="form-control" name="author">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nhà xuất bản</label>
-                                            <input type="text" class="form-control" name="publisher">
-                                        </div>
+
                                         <div class="mb-3">
                                             <label class="form-label">Ảnh đại diện</label>
                                             <input type="file" class="form-control" name="image">
@@ -92,10 +104,27 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Danh mục</label>
-                                            <select class="form-control" name="parent_id[]" id="categories" multiple>
-                                                <option value="1">danh mục 1</option>
-                                                <option value="2">danh mục 2</option>
+                                            <select class="form-control" name="categories[]" id="categories" multiple>
+                                                @foreach ($categories as $category)
+                                                    <option value="{{ $category->id }}" @selected(in_array($category->id, old('categories', [])))>
+                                                        {{ $category->name }}
+                                                    </option>
+                                                    @if (count($category->childrenRecursive) > 0)
+                                                        @include('admin.components.child-category', [
+                                                            'children' => $category->childrenRecursive,
+                                                            'depth' => 1,
+                                                        ])
+                                                    @endif
+                                                @endforeach
                                             </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Tác giả</label>
+                                            <input type="text" class="form-control" name="author">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Nhà xuất bản</label>
+                                            <input type="text" class="form-control" name="publisher">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Năm xuất bản</label>
@@ -103,7 +132,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Cân nặng</label>
-                                            <input type="text" class="form-control" name="weight">
+                                            <input type="number" class="form-control" name="weight">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Số trang</label>
@@ -113,10 +142,43 @@
                                             <label class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity">
                                         </div>
-                                        
                                         <div class="mb-3">
-                                            <label class="form-label">Ảnh sản phẩm</label>
-                                            <input type="file" class="form-control" id="fileupload" name="product_image[]" multiple>
+                                            <label class="form-label">Số thứ tự</label>
+                                            <input type="number" class="form-control" name="order" value="{{old('order',0)}}" min="0">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="mb-3 form-check">
+                                                    <label class="form-check-label">Nổi bật</label>
+                                                    <input type="checkbox" class="form-check-input" name="best" checked value="1">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="mb-3 form-check">
+                                                    <label class="form-check-label">Trạng thái</label>
+                                                    <input type="checkbox" class="form-check-input" name="active" checked value="1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Ảnh liên quan</label>
+                                            <input type="file" class="form-control" id="fileupload"
+                                                name="product_image[]" multiple>
+                                            @error('product_image')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            @foreach ($errors->get('product_image.*') as $messages)
+                                                @foreach ($messages as $message)
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @endforeach
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div> <!--end::Body-->
@@ -134,24 +196,48 @@
     </main>
 @endsection
 @section('js')
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script> 
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.fileupload/9.22.0/js/jquery.fileupload.min.js"></script> --}}
-<script>
-    $(document).ready(function() {
-        $('#categories').select2({
-            placeholder: "Chọn danh mục",
-            allowClear: true
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#categories').select2({
+                placeholder: "Chọn danh mục",
+                allowClear: true
+            });
         });
+    </script>
 
-        // $('#fileupload').fileupload({
-        //     url: '/upload',
-        //     dataType: 'json',
-        //     done: function(e, data) {
-        //         console.log('Tải lên thành công: ' + data.result);
-        //     }
-        // });
-    });
 
-</script>
+    <script>
+        function ChangeToSlug() {
+            var slug;
+
+            //Lấy text từ thẻ input title 
+            slug = document.getElementById("slug").value;
+            slug = slug.toLowerCase();
+            // alert(slug);
+            //Đổi ký tự có dấu thành không dấu
+            slug = slug.replace(/á|à|ả|ạ|ã|ă|ắ|ằ|ẳ|ẵ|ặ|â|ấ|ầ|ẩ|ẫ|ậ/gi, 'a');
+            slug = slug.replace(/é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ/gi, 'e');
+            slug = slug.replace(/i|í|ì|ỉ|ĩ|ị/gi, 'i');
+            slug = slug.replace(/ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ/gi, 'o');
+            slug = slug.replace(/ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự/gi, 'u');
+            slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
+            slug = slug.replace(/đ/gi, 'd');
+            //Xóa các ký tự đặt biệt
+            slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+            //Đổi khoảng trắng thành ký tự gạch ngang
+            slug = slug.replace(/ /gi, "-");
+            //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
+            //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
+            slug = slug.replace(/\-\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-\-/gi, '-');
+            slug = slug.replace(/\-\-/gi, '-');
+            //Xóa các ký tự gạch ngang ở đầu và cuối
+            slug = '@' + slug + '@';
+            slug = slug.replace(/\@\-|\-\@|\@/gi, '');
+            //In slug ra textbox có id “slug”
+            document.getElementById('convert_slug').value = slug;
+        }
+    </script>
 @endsection

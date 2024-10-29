@@ -59,8 +59,8 @@
                                 <td>{{ $product->name }}</td>
                                 <td><img src="{{ asset('storage') . $product->image }}" alt="" srcset=""
                                         height="100px" width="100px"></td>
-                                <td>{{ number_format($product->price, 3, ',', ',') }} VNĐ</td>
-                                <td>{{ number_format($product->sale, 3, ',', ',') }} VNĐ</td>
+                                <td>{{ number_format($product->price) }} VNĐ</td>
+                                <td>{{ number_format($product->sale) }} VNĐ</td>
                                 <td>
                                     <ul class="list-unstyled">
                                         @foreach ($product->ProductCategories as $item)
@@ -124,8 +124,8 @@
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script src="{{ asset('js/admin/change.js') }}"></script>
 @endsection
