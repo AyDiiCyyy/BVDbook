@@ -20,7 +20,7 @@
             <div class="container-fluid"> <!--begin::Row-->
                 <div class="row">
                     <div class="col-2">
-                        <button class="btn btn-success">Thêm mới</button>
+                        <a href="{{route('admin.product.create')}}"><button class="btn btn-success">Thêm mới</button></a>
                     </div>
                     <div class="col-10 d-flex justify-content-end align-items-center">
                         <div class="form-group d-flex">
@@ -56,7 +56,7 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $product->name }}</td>
-                            <td><img src="{{ asset('storage') . $product->image }}" alt="" srcset=""
+                            <td><img src="{{asset($product->image)}}" alt=""
                                     height="100px" width="100px"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
@@ -90,7 +90,7 @@
                             </td>                            
 
                             <td>
-                               <input type="number" min="0" name="order" class="form-control changeOrder" style="width: 67px"
+                               <input type="number" min="1" name="order" class="form-control changeOrder" style="width: 67px"
                                data-id="{{$product->id}}" data-url="{{route('admin.product.changeOrder')}}" value="{{$product->order}}">
                             </td>
                             
@@ -104,6 +104,9 @@
 
                 </tbody>
             </table>
+            <div class="d-flex justify-content-center align-items-center p-5">
+                {{ $products->links('pagination::bootstrap-4') }}</div>
+        </div>
         </div> <!--end::Container-->
         </div> <!--end::App Content-->
     </main>

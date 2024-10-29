@@ -24,6 +24,8 @@ Route::prefix('admin')->as('admin.')->group(function(){
         Route::post('/changeBest', 'changeBest')->name('changeBest');
         Route::post('/changeActive', 'changeActive')->name('changeActive');
         Route::post('changeOrder', 'changeOrder')->name('changeOrder');
+        Route::get('create','create')->name('create');
+        Route::post('store','store')->name('store');
     });
     
 
