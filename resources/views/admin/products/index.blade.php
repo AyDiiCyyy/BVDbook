@@ -2,6 +2,8 @@
 @section('title')
 @endsection
 @section('css')
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -18,20 +20,52 @@
         <div class="app-content"> <!--begin::Container-->
 
             <div class="container-fluid"> <!--begin::Row-->
+                <div>
+                    <h2>Tìm kiếm</h2>
+                    <form action="">
+                        <div class="row">
+                            <div class="col-3">
+                                <label class="form-label">Tên</label>
+                                <input type="text" name="name" placeholder="Nhập tên" class="form-control">
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label">Sắp xếp</label>
+                                <select name="order_with" id="" class="form-control">
+                                    <option selected value="">--Sắp xếp theo--</option>
+                                    <option value="date_asc">Ngày tạo tăng dần</option>
+                                    <option value="date_desc">Ngày tạo giảm dần</option>
+                                    <option value="price_asc">Giá tăng dần</option>
+                                    <option value="price_desc">Giá giảm dần</option>
+                                </select>
+                            </div>
+                            <div class="col-2">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="active" class="form-control">
+                                    <option value="hot">Sản phẩm nổi bật</option>
+                                    <option value="no_hot">Sản phẩm không nổi bật</option>
+                                    <option value="active">Sản phẩm hiển thị</option>
+                                    <option value="no_active">Sản phẩm không hiển thị</option>
+                                </select>
+                            </div>
+                            <div class="col-2"> 
+                                <label class="form-label">Danh mục</label>
+                                <select name="categories[]" id="categories" multiple>
+                                    <option value="1">abc</option>
+                                    <option value="2">van</option>
+                                    <option value="3">vanmongmo</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+                                <button class="btn btn-danger" type="reset">Xóa trống</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
                 <div class="row">
                     <div class="col-2">
-                        <a href="{{route('admin.product.create')}}"><button class="btn btn-success">Thêm mới</button></a>
-                    </div>
-                    <div class="col-10 d-flex justify-content-end align-items-center">
-                        <div class="form-group d-flex">
-                            <input type="text" class="form-control me-2 w-auto" placeholder="Tìm kiếm">
-                            <select name="search" id="" class="form-control me-2 w-auto">
-                                <option value="">--Danh mục--</option>
-                                <option value="1">danh mục 1</option>
-                                <option value="2">danh mục 2</option>
-                            </select>
-                            <button class="btn btn-primary">Tìm kiếm</button>
-                        </div>
+                        <a href="{{ route('admin.product.create') }}"><button class="btn btn-success">Thêm mới</button></a>
                     </div>
                 </div>
 
@@ -56,15 +90,13 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $product->name }}</td>
-                            <td><img src="{{asset($product->image)}}" alt=""
-                                    height="100px" width="100px"></td>
+                            <td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
                             <td>
                                 <ul class="list-unstyled">
-                                    @foreach ($product->ProductCategories as $item   )
-                                        <li>{{$item->category->name}}</li>
-                                    
+                                    @foreach ($product->ProductCategories as $item)
+                                        <li>{{ $item->category->name }}</li>
                                     @endforeach
                                 </ul>
                             </td>
@@ -87,14 +119,15 @@
                                     {{ $product->active == 1 ? 'Hiển thị' : 'Ẩn' }}
 
                                 </button>
-                            </td>                            
+                            </td>
 
                             <td>
-                               <input type="number" min="1" name="order" class="form-control changeOrder" style="width: 67px"
-                               data-id="{{$product->id}}" data-url="{{route('admin.product.changeOrder')}}" value="{{$product->order}}">
+                                <input type="number" min="1" name="order" class="form-control changeOrder"
+                                    style="width: 67px" data-id="{{ $product->id }}"
+                                    data-url="{{ route('admin.product.changeOrder') }}" value="{{ $product->order }}">
                             </td>
-                            
-                         
+
+
                             <td>
                                 <button type="button" class="btn btn-primary btn-sm">Sửa</button>
                                 <button type="button" class="btn btn-danger btn-sm">Xóa</button>
@@ -113,9 +146,14 @@
 @endsection
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="{{asset('js/admin/change.js')}}"></script>
-    
+    <script src="{{ asset('js/admin/change.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></>
+    <script>
+        $(document).ready(function() {
+            $('#categories').select2({
+                placeholder: "Chọn danh mục",
+                allowClear: true
+            });
+        });
+    </script>
 @endsection
