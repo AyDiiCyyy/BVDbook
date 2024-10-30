@@ -68,7 +68,7 @@ class ProductController extends Controller
                 'page'=>$request->page,
                 'quantity' => $request->quantity,
                 'best' => $request->best ?? 0,
-                'active' => $request->active ?? 1,
+                'active' => $request->active ?? 0,
                 'order' => $request->order ?? 1,
     
             ];
