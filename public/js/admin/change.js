@@ -53,7 +53,7 @@ $(document).ready(function () {
         var url = input.data("url");
         var itemId = input.data("id");
         var order = input.val();
-        console.log(order);
+        
         var csrfToken = $('meta[name="csrf-token"]').attr("content");
         $.ajax({
             url: url,

@@ -28,7 +28,7 @@ trait StorageImageTrait
 
         if ($request->hasFile($fieldName)) {
             foreach ($request->file($fieldName) as $file) {
-                $path = $file->store($folderName,'public');
+                $path = $file->store($folderName, 'public');
 
                 $dataUploadTrait[] = [
                     'name' => $file->getClientOriginalName(),
