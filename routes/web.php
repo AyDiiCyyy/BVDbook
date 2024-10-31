@@ -27,3 +27,21 @@ Route::get('form', function () {
     return view('admin.products.form');
 })->name("form");
 
+Route::prefix('admin')->as('admin.')->group(function(){
+    Route::prefix('category')->as('category.')->group(function (){
+
+    });
+    Route::prefix('product')->as('product.')->controller(ProductController::class)->group(function (){
+        Route::get('/','index')->name('index');
+        Route::post('/changeBest', 'changeBest')->name('changeBest');
+        Route::post('/changeActive', 'changeActive')->name('changeActive');
+        Route::post('/changeOrder', 'changeOrder')->name('changeOrder');
+        Route::get('/create','create')->name('create');
+        Route::post('/store','store')->name('store');
+        Route::get('/edit/{id}','edit')->name('edit');
+        Route::post('/update/{id}','update')->name('update');
+        Route::delete('/destroy/{id}','destroy')->name('destroy');
+    });
+    
+
+});

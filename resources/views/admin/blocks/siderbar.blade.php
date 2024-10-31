@@ -15,14 +15,16 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a href="{{ route('admin.product.create') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Thêm mới</p>
+                            </a>
+                        </li>
                         <li class="nav-item"> <a href="{{ route('admin.product.index') }}" class="nav-link active"> <i
                                     class="nav-icon bi bi-circle"></i>
                                 <p>Danh sách</p>
-                            </a> </li>
-                        <li class="nav-item"> <a href="" class="nav-link"> <i
-                                    class="nav-icon bi bi-circle"></i>
-                                <p>Thêm mới</p>
-                            </a> </li>
+                            </a>
+                        </li>
 
                     </ul>
                 </li>
