@@ -108,13 +108,13 @@ class ProductController extends Controller
     {
         $product = Product::query()->findOrFail($id);
         $categories = Category::query()->where('parent_id', 0)->get();
-        $selectedCategories = $product->ProductCategories()->pluck('category_id')->toArray(); 
-    
-        return view('admin.products.edit', compact('product', 'categories','selectedCategories'));
+        $selectedCategories = $product->ProductCategories()->pluck('category_id')->toArray();
+
+        return view('admin.products.edit', compact('product', 'categories', 'selectedCategories'));
     }
     public function update(UpdateProductRequest $request, $id)
     {
-        
+
         $product = Product::query()->findOrFail($id);
         try {
 
@@ -142,26 +142,26 @@ class ProductController extends Controller
 
             $data['image'] = StorageImageTrait::storageTraitUpload($request, 'image', 'products')['path'] ?? $product->image;
             // dd($data);
-            if($request->hasFile('image')){
+            if ($request->hasFile('image')) {
                 $path = 'public/products/' . basename($product->image);
-                if(Storage::exists($path)){
+                if (Storage::exists($path)) {
                     Storage::delete($path);
-                } 
+                }
             }
             $product->update($data);
             //Handle Category 
-           
+
             if ($request->categories) {
-                 //lấy giá trị cột 'category_id' mà sản phẩm đấy có  biến thành mảng
-                $getCategoryID = $product->ProductCategories()->pluck('category_id')->toArray();  
+                //lấy giá trị cột 'category_id' mà sản phẩm đấy có  biến thành mảng
+                $getCategoryID = $product->ProductCategories()->pluck('category_id')->toArray();
                 //array_diff so sánh 2 mảng nó trả về cái khác nhau
-                 $categoriesToDelete = array_diff(  $getCategoryID, $request->categories);
+                $categoriesToDelete = array_diff($getCategoryID, $request->categories);
                 // Xóa mềm các danh mục không có trong request
-                    //WhereIN ('column',[Value 1,....]);
-                    if (!empty($categoriesToDelete)) {
-                        $product->ProductCategories()->whereIn('category_id', $categoriesToDelete)->delete();
-                    }
-                
+                //WhereIN ('column',[Value 1,....]);
+                if (!empty($categoriesToDelete)) {
+                    $product->ProductCategories()->whereIn('category_id', $categoriesToDelete)->delete();
+                }
+
                 foreach ($request->categories as $category) {
                     //Lấy những danh mục trong CategoryProduct 'category_id' bị xóa mềm 
                     $trashedCategory = $product->ProductCategories()->withTrashed()->where('category_id', $category)->first();
@@ -188,7 +188,7 @@ class ProductController extends Controller
                         //Xóa cứng  
                         $path = 'public/products/' . basename($gallery->image);
                         // dd($path);
-                        if($gallery && Storage::exists($path)){
+                        if ($gallery && Storage::exists($path)) {
                             Storage::delete($path);
                         }
                         $gallery->forceDelete();
@@ -211,9 +211,32 @@ class ProductController extends Controller
     }
     public function destroy($id)
     {
-        $product = Product::query()->findOrFail($id);
-        CategoryProduct::where('product_id', $product->id)->delete();
-        $product->delete();
-        return redirect()->route('admin.product.index')->with('status_succeed', 'Xóa sản phẩm thành công');
+        try {
+            DB::beginTransaction();
+            $product = Product::query()->findOrFail($id);
+            $product->ProductCategories()->forceDelete();
+            foreach ($product->galleries as $gallery) {
+                //Xóa cứng  
+                $path = 'public/products/' . basename($gallery->image);
+                // dd($path);
+                if ($gallery && Storage::exists($path)) {
+                    Storage::delete($path);
+                }
+                $gallery->forceDelete();
+            }
+            $product->delete();
+            DB::commit();
+            return redirect()->route('admin.product.index')->with('status_succeed', 'Xóa sản phẩm thành công');
+           
+        }catch (\Exception $e) {
+            // Roll back the transaction if anything fails
+            DB::rollBack();
+
+            // Log the error or display an error message
+            Log::error($e->getMessage());
+            return back()->with(['status_failed' => $e->getMessage()]);
+        }
+
+        
     }
 }

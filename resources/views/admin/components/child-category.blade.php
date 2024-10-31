@@ -1,7 +1,4 @@
 @foreach ($children as $child)
-    <option value="{{ $child->id }}" @selected($child->id == $selectedId)>
-        {{ str_repeat('-', $depth) }} {{ $child->name }}
-    </option>
     @if (isset($cate->id))
         @if ($child->id != $cate->id)
             <option  value="{{ $child->id }}" 
