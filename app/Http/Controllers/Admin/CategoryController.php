@@ -96,7 +96,18 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $category = Category::findOrFail($id);
+    
+        $excludedCategories = $category->descendants()->pluck('id')->toArray();
+        $excludedCategories[] = $category->id;
+    
+        $categories = Category::with('childrenRecursive')
+            ->whereNotIn('id', $excludedCategories)
+            ->where('parent_id', 0)
+            ->get();
+    
+        $title = "Sửa danh mục";
+        return view('admin.categories.edit', compact('title', 'categories', 'category'));
     }
 
     /**
@@ -104,8 +115,54 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+    
+            // Tìm danh mục
+            $category = Category::findOrFail($id);
+    
+            // Kiểm tra nếu danh mục được chọn làm cha là một trong các danh mục con của danh mục hiện tại
+            if ($request->parent_id && $category->descendants()->pluck('id')->contains((int)$request->parent_id)) {
+                return back()->with(['status_failed' => 'Không thể chọn danh mục con làm danh mục cha.']);
+            }
+    
+            // Xử lý hình ảnh
+            $image = $category->image; // Giữ nguyên ảnh cũ
+            if ($request->hasFile('image')) {
+                // Xóa ảnh cũ nếu có
+                if ($image && file_exists(storage_path('app/public/' . $image))) {
+                    // Xóa file trong thư mục
+                    unlink(storage_path('app/public/' . $image));
+                }
+                $file = $request->file('image');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('uploads/categories', $fileName, 'public'); // Lưu ảnh mới
+                $image = $filePath; // Cập nhật đường dẫn ảnh mới
+            }
+    
+            // Cập nhật danh mục
+            $category->update([
+                'name' => $request->name,
+                'slug' => $request->slug,
+                'parent_id' => $request->parent_id ?? 0,
+                'image' => $image,
+            ]);
+    
+            // Commit the transaction
+            DB::commit();
+    
+            return redirect()->route('admin.category.index')->with('status_succeed', "Cập nhật danh mục thành công");
+        } catch (\Exception $e) {
+            // Rollback nếu có lỗi
+            DB::rollBack();
+    
+            // Log lỗi và trả về thông báo lỗi
+            Log::error($e->getMessage());
+            return back()->with(['status_failed' => 'Có lỗi xảy ra. Vui lòng thử lại.']);
+        }
     }
+    
+    
 
     /**
      * Remove the specified resource from storage.
