@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,5 +35,19 @@ class Category extends Model
     public function childrenRecursive()
     {
         return $this->childs()->with('childrenRecursive');
+    }
+    public function descendants(): Collection
+    {
+        $descendants = new Collection(); // Sử dụng Eloquent Collection
+    
+        $getChildren = function ($category) use (&$getChildren, &$descendants) {
+            foreach ($category->childs as $child) {
+                $descendants->push($child);
+                $getChildren($child);
+            }
+        };
+    
+        $getChildren($this);
+        return $descendants;
     }
 }
