@@ -87,7 +87,7 @@
                                 </td>
                                 <td>{{ $category->slug }}</td>
                                 <td>
-                                    {{ $category->parent ? $category->parent->name : 'Không có' }}
+                                    {{ $category->parent ? $category->parent->name : 'Danh mục chính' }}
                                 </td>
 
                                 <td>

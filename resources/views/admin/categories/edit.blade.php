@@ -32,7 +32,6 @@
                                                 {{ $category->parent_id == $item->id ? 'selected' : '' }}>
                                                 {{ $item->name }}
                                             </option>
-                        
                                             @if ($item->childrenRecursive->isNotEmpty())
                                                 @include('admin.components.child-category', [
                                                     'children' => $item->childrenRecursive,
@@ -42,16 +41,25 @@
                                             @endif
                                         @endforeach
                                     </select>
+                                    @error('parent_id')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                         
                                 <div class="mb-3">
                                     <label class="form-label">Tên danh mục: </label>
-                                    <input type="text" class="form-control" name="name" value="{{ $category->name }}" onkeyup="ChangeToSlug()" id="slug">
+                                    <input type="text" class="form-control" name="name" value="{{ old('name', $category->name) }}" onkeyup="ChangeToSlug()" id="slug">
+                                    @error('name')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                         
                                 <div class="mb-3">
                                     <label class="form-label">Slug danh mục: </label>
-<input type="text" class="form-control" name="slug" value="{{ $category->slug }}" id="convert_slug">
+                                    <input type="text" class="form-control" name="slug" value="{{ old('slug', $category->slug) }}" id="convert_slug">
+                                    @error('slug')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                         
                                 <div class="mb-3">
@@ -60,6 +68,9 @@
                                     @if($category->image)
                                         <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" class="img-fluid mt-2" style="max-height: 150px;">
                                     @endif
+                                    @error('image')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="card-footer">
