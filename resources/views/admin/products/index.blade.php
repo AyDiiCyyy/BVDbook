@@ -100,7 +100,7 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $product->name }}</td>
-                            <td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
+                            <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow" width="100" height="80"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
                             <td>
