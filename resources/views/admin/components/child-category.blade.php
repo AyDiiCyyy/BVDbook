@@ -24,31 +24,3 @@
         ])
     @endif
 @endforeach
-
-{{-- cateData là dữ liệu từ thẻ select bên form tìm kiếm đc truyền qua request có thể là null hoặc có dữ liệu --}}
-
-
-{{-- @foreach ($children as $child)
-    @php
-        $isSelected = isset($selectedCategories) && in_array($child->id, $selectedCategories);
-    @endphp
-
-    @if (isset($cate) && $child->id != $cate->id)
-        <option {{ $isSelected ? 'selected' : '' }} value="{{ $child->id }}">
-            {{ str_repeat('-', $depth) }} {{ $child->name }}
-        </option>
-    @elseif(!isset($cate))
-        <option {{ $isSelected ? 'selected' : '' }} value="{{ $child->id }}">
-            {{ str_repeat('-', $depth) }} {{ $child->name }}
-        </option>
-    @endif
-
-    @if (count($child->childrenRecursive) > 0)
-        @include('admin.components.child-category', [
-            'children' => $child->childrenRecursive,
-            'depth' => $depth + 1,
-            'selectedCategories' => $selectedCategories,
-        ])
-    @endif
-    
-@endforeach --}}
