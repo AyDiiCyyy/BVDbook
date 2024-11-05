@@ -45,7 +45,7 @@
                                     <option value="hot" @selected($request->active == 'hot')>Sản phẩm nổi bật</option>
                                     <option value="no_hot" @selected($request->active == 'no_hot')>Sản phẩm không nổi bật</option>
                                     <option value="active" @selected($request->active == 'active')>Sản phẩm hiển thị</option>
-<option value="no_active" @selected($request->active == 'no_active')>Sản phẩm không hiển thị</option>
+                                    <option value="no_active" @selected($request->active == 'no_active')>Sản phẩm không hiển thị</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -157,7 +157,7 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/admin/change.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#categories').select2({
