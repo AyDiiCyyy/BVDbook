@@ -3,7 +3,6 @@
 
 
 use App\Http\Controllers\Admin\CategoryController;
-use App\Models\Category;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VoucherController;
 use Illuminate\Support\Facades\Route;
