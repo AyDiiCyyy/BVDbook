@@ -51,16 +51,16 @@
                             <div class="col-md-3">
                                 <label class="form-label">Danh mục</label>
                                 <select class="form-select" name="categories[]" id="categories" multiple>
-                                    @foreach ($listCategory as $category )
-                                        <option value="{{$category->id}}" @selected(in_array($category->id,$request->categories ?? []))>{{$category->name}}</option>      
-                                        @if (count($category->childrenRecursive)>0)
-                                            @include('admin.components.child-category',
-                                            [
-                                                'children'=>$category->childrenRecursive,
-                                                'depth'=>1,
-                                                'cateData'=>$request->categories
+                                    @foreach ($listCategory as $category)
+                                        <option value="{{ $category->id }}" @selected(in_array($category->id, $request->categories ?? []))>
+                                            {{ $category->name }}</option>
+                                        @if (count($category->childrenRecursive) > 0)
+                                            @include('admin.components.child-category', [
+                                                'children' => $category->childrenRecursive,
+                                                'depth' => 1,
+                                                'cateData' => $request->categories,
                                             ])
-                                        @endif                                  
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -81,7 +81,7 @@
 
             </div>
             <table class="table table-striped">
-                <thead>
+                <thead class="text-center align-middle">
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Tên sản phẩm</th>
@@ -95,12 +95,12 @@
                         <th scope="col">Hành động</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-center align-middle">
                     @foreach ($products as $key => $product)
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $product->name }}</td>
-<td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
+                            <td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
                             <td>
@@ -138,10 +138,16 @@
                             </td>
 
 
-                            <td>
-                                <button type="button" class="btn btn-primary btn-sm">Sửa</button>
-                                <button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                            <td class="text-center align-middle">
+                                <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
+                                <form action="{{ route('admin.product.destroy', $product->id) }}" method="post" class="d-inline-block">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button onclick="return confirm('Bạn có muốn xóa không')" type="submit" class="btn btn-danger">Xóa</button>
+                                </form>
                             </td>
+                            
+
                         </tr>
                     @endforeach
 
