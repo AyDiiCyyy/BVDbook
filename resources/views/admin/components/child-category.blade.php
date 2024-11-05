@@ -25,7 +25,7 @@
     @endif
 @endforeach
 
-
+{{-- cateData là dữ liệu từ thẻ select bên form tìm kiếm đc truyền qua request có thể là null hoặc có dữ liệu --}}
 
 
 {{-- @foreach ($children as $child)

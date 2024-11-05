@@ -12,7 +12,7 @@ $(document).ready(function () {
                 _token: csrfToken,
             },
             success: function (response) {
-                var newStatus = statusType === "active" ? response.active : response.best;
+                var newStatus = statusType === "active" ? response.active : response.best; 
                 
                 button.attr("data-status", newStatus);
                 var buttonText;

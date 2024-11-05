@@ -15,6 +15,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return view('client.layouts');
+});
+Route::get('admin', function () {
+    return view('layouts.admin');
+});
+Route::get('product', function () {
+    return view('admin.products.table');
+})->name("product");
+Route::get('form', function () {
+    return view('admin.products.form');
+})->name("form");
 
 Route::prefix('admin')->as('admin.')->group(function(){
     Route::prefix('category')->as('category.')->group(function (){
@@ -24,9 +36,12 @@ Route::prefix('admin')->as('admin.')->group(function(){
         Route::get('/','index')->name('index');
         Route::post('/changeBest', 'changeBest')->name('changeBest');
         Route::post('/changeActive', 'changeActive')->name('changeActive');
-        Route::post('changeOrder', 'changeOrder')->name('changeOrder');
-        Route::get('create','create')->name('create');
-        Route::post('store','store')->name('store');
+        Route::post('/changeOrder', 'changeOrder')->name('changeOrder');
+        Route::get('/create','create')->name('create');
+        Route::post('/store','store')->name('store');
+        Route::get('/edit/{id}','edit')->name('edit');
+        Route::post('/update/{id}','update')->name('update');
+        Route::delete('/destroy/{id}','destroy')->name('destroy');
     });
     
 

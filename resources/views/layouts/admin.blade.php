@@ -28,7 +28,8 @@
         integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous"><!-- jsvectormap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/css/jsvectormap.min.css"
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/> {{-- thông báo --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    {{-- thông báo --}}
     @yield('css')
 </head> <!--end::Head--> <!--begin::Body-->
 
@@ -112,12 +113,12 @@
             toastr.success('{{ session('status_succeed') }}', {
                 timeOut: 3000
             })
-            @elseif (session('status_failed'))
+        @elseif (session('status_failed'))
             toastr.error('{{ session('status_failed') }}', {
                 timeOut: 3000
             })
-            @endif
-        </script>
+        @endif
+    </script>
 
     @yield('js')
 </body><!--end::Body-->

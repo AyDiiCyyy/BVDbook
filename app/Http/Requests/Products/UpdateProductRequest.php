@@ -5,7 +5,7 @@ namespace App\Http\Requests\Products;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreProductRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +26,10 @@ class StoreProductRequest extends FormRequest
             "name" => "required|min:1|max:255",
             "slug" => [
                 'required',
-                Rule::unique('products', 'slug')->whereNull('deleted_at')],
+                Rule::unique('products', 'slug')->whereNull('deleted_at')->ignore($this->route('id'))],
             "sku" => [
                 'required',
-                Rule::unique('products', 'sku')->whereNull('deleted_at')],
+                Rule::unique('products', 'sku')->whereNull('deleted_at')->ignore($this->route('id'))],
             "price" => "required|min:0|max:99999999,99|numeric",            
             "sale" => "nullable|numeric|min:0|max:99999999,99|lt:price",
             "image" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:2048",
@@ -49,7 +49,6 @@ class StoreProductRequest extends FormRequest
     public function messages()
     {
         return [
-            // Name
             "name.required" => "Tên sản phẩm bắt buộc nhập",
             "name.min" => "Tên sản phẩm phải lớn hơn 1 kí tự",
             "name.max" => "Tên sản phẩm phải nhỏ hơn 255 kí tự",
