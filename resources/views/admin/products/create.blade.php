@@ -182,14 +182,6 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Tác giả</label>
-                                            <input type="text" class="form-control" name="author">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Nhà xuất bản</label>
-                                            <input type="text" class="form-control" name="publisher">
-                                        </div>
-                                        <div class="mb-3">
                                             <label class="form-label">Năm xuất bản</label>
                                             <input type="number" class="form-control" name="released"
                                                 value="{{ old('released') }}">

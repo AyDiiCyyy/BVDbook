@@ -2,6 +2,7 @@
 @section('title')
 @endsection
 @section('css')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -18,20 +19,63 @@
         <div class="app-content"> <!--begin::Container-->
 
             <div class="container-fluid"> <!--begin::Row-->
-                <div class="row mb-3">
+                <div class="container mt-2 mb-4">
+                    <h3 class="mb-4">Tìm kiếm</h3>
+                    <form action="{{ route('admin.product.index') }}" method="GET">
+                        <div class="row g-3">
+                            <div class="col-md-2">
+                                <label class="form-label">Tên</label>
+                                <input type="text" name="name" placeholder="Nhập tên" class="form-control"
+                                    value="{{ $request->name ?? '' }}">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Sắp xếp</label>
+                                <select name="order_with" class="form-select">
+                                    <option selected value="">--Sắp xếp theo--</option>
+                                    <option value="date_asc" @selected($request->order_with == 'date_asc')>Ngày tạo tăng dần</option>
+                                    <option value="date_desc" @selected($request->order_with == 'date_desc')>Ngày tạo giảm dần</option>
+                                    <option value="price_asc" @selected($request->order_with == 'price_asc')>Giá tăng dần</option>
+                                    <option value="price_desc" @selected($request->order_with == 'price_desc')>Giá giảm dần</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Trạng thái</label>
+                                <select name="active" class="form-select">
+                                    <option selected value="">--Lọc--</option>
+                                    <option value="hot" @selected($request->active == 'hot')>Sản phẩm nổi bật</option>
+                                    <option value="no_hot" @selected($request->active == 'no_hot')>Sản phẩm không nổi bật</option>
+                                    <option value="active" @selected($request->active == 'active')>Sản phẩm hiển thị</option>
+<option value="no_active" @selected($request->active == 'no_active')>Sản phẩm không hiển thị</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Danh mục</label>
+                                <select class="form-select" name="categories[]" id="categories" multiple>
+                                    @foreach ($listCategory as $category )
+                                        <option value="{{$category->id}}" @selected(in_array($category->id,$request->categories ?? []))>{{$category->name}}</option>      
+                                        @if (count($category->childrenRecursive)>0)
+                                            @include('admin.components.child-category',
+                                            [
+                                                'children'=>$category->childrenRecursive,
+                                                'depth'=>1,
+                                                'cateData'=>$request->categories
+                                            ])
+                                        @endif                                  
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-start justify-content-center mt-5">
+                                <button class="btn btn-primary me-2" type="submit">Tìm kiếm</button>
+                                <button class="btn btn-danger" type="reset">Xóa trống</button>
+                            </div>
+
+
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
                     <div class="col-2">
                         <a href="{{ route('admin.product.create') }}"><button class="btn btn-success">Thêm mới</button></a>
-                    </div>
-                    <div class="col-10 d-flex justify-content-end align-items-center">
-                        <div class="form-group d-flex">
-                            <input type="text" class="form-control me-2 w-auto" placeholder="Tìm kiếm">
-                            <select name="search" id="" class="form-control me-2 w-auto">
-                                <option value="">--Danh mục--</option>
-                                <option value="1">danh mục 1</option>
-                                <option value="2">danh mục 2</option>
-                            </select>
-                            <button class="btn btn-primary">Tìm kiếm</button>
-                        </div>
                     </div>
                 </div>
 
@@ -56,7 +100,7 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $product->name }}</td>
-                            <td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
+<td><img src="{{ asset($product->image) }}" alt="" height="100px" width="100px"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
                             <td>
@@ -113,4 +157,13 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('js/admin/change.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#categories').select2({
+                placeholder: "Chọn danh mục",
+                allowClear: true
+            });
+        });
+    </script>
 @endsection

@@ -15,10 +15,56 @@ class ProductController extends Controller
 {   
     use StorageImageTrait;
     const PAGINATION = 10;
-    public function index()
-    {
-        $products = Product::query()->orderBy('order')->orderBy('id', 'desc')->paginate(self::PAGINATION);
-        return view('admin/products/index', compact('products'));
+    public function index(Request $request)
+    {   $listCategory = Category::query()->where('parent_id',0)->get();
+        $name = $request->name;
+        $active = $request->active;
+        $order_with = $request->order_with;
+        $categories = $request->categories;
+        $products = Product::query();
+        if($name){
+            $products = $products->where('name','LIKE','%'.$name.'%');
+        }
+        
+        switch ($active) {
+            case 'hot':
+                $products = $products->where('best', 1);
+                break;
+            case 'no_hot':
+                $products = $products->where('best', 0);
+                break;
+            case 'active':
+                $products = $products->where('active', 1);
+                break;
+            case 'no_active':
+                $products = $products->where('active', 0);
+                break;
+        }
+
+
+        switch ($order_with) {
+            case 'date_asc':
+                $products = $products->orderBy('created_at', 'asc');
+                break;
+            case 'date_desc':
+                $products = $products->orderBy('created_at', 'desc');
+                break;
+            case 'price_asc':
+                $products = $products->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $products = $products->orderBy('price', 'desc');
+                break;
+        }
+
+        if(empty($order_with)) {
+            $products = Product::query()->orderBy('order')->orderBy('id', 'desc');
+        }
+
+        $products = $products->paginate(self::PAGINATION);
+
+        // $products = Product::query()->orderBy('order')->orderBy('id', 'desc')->paginate(self::PAGINATION);
+        return view('admin/products/index', compact('products','request','listCategory'));
     }
     public function changeBest(Request $request)
     {
