@@ -43,7 +43,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="slug"
-                                                value="{{ $product->name }}" onkeyup="ChangeToSlug()">
+                                                value="{{ old('name',$product->name) }}" onkeyup="ChangeToSlug()">
                                             @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -53,7 +53,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Slug</label>
                                             <input type="text" class="form-control" name="slug" id="convert_slug"
-                                                value="{{ $product->slug }}">
+                                                value="{{ old('slug',$product->slug) }}">
                                             @error('slug')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -63,7 +63,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mã sản phẩm</label>
                                             <input type="text" class="form-control" name="sku"
-                                                value="{{ $product->sku }}">
+                                                value="{{ old('sku',$product->sku) }}">
                                             @error('sku')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -73,7 +73,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giá sản phẩm</label>
                                             <input type="number" class="form-control" name="price"
-                                                value="{{ $product->price }}">
+                                                value="{{ old('price',$product->price) }}">
                                             @error('price')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -83,7 +83,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giảm giá</label>
                                             <input type="number" class="form-control" name="sale"
-                                                value="{{ $product->sale }}">
+                                                value="{{ old('sale',$product->sale) }}">
                                             @error('sale')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -93,11 +93,11 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả ngắn</label>
                                             <input type="text" class="form-control" name="short_description"
-                                                value="{{ $product->short_description }}">
+                                                value="{{ old('short_description',$product->short_description) }}">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ $product->long_description }}</textarea>
+                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ old('long_description',$product->long_description) }}</textarea>
                                         </div>
 
 
@@ -153,6 +153,7 @@
                                                         @include('admin.components.child-category', [
                                                             'children' => $category->childrenRecursive,
                                                             'depth' => 1,
+                                                            'cateData' => $selectedCategories
                                                     
                                                         ])
                                                     @endif
