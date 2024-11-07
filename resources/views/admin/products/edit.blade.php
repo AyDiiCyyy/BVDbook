@@ -153,7 +153,8 @@
                                                         @include('admin.components.child-category', [
                                                             'children' => $category->childrenRecursive,
                                                             'depth' => 1,
-                                                    
+                                                            'cateData' => $selectedCategories
+
                                                         ])
                                                     @endif
                                                 @endforeach
