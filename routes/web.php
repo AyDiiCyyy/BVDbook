@@ -47,7 +47,7 @@ Route::prefix('admin')->as('admin.')->group(function(){
         Route::post('/update/{id}','update')->name('update');
         Route::delete('/destroy/{id}','destroy')->name('destroy');
     });
-    
+
 
 });
 Route::get('/', function () {
@@ -71,4 +71,5 @@ Route::get('form', function () {
 
 Route::resource('vouchers', VoucherController::class);
 Route::get('vouchers/{id}/restore', [VoucherController::class, 'restore'])->name('vouchers.restore');
+Route::patch('/admin/vouchers/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('vouchers.toggleStatus');
 

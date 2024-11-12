@@ -22,7 +22,8 @@ class Voucher extends Model
         'usage_limit',
         'description',
         'start',
-        'end'
+        'end',
+        'status'
     ];
 
     public function UserVouchers (){
