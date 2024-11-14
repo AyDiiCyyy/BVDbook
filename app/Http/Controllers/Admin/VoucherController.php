@@ -21,10 +21,15 @@ class VoucherController extends Controller
         $currentDate = now();
 
         foreach ($data['vouchers'] as $voucher) {
+            // Nếu voucher đã bị thay đổi thủ công, không cập nhật trạng thái tự động
+            if ($voucher->is_manually_updated) {
+                continue; // Bỏ qua voucher đã thay đổi thủ công
+            }
+
             $endDate = Carbon::parse($voucher->end);
 
             if ($endDate->endOfDay()->lessThan($currentDate)) {
-                // Nếu ngày kết thúc đã qua, cập nhật trạng thái thành 'expired'
+                // Nếu ngày kết thúc đã qua và voucher chưa thay đổi trạng thái, cập nhật thành 'expired'
                 if ($voucher->status !== 'expired') {
                     $voucher->status = 'expired';
                     $voucher->save();
@@ -87,6 +92,7 @@ class VoucherController extends Controller
 
             // Đổi trạng thái giữa 'active' và 'expired'
             $voucher->status = $voucher->status === 'active' ? 'expired' : 'active';
+            $voucher->is_manually_updated = true; // Đánh dấu voucher đã được thay đổi thủ công
             $voucher->save();
 
             return response()->json([
