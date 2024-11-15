@@ -87,7 +87,7 @@
                                 </td>
                                 <td>{{ $category->slug }}</td>
                                 <td>
-                                    {{ $category->parent ? $category->parent->name : 'Không có' }}
+                                    {{ $category->parent ? $category->parent->name : 'Danh mục chính' }}
                                 </td>
 
                                 <td>
@@ -110,27 +110,5 @@
     </main>
 @endsection
 @section('js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.querySelectorAll('.btn-delete').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const form = button.closest('form');
-            Swal.fire({
-                title: 'Bạn có chắc chắn muốn xóa?',
-                text: "Bạn sẽ không thể hoàn tác hành động này!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Xóa',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-</script>
+
 @endsection
