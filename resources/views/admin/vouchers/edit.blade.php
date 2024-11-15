@@ -131,4 +131,5 @@
 @endsection
 
 @section('js')
+
 @endsection

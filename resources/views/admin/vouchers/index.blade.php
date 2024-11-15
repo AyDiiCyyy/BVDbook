@@ -41,17 +41,6 @@
                     </div>
                 </div>
             </div>
-            <div class="container"> <!--begin::Row-->
-                <form action="{{ route('vouchers.index') }}" method="GET">
-                    <div class="form-group">
-                        <label for="status" class="label-control">Lọc voucher:</label>
-                        <select name="status" id="status" class="form-control" onchange="this.form.submit()">
-                            <option value="active" {{ $status == 'active' ? 'selected' : '' }}>Đang hoạt động</option>
-                            <option value="deleted" {{ $status == 'deleted' ? 'selected' : '' }}>Đã xóa</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
             <div class="container">
                 <table class="table table-striped mt-3">
                     <thead>
@@ -78,42 +67,19 @@
                                 <td>{{ number_format($voucher->discount_amount) }} VND</td>
                                 <td>{{ $voucher->usage_limit }}</td>
                                 <td>{{ number_format($voucher->min_order_amount) }} VND</td>
-                                <td>
-                                    @if ($voucher->isExpired)
-                                        <span class="badge bg-danger">Đã hết hạn</span>
-                                    @elseif($voucher->isUpcoming)
-                                        <span class="badge bg-info">Sắp ra mắt</span>
-                                    @else
-                                        <span class="badge bg-success">Còn hiệu lực</span>
-                                    @endif
+                                <td class="voucher-status" data-id="{{ $voucher->id }}" style="cursor: pointer;">
+                                    <button
+                                        class="toggle-status-btn btn btn-sm {{ $voucher->status === 'active' ? 'btn-success' : 'btn-danger' }} text-white"
+                                        data-id="{{ $voucher->id }}" data-status="{{ $voucher->status }}"
+                                        data-url="{{ route('vouchers.toggleStatus', $voucher->id) }}">
+                                        {{ $voucher->status === 'active' ? 'Còn hiệu lực' : 'Hết hiệu lực' }}
+                                    </button>
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->start)->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->end)->format('d/m/Y') }}</td>
                                 <td>
-                                    @if ($voucher->deleted_at)
-                                        {{-- Hiển thị nút Khôi phục cho voucher đã bị xóa --}}
-                                        <a href="{{ route('vouchers.restore', $voucher->id) }}"
-                                            class="btn btn-warning btn-sm">Khôi phục</a>
-                                        <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                onclick="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn?')"
-                                                class="btn btn-danger btn-sm">Xóa vĩnh viễn</button>
-                                        </form>
-                                    @else
-                                        {{-- Hiển thị nút Sửa và Xóa cho voucher chưa bị xóa --}}
-                                        <a href="{{ route('vouchers.edit', $voucher->id) }}"
-                                            class="btn btn-warning btn-sm">Sửa</a>
-                                        <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
-                                            style="display:inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa?')"
-                                                class="btn btn-danger btn-sm">Xóa</button>
-                                        </form>
-                                    @endif
+                                    <a href="{{ route('vouchers.edit', $voucher->id) }}"
+                                        class="btn btn-warning btn-sm">Sửa</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -130,4 +96,47 @@
 @endsection
 
 @section('js')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.voucher-status').forEach(cell => {
+                cell.addEventListener('click', function() {
+                    const voucherId = this.getAttribute('data-id');
+                    const button = this.querySelector('button'); // Lấy nút bên trong ô trạng thái
+
+                    fetch(`/admin/vouchers/${voucherId}/toggle-status`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Cập nhật nội dung và màu sắc của nút
+                                button.textContent = data.newStatus === 'Còn hiệu lực' ?
+                                    'Còn hiệu lực' : 'Hết hiệu lực';
+                                button.setAttribute('data-status', data.newStatus ===
+                                    'Còn hiệu lực' ? 'active' : 'expired');
+
+                                // Cập nhật màu sắc của nút
+                                if (data.newStatus === 'Còn hiệu lực') {
+                                    button.classList.remove('btn-danger');
+                                    button.classList.add('btn-success');
+                                } else {
+                                    button.classList.remove('btn-success');
+                                    button.classList.add('btn-danger');
+                                }
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Có lỗi xảy ra:', error);
+                            alert('Không thể thay đổi trạng thái voucher.');
+                        });
+                });
+            });
+        });
+    </script>
 @endsection
