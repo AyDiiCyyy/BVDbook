@@ -70,9 +70,9 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Số tiền tối thiểu (Min Order Amount) -->
+                                    <!-- Đơn Hàng tối thiểu (Min Order Amount) -->
                                     <div class="mb-3">
-                                        <label class="form-label">Số tiền tối thiểu</label>
+                                        <label class="form-label">Đơn Hàng tối thiểu</label>
                                         <input type="number" class="form-control @error('min_order_amount') is-invalid @enderror" name="min_order_amount"
                                             value="{{ old('min_order_amount', $voucher->min_order_amount) }}">
                                         @error('min_order_amount')
