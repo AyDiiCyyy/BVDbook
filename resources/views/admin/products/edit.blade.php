@@ -43,7 +43,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="slug"
-                                                value="{{ old('name',$product->name) }}" onkeyup="ChangeToSlug()">
+                                                value="{{ old('name', $product->name)  }}" onkeyup="ChangeToSlug()">
                                             @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -53,7 +53,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Slug</label>
                                             <input type="text" class="form-control" name="slug" id="convert_slug"
-                                                value="{{ old('slug',$product->slug) }}">
+                                                value="{{old('slug', $product->slug)  }}">
                                             @error('slug')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -63,7 +63,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mã sản phẩm</label>
                                             <input type="text" class="form-control" name="sku"
-                                                value="{{ old('sku',$product->sku) }}">
+                                                value="{{ old('sku',$product->sku)  }}">
                                             @error('sku')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -73,7 +73,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giá sản phẩm</label>
                                             <input type="number" class="form-control" name="price"
-                                                value="{{ old('price',$product->price) }}">
+                                                value="{{ old('price',$product->price  ) }}">
                                             @error('price')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -83,7 +83,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giảm giá</label>
                                             <input type="number" class="form-control" name="sale"
-                                                value="{{ old('sale',$product->sale) }}">
+                                                value="{{old('sale', $product->sale )  }}">
                                             @error('sale')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -93,11 +93,11 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả ngắn</label>
                                             <input type="text" class="form-control" name="short_description"
-                                                value="{{ old('short_description',$product->short_description) }}">
+                                                value="{{ old('short_description', $product->short_description)  }}">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ old('long_description',$product->long_description) }}</textarea>
+                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ old('long_description',$product->long_description )  }}</textarea>
                                         </div>
 
 
@@ -154,7 +154,6 @@
                                                             'children' => $category->childrenRecursive,
                                                             'depth' => 1,
                                                             'cateData' => $selectedCategories
-                                                    
                                                         ])
                                                     @endif
                                                 @endforeach
@@ -168,7 +167,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tác giả</label>
                                             <input type="text" class="form-control" name="author"
-                                                value="{{ $product->author }}">
+                                                value="{{old('author', $product->author  ) }}">
                                             @error('author')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -178,7 +177,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Nhà xuất bản</label>
                                             <input type="text" class="form-control" name="publisher"
-                                                value="{{ $product->publisher }}">
+                                                value="{{ old('publisher', $product->publisher )  }}">
                                             @error('publisher')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -188,7 +187,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Năm xuất bản</label>
                                             <input type="number" class="form-control" name="released"
-                                                value="{{ $product->released }}">
+                                                value="{{ old('released', $product->released)  }}">
                                             @error('released')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -198,7 +197,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Cân nặng</label>
                                             <input type="number" class="form-control" name="weight"
-                                                value="{{ $product->weight }}">
+                                                value="{{old('weight', $product->weight ) }}">
                                             @error('weight')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -208,7 +207,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số trang</label>
                                             <input type="number" class="form-control" name="page"
-                                                value="{{ $product->page }}">
+                                                value="{{old('page', $product->page)  }}">
                                             @error('page')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -218,7 +217,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity"
-                                                value="{{ $product->quantity }}">
+                                                value="{{ old('quantity', $product->quantity)  }}">
                                             @error('quantity')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -228,7 +227,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số thứ tự</label>
                                             <input type="number" class="form-control" name="order"
-                                                value="{{ $product->order }}" min="1">
+                                                value="{{old('order', $product->order)  }}" min="1">
                                             @error('order')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}

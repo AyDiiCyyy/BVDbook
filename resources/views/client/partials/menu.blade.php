@@ -4,7 +4,7 @@
         <!--  Logo Area Start-->
         <div class="col-md-2 col-sm-2">
             <div class="logo">
-                <a href="index.html"><img src="{{ asset('client/assets/images/logo/logo-3.jpg') }}" alt="" /></a>
+                <a href="index.html"><img src="{{ asset('client/assets/images/logo/logo-new.jpg') }}" alt="" width="124px" height="34px"/></a>
             </div>
         </div>
         <!--  Logo Area end-->
@@ -12,8 +12,8 @@
             <div class="main-navigation">
                 <ul>
                     <li class="menu-dropdown">
-                        <a href="#">Home <i class="ion-ios-arrow-down"></i></a>
-                        <ul class="sub-menu">
+                        <a href="#">Trang Chủ</a>
+                        {{-- <ul class="sub-menu">
                             <li class="menu-dropdown position-static">
                                 <a href="#">Home Organic <i class="ion-ios-arrow-down"></i></a>
                                 <ul class="sub-menu sub-menu-2">
@@ -63,61 +63,15 @@
                                 <a href="index-21.html">Single Product</a>
                                 <span class="stekar">new</span>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
                     <li class="menu-dropdown">
-                        <a href="#">Shop <i class="ion-ios-arrow-down"></i></a>
-                        <ul class="mega-menu-wrap">
-                            <li>
-                                <ul>
-                                    <li class="mega-menu-title"><a href="#">Shop Grid</a></li>
-                                    <li><a href="shop-3-column.html">Shop Grid 3 Column</a></li>
-                                    <li><a href="shop-4-column.html">Shop Grid 4 Column</a></li>
-                                    <li><a href="shop-left-sidebar.html">Shop Grid Left Sidebar</a></li>
-                                    <li><a href="shop-right-sidebar.html">Shop Grid Right Sidebar</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li class="mega-menu-title"><a href="#">Shop List</a></li>
-                                    <li><a href="shop-list.html">Shop List</a></li>
-                                    <li><a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a>
-                                    </li>
-                                    <li><a href="shop-list-right-sidebar.html">Shop List Right
-                                            Sidebar</a></li>
-                                    <li><a href="shop-filter.html">Shop Filter Page</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li class="mega-menu-title"><a href="#">Shop Single</a></li>
-                                    <li><a href="single-product.html">Shop Single</a></li>
-                                    <li><a href="single-product-variable.html">Shop Variable</a></li>
-                                    <li><a href="single-product-affiliate.html">Shop Affiliate</a></li>
-                                    <li><a href="single-product-group.html">Shop Group</a></li>
-                                    <li><a href="single-product-tabstyle-2.html">Shop Tab 2</a></li>
-                                    <li><a href="single-product-tabstyle-3.html">Shop Tab 3</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <ul>
-                                    <li class="mega-menu-title"><a href="#">Shop Single</a></li>
-                                    <li><a href="single-product-slider.html">Shop Slider</a></li>
-                                    <li><a href="single-product-gallery-left.html">Shop Gallery Left</a>
-                                    </li>
-                                    <li><a href="single-product-gallery-right.html">Shop Gallery
-                                            Right</a></li>
-                                    <li><a href="single-product-sticky-left.html">Shop Sticky Left</a>
-                                    </li>
-                                    <li><a href="single-product-sticky-right.html">Shop Sticky Right</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="banner-wrapper">
-                                <a href="single-product.html"><img src="assets/images/banner-image/banner-menu.jpg"
-                                        alt="" /></a>
-                            </li>
+                        <a href="#">Danh Mục Sách <i class="ion-ios-arrow-down"></i></a>
+                        <ul class="sub-menu">
+                            <li><a href="about.html">Sách Giáo Khoa</a></li>
+                            <li><a href="cart.html">Truyện Tranh</a></li>
+                            <li><a href="checkout.html">Sách Tô Màu</a></li>
+                            <li><a href="compare.html">Văn Học</a></li>
                         </ul>
                     </li>
                     <li class="menu-dropdown">
@@ -164,7 +118,8 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="contact.html">Giới Thiệu</a></li>
+                    <li><a href="contact.html">Liên Hệ</a></li>
                 </ul>
             </div>
             <!-- Main Navigation Area end -->
