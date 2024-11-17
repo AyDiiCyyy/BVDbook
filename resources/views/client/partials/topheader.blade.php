@@ -4,7 +4,7 @@
             <!--Left Start-->
             <div class="col-lg-4 col-md-12">
                 <div class="text-lg-start text-center">
-                    <p class="color-black">Welcome you to Ecolife store!</p>
+                    <p class="color-black">Chào mừng bạn đến với BVDbook!</p>
                 </div>
             </div>
             <!--Left End-->
@@ -13,10 +13,10 @@
                 <div class="header-right-nav">
                     <ul>
                         <li>
-                            <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>Compare (0)</a>
+                            <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>So sánh (0)</a>
                         </li>
                         <li class="border-color-black">
-                            <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Wishlist
+                            <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Sản phẩm yêu thích
                                 (0)</a>
                         </li>
                     </ul>
@@ -28,13 +28,16 @@
                                 data-bs-toggle="dropdown"> Settings <i
                                     class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="my-account.html">My account</a></li>
-                                <li><a class="dropdown-item" href="checkout.html">Checkout</a></li>
-                                <li><a class="dropdown-item" href="login.html">Sign in</a></li>
+                                <li><a class="dropdown-item" href="my-account.html">Tài Khoản</a></li>
+                                <li><a class="dropdown-item" href="my-account.html">Đơn Mua</a></li>
+                                {{-- <li><a class="dropdown-item" href="checkout.html">Checkout</a></li> --}}
+                                <li><a class="dropdown-item" href="login.html">Đăng Ký</a></li>
+                                <li><a class="dropdown-item" href="login.html">Đăng Nhập</a></li>
+                                <li><a class="dropdown-item" href="login.html">Đăng Xuất</a></li>
                             </ul>
                         </div>
                         <!-- Single Wedge Start -->
-                        <div class="header-top-curr dropdown">
+                        {{-- <div class="header-top-curr dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
                                 data-bs-toggle="dropdown"><img class="me-2" src="{{ asset('client/assets/images/icons/1.jpg') }}" alt="">English<i class="ion-ios-arrow-down"></i></button>
@@ -44,10 +47,10 @@
                                 <li><a class="dropdown-item" href="#"><img src="{{ asset('client/assets/images/icons/2.jpg') }}"
                                             alt="">Français</a></li>
                             </ul>
-                        </div>
+                        </div> --}}
                         <!-- Single Wedge End -->
                         <!-- Single Wedge Start -->
-                        <div class="header-top-curr dropdown">
+                        {{-- <div class="header-top-curr dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black pr-0"
                                 data-bs-toggle="dropdown">USD $
@@ -56,7 +59,7 @@
                                 <li><a class="dropdown-item" href="#">USD $</a></li>
                                 <li><a class="dropdown-item" href="#">EUR €</a></li>
                             </ul>
-                        </div>
+                        </div> --}}
                         <!-- Single Wedge End -->
                     </div>
                     <!-- Header Top Language Currency -->
