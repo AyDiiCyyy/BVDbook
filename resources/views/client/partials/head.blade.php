@@ -12,3 +12,8 @@
 <link rel="stylesheet" href="{{ asset('client/assets/css/plugins/plugins.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/style.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/responsive.min.css') }}">
+<style>
+    .search-category .nice-select .list {
+        height: 300px;
+    }
+</style>​

@@ -51,7 +51,7 @@ Route::prefix('admin')->as('admin.')->group(function(){
 
 });
 Route::get('/', function () {
-    return view('client.layouts');
+    return view('client.page.index');
 });
 
 Route::prefix('admin')->as('admin.')->group(function(){
