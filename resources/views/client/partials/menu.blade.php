@@ -168,7 +168,10 @@
                 </ul>
             </div>
             <!-- Main Navigation Area end -->
-            <div class="header_account_area">
+            <div class="header_account_area ">
+                <div class="header_account_list me-2">
+                <button class="btn btn-primary"> <i class="ion-ios-person"></i> Đăng nhập</button>    
+                </div>
                 <!-- Search start -->
                 <div class="header_account_list search_list">
                     <a href="javascript:void(0)"><i class="ion-ios-search-strong"></i></a>

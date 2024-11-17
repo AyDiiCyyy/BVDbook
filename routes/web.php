@@ -4,6 +4,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,9 +51,24 @@ Route::prefix('admin')->as('admin.')->group(function(){
     
 
 });
-Route::get('/', function () {
-    return view('client.layouts');
+Route::prefix('admin')->as('admin.')->group(function () {
+    Route::prefix('user')->as('user.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::post('admin/user/change-active', [UserController::class, 'changeActive'])->name('changeActive');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::get('/show/{id}', [UserController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
+        Route::put('update/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
+
+    });
 });
+
+
+// Route::get('/', function () {
+//     return view('client.partials.login');
+// });
 
 Route::prefix('admin')->as('admin.')->group(function(){
     Route::prefix('category')->as('category.')->group(function (){
