@@ -37,16 +37,16 @@
                                 <div class="col-4">
                                     <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên" value="{{ request('name') }}">
                                 </div>
-                                {{-- <div class="col-4">
-                                    <select name="parent_id" class="form-control">
+                                <div class="col-4">
+                                    {{-- <select name="parent_id" class="form-control">
                                         <option value="" selected>--Danh mục cha--</option>
                                         @foreach($allCategories as $cat)
                                             <option value="{{ $cat->id }}" {{ request('parent_id') == $cat->id ? 'selected' : '' }}>
                                                 {{ $cat->name }}
                                             </option>
                                         @endforeach
-                                    </select>
-                                </div> --}}
+                                    </select> --}}
+                                </div>
                                 <div class="col-4">
                                     <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                                 </div>
