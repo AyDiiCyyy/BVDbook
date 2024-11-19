@@ -11,7 +11,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-hrading">Login / Register Page</h1>
+                        <h1 class="breadcrumb-hrading">Login / Register</h1>
                         <ul class="breadcrumb-links">
                             <li><a href="#">Home</a></li>
                             <li>Login / Register</li>

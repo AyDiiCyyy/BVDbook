@@ -1,15 +1,15 @@
 @extends('layouts.auth')
 
 @section('content')
-    <section class="breadcrumb-area">
+    <section class="breadcrumb-area" style="margin-top: -50px">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-hrading">Reset Password</h1>
+                        <h1 class="breadcrumb-hrading">Đặt lại mật khẩu</h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="{{ url('/') }}">Home</a></li>
-                            <li>Reset Password</li>
+                            <li><a href="{{ url('/') }}">Trang chủ</a></li>
+                            <li>Đặt lại mật khẩu</li>
                         </ul>
                     </div>
                 </div>
@@ -17,11 +17,11 @@
         </div>
     </section>
 
-    <div class="container">
-        <div class="row justify-content-center">
+    <div class="container" style="margin-top: -50px">
+        <div class="row justify-content-center" >
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('Reset Password') }}</div>
+                    <div class="card-header">{{ __('Đặt lại mật khẩu') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('password.update') }}">
@@ -31,7 +31,7 @@
 
                             <div class="row mb-3">
                                 <label for="email"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Email') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="email" type="email"
@@ -48,7 +48,7 @@
 
                             <div class="row mb-3">
                                 <label for="password"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Mật khẩu mới') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="password" type="password"
@@ -65,7 +65,7 @@
 
                             <div class="row mb-3">
                                 <label for="password-confirm"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Xác nhận mật khẩu') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="password-confirm" type="password" class="form-control"
@@ -76,7 +76,7 @@
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Reset Password') }}
+                                        {{ __('Đổi mật khẩu') }}
                                     </button>
                                 </div>
                             </div>
