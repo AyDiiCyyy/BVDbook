@@ -25,23 +25,43 @@
                         <div class="header-bottom-set dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
-                                data-bs-toggle="dropdown"> Settings <i
-                                    class="ion-ios-arrow-down"></i></button>
+                                data-bs-toggle="dropdown"> Settings <i class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="my-account.html">My account</a></li>
-                                <li><a class="dropdown-item" href="checkout.html">Checkout</a></li>
-                                <li><a class="dropdown-item" href="login.html">Sign in</a></li>
+                                <li><a class="dropdown-item" href="#">My account</a></li>
+                                <li><a class="dropdown-item" href="#">Checkout</a></li>
+
+                                @guest
+                                    <!-- Hiển thị Login khi chưa đăng nhập -->
+                                    <li><a class="dropdown-item" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                                @endguest
+
+                                @auth
+                                    <!-- Hiển thị Logout khi đã đăng nhập -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @endauth
                             </ul>
                         </div>
                         <!-- Single Wedge Start -->
                         <div class="header-top-curr dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
-                                data-bs-toggle="dropdown"><img class="me-2" src="{{ asset('client/assets/images/icons/1.jpg') }}" alt="">English<i class="ion-ios-arrow-down"></i></button>
+                                data-bs-toggle="dropdown"><img class="me-2"
+                                    src="{{ asset('client/assets/images/icons/1.jpg') }}" alt="">English<i
+                                    class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="#"><img src="{{ asset('client/assets/images/icons/1.jpg') }}"
+                                <li><a class="dropdown-item" href="#"><img
+                                            src="{{ asset('client/assets/images/icons/1.jpg') }}"
                                             alt="">English</a></li>
-                                <li><a class="dropdown-item" href="#"><img src="{{ asset('client/assets/images/icons/2.jpg') }}"
+                                <li><a class="dropdown-item" href="#"><img
+                                            src="{{ asset('client/assets/images/icons/2.jpg') }}"
                                             alt="">Français</a></li>
                             </ul>
                         </div>
