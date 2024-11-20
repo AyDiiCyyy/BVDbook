@@ -15,6 +15,9 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/', function () {
     return view('client.layouts');
 });
+Route::get('/about', function () {
+    return view('client.partials.gioithieu');
+});
 
 // Sử dụng middleware `auth` để yêu cầu đăng nhập trước khi truy cập vào các route admin
 Route::middleware(['auth', 'admin.role'])->group(function () {
@@ -64,7 +67,6 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
 
     // Routes cho quản lý voucher
     Route::resource('vouchers', VoucherController::class);
-    Route::get('vouchers/{id}/restore', [VoucherController::class, 'restore'])->name('vouchers.restore');
     Route::patch('/admin/vouchers/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('vouchers.toggleStatus');
 });
 
