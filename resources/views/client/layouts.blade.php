@@ -7,8 +7,6 @@
 </head>
 
 <body class="home-3">
-
-    <!--====== PRELOADER PART ENDS ======-->
     <div id="main">
         <!-- Header Area Start  -->
         <header class="main-header">

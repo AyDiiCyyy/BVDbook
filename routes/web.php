@@ -52,7 +52,6 @@ Route::prefix('admin')->as('admin.')->group(function(){
 
 });
 
-
 Route::prefix('admin')->as('admin.')->group(function(){
     Route::prefix('category')->as('category.')->group(function (){
 
@@ -75,5 +74,5 @@ Route::patch('/admin/vouchers/{id}/toggle-status', [VoucherController::class, 't
 
 
 // router client
-Route::get('/',[HomeController::class,'index']);
-Route::get('/{slug}',[HomeController::class,'proCate']);
+Route::get('/',[HomeController::class,'index'])->name('index');
+Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSanpham');

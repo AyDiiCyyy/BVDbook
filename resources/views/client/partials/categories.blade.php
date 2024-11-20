@@ -3,8 +3,9 @@
         <div class="col-md-12">
             <!-- Section Title -->
             <div class="section-title">
-                <h2>Popular Categories</h2>
-                <p>Add Popular Categories to weekly line up</p>
+                <h2>Danh mục phổ biến</h2>
+                <p>Thêm các sản phẩm thuộc danh mục phổ biến vào giỏ hàng của bạn
+                </p>
             </div>
             <!-- Section Title -->
         </div>

@@ -1,7 +1,7 @@
 <div class="slider-active-3 owl-carousel slider-hm8 owl-dot-style">
 
     <div class="slider-height-6 d-flex align-items-start justify-content-start bg-img"
-        style="background-image: url({{ asset('client/assets/images/slider-image/sample-5.jpg') }});">
+        style="background-image: url({{ asset('client/assets/images/slider-image/slidel1.png') }});">
         <div class="container">
             <div class="slider-content-5 slider-animated-1 text-left">
                 <span class="animated">100% NATURAL</span>
