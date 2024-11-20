@@ -5,16 +5,16 @@
 @endsection
 
 @section('content')
-    <!-- Breadcrumb Area start -->
+    <!-- Breadcrumb Area Start -->
     <section class="breadcrumb-area">
-        <div class="container">
+        <div class="container" style="margin-top: -50px">
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-hrading">About Page</h1>
+                        <h1 class="breadcrumb-hrading">Giới Thiệu</h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="index.html">Home</a></li>
-                            <li>About</li>
+                            <li><a href="{{ url('/') }}">Trang Chủ</a></li>
+                            <li>Giới Thiệu</li>
                         </ul>
                     </div>
                 </div>
@@ -24,76 +24,79 @@
     <!-- Breadcrumb Area End -->
 
     <!-- About Area Start -->
-    <section class="about-area">
+    <section class="about-area" style="margin-top: -80px">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mb-res-sm-50px">
-                    <div class="about-left-image">
-                        <img src="assets/images/feature-bg/1.jpg" alt="" class="img-responsive" />
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <img src="{{ asset('client/assets/images/about/bookstore.jpg') }}" alt="Giới thiệu"
+                            class="img-fluid rounded shadow-sm" />
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="about-content">
-                        <div class="about-title">
-                            <h2>Welcome To Ecolife</h2>
-                        </div>
-                        <p class="mb-30px">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore aperiam fugit consequuntur
-                            voluptatibus ex sint iure in, distinctio sed dolorem aspernatur veritatis repellendus dolorum
-                            voluptate, animi
-                            libero officiis eveniet accusamus recusandae. Temporibus amet ducimus sapiente voluptatibus
-                            autem dolorem magnam quas, porro suscipit. Quibusdam culpa asperiores exercitationem architecto
-                            quo, temporibus
-                            vel! porro suscipit. Quibusdam culpa asperiores exercitationem architecto quo, temporibus vel!
+                        <h2>Chào Mừng Đến Với BVD Book</h2>
+                        <p class="mt-4">
+                            BVD Book là nơi mang đến những cuốn sách hay và ý nghĩa, giúp bạn khám phá tri thức và giải trí
+                            trong thế giới sách phong phú. Chúng tôi cam kết mang lại trải nghiệm mua sắm tốt nhất với
+                            các dịch vụ và sản phẩm chất lượng cao với định hướng: đưa tri thức tới mọi tầng lớp nhân dân,
+                            nâng tầm tri thức Việt.
                         </p>
                         <p>
-                            Sint voluptatum beatae necessitatibus quos mollitia vero, optio asperiores aut tempora iusto eum
-                            rerum, possimus, minus quidem ut saepe laboriosam. Praesentium aperiam accusantium minus
-                            repellendus
-                            accusamus neque iusto pariatur laudantium provident quod recusandae exercitationem natus
-                            dignissimos, molestias quibusdam doloremque eaque fugit molestiae modi quam unde. Error est
-                            dolor facere.
+                            Từ các tác phẩm văn học kinh điển đến sách kỹ năng, hay những tiểu thuyết trinh thám, ngôn tình,
+                            chúng tôi luôn cố gắng cập nhật những
+                            đầu sách mới nhất để phục vụ mọi đối tượng độc giả.
+                        </p>
+                        <br>
+                        <p>
+                            Hiện tại, BVD Book tự hào là đơn vị tiên phong trong việc ứng dụng công
+                            nghệ cao trong triển khai và phân phối nhiều thể loại ở Việt Nam, Chúng tôi sở hữu nền tảng công
+                            nghệ hiện đại và đội ngũ phát triển sản phẩm chất lượng cao, đảm bảo
+                            xây dựng nền tảng xuất bản tiên tiến, đáp ứng mọi nhu cầu đọc của người dùng từ tìm kiếm nội
+                            dung đến trải nghiệm đọc sách, truyện tranh     trên bất cứ thiết bị di
+                            động thông minh nào, ngay cả khi không có kết nối Internet.
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="row mt-60px">
-                <div class="col-md-4 mb-res-sm-30px">
-                    <div class="single-about">
-                        <h4>Our Company</h4>
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="single-about text-center">
+                        <img src="{{ asset('client/assets/images/icons/company.png') }}" alt="Công ty" class="mb-3" />
+                        <h4>Công Ty</h4>
                         <p>
-                            Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet conse ctetur
-                            adipisicing
-                            elit.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-res-sm-30px">
-                    <div class="single-about">
-                        <h4>Our Team</h4>
-                        <p>
-                            Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet conse ctetur
-                            adipisicing
-                            elit.
+                            BVD Book được thành lập từ năm 2024 với mục tiêu là cầu nối giữa tác giả, dịch giả, nhà xuất bản
+                            và bạn
+                            đọc, kho nội dung của chúng tôi liên tục được cung cấp và cập nhật các nội dung số đa dạng giúp
+                            nâng
+                            cao văn hóa đọc của người Việt và mang đến một phong cách đọc sách hiện đại, tiện ích hơn.
                         </p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="single-about">
-                        <h4>Testimonial</h4>
+                    <div class="single-about text-center">
+                        <img src="{{ asset('client/assets/images/icons/team.png') }}" alt="Đội ngũ" class="mb-3" />
+                        <h4>Đội Ngũ</h4>
                         <p>
-                            Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam. Lorem ipsum dolor sit amet conse ctetur
-                            adipisicing
-                            elit.
+                            Chúng tôi sở hữu nền tảng công nghệ hiện đại và đội ngũ phát triển sản phẩm chất lượng cao,
+                            đội ngũ nhân viên tận tâm và chuyên nghiệp luôn sẵn sàng hỗ trợ bạn trong hành trình khám phá
+                            những cuốn sách tuyệt vời.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="single-about text-center">
+                        <img src="{{ asset('client/assets/images/icons/testimonial.png') }}" alt="Khách hàng"
+                            class="mb-3" />
+                        <h4>Khách Hàng</h4>
+                        <p>
+                            Hơn 10,000 khách hàng tin tưởng sử dụng dịch vụ của chúng tôi mỗi năm là minh chứng rõ ràng
+                            cho sự hài lòng và chất lượng của BVD Book.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
     <!-- About Area End -->
 @endsection

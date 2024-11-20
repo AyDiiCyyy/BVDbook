@@ -34,13 +34,25 @@
         </div> <!--end::App Content Header--> <!--begin::App Content-->
         <div class="app-content"> <!--begin::Container-->
 
-            <div class="container"> <!--begin::Row-->
-                <div class="row">
-                    <div class="d-flex justify-content-end ">
+            <div class="container">
+                <!--begin::Row-->
+                <div class="row mb-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Nút "Thêm mới" -->
                         <a href="{{ route('vouchers.create') }}" class="btn btn-success">Thêm mới</a>
+
+                        <!-- Form tìm kiếm -->
+                        <form method="GET" action="{{ route('vouchers.index') }}" class="d-flex">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control"
+                                    placeholder="Tìm kiếm vouchers" value="{{ request('search') }}">
+                                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+
             <div class="container">
                 <table class="table table-striped mt-3">
                     <thead>

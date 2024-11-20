@@ -15,8 +15,18 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
         $status = $request->input('status', 'active');
+        $search = $request->input('search', null);
 
-        $data['vouchers'] = Voucher::orderByDesc('id')->paginate(10);
+        $query = Voucher::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', '%' . $search . '%')
+                  ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $data['vouchers'] = $query->orderByDesc('id')->paginate(10);
 
         $currentDate = now();
 
@@ -48,6 +58,7 @@ class VoucherController extends Controller
         }
 
         $data['status'] = $status;
+        $data['search'] = $search;
 
         return view('admin.vouchers.index', $data);
     }
