@@ -57,7 +57,7 @@ class VoucherController extends Controller
     {
         try {
             Voucher::create($request->validated());
-            return redirect()->route('vouchers.index')->with('success', 'Thêm mới voucher thành công.');
+            return redirect()->route('admin.voucher.index')->with('success', 'Thêm mới voucher thành công.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
         }
@@ -74,7 +74,7 @@ class VoucherController extends Controller
         try {
             $voucher = Voucher::withTrashed()->findOrFail($id);
             $voucher->update($request->validated());
-            return redirect()->route('vouchers.index')->with('success', 'Cập nhật voucher thành công.');
+            return redirect()->route('admin.voucher.index')->with('success', 'Cập nhật voucher thành công.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
         }
@@ -88,11 +88,11 @@ class VoucherController extends Controller
             if ($voucher->trashed()) {
                 // Nếu bản ghi đã bị xóa mềm, thì xóa vĩnh viễn
                 $voucher->forceDelete();
-                return redirect()->route('vouchers.index')->with('success', 'Xóa vĩnh viễn voucher thành công.');
+                return redirect()->route('admin.voucher.index')->with('success', 'Xóa vĩnh viễn voucher thành công.');
             } else {
                 // Nếu bản ghi chưa bị xóa mềm, thì xóa mềm
                 $voucher->delete();
-                return redirect()->route('vouchers.index')->with('success', 'Xóa voucher thành công.');
+                return redirect()->route('admin.voucher.index')->with('success', 'Xóa voucher thành công.');
             }
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
@@ -104,7 +104,7 @@ class VoucherController extends Controller
     try {
         $voucher = Voucher::onlyTrashed()->findOrFail($id);
         $voucher->restore();
-        return redirect()->route('vouchers.index')->with('success', 'Khôi phục voucher thành công.');
+        return redirect()->route('admin.voucher.index')->with('success', 'Khôi phục voucher thành công.');
     } catch (Exception $e) {
         return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
     }

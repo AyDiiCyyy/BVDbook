@@ -30,6 +30,7 @@
         integrity="sha256-+uGLJmmTKOqBr+2E6KDYs/NRsHxSkONXFHUL0fy2O/4=" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     {{-- thông báo --}}
+    <title>@yield('title')</title>
     @yield('css')
 </head> <!--end::Head--> <!--begin::Body-->
 

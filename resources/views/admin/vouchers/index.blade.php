@@ -37,12 +37,12 @@
             <div class="container"> <!--begin::Row-->
                 <div class="row">
                     <div class="d-flex justify-content-end ">
-                        <a href="{{ route('vouchers.create') }}" class="btn btn-success">Thêm mới</a>
+                        <a href="{{ route('admin.voucher.create') }}" class="btn btn-success">Thêm mới</a>
                     </div>
                 </div>
             </div>
             <div class="container"> <!--begin::Row-->
-                <form action="{{ route('vouchers.index') }}" method="GET">
+                <form action="{{ route('admin.voucher.index') }}" method="GET">
                     <div class="form-group">
                         <label for="status" class="label-control">Lọc voucher:</label>
                         <select name="status" id="status" class="form-control" onchange="this.form.submit()">
@@ -104,9 +104,9 @@
                                         </form>
                                     @else
                                         {{-- Hiển thị nút Sửa và Xóa cho voucher chưa bị xóa --}}
-                                        <a href="{{ route('vouchers.edit', $voucher->id) }}"
+                                        <a href="{{ route('admin.voucher.index', $voucher->id) }}"
                                             class="btn btn-warning btn-sm">Sửa</a>
-                                        <form action="{{ route('vouchers.destroy', $voucher->id) }}" method="POST"
+                                        <form action="{{ route('admin.voucher.destroy', $voucher->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
                                             @method('DELETE')

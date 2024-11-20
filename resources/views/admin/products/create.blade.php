@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-@section('title')
-@endsection
+@section('title','Thêm sản phẩm')
+
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/10.23.0/css/jquery.fileupload.css" rel="stylesheet" /> --}}
