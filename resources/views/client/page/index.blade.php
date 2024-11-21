@@ -44,9 +44,9 @@
     </section>
     <!-- Recent product area end -->
     <!-- Blog area Start -->
-    <section class="blog-area mb-30px">
+    {{-- <section class="blog-area mb-30px">
         @include('client.partials.blog')
-    </section>
+    </section> --}}
     <!-- Blog Area End -->
     <!-- Category Area Start -->
     <section class="categorie-area">

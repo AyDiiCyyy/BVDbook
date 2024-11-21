@@ -8,8 +8,8 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-1.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>Free Shipping</h4>
-                        <p>On all orders over $75.00</p>
+                        <h4>Miễn phí vận chuyển</h4>
+                        <p>Miễn phí vận chuyển cho tất cả đơn hàng</p>
                     </div>
                 </div>
             </div>
@@ -20,8 +20,8 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-2.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>Free Returns</h4>
-                        <p>Returns are free within 9 days</p>
+                        <h4>Trả hàng miễn phí</h4>
+                        <p>Trả hàng miễn phí trong vòng 9 ngày</p>
                     </div>
                 </div>
             </div>
@@ -32,8 +32,8 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-3.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>100% Payment Secure</h4>
-                        <p>Your payment are safe with us.</p>
+                        <h4>Thanh toán an toàn 100%</h4>
+                        <p>Thanh toán của bạn sẽ an toàn với chúng tôi.</p>
                     </div>
                 </div>
             </div>
@@ -44,8 +44,9 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-4.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>Support 24/7</h4>
-                        <p>Contact us 24 hours a day</p>
+                        <h4>Hỗ trợ 24/7</h4>
+                        <p>Liên hệ với chúng tôi 24 giờ một ngày
+                        </p>
                     </div>
                 </div>
             </div>
