@@ -63,11 +63,21 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
         Route::get('/product/form', function () {
             return view('admin.products.form');
         })->name('product.form');
+
+        // Routes cho quản lý voucher
+        Route::resource('vouchers', VoucherController::class)->names([
+            'index' => 'vouchers.index',
+            'create' => 'vouchers.create',
+            'store' => 'vouchers.store',
+            'show' => 'vouchers.show',
+            'edit' => 'vouchers.edit',
+            'update' => 'vouchers.update',
+            'destroy' => 'vouchers.destroy',
+        ]);
+
+        Route::patch('/vouchers/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('vouchers.toggleStatus');
     });
 
-    // Routes cho quản lý voucher
-    Route::resource('vouchers', VoucherController::class);
-    Route::patch('/admin/vouchers/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('vouchers.toggleStatus');
 });
 
 
