@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('client.layouts');
 });
-
+//Sản phẩm chi tiết
+Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
 Route::prefix('admin')->as('admin.')->group(function(){
     Route::prefix('category')->as('category.')->group(function (){
 
