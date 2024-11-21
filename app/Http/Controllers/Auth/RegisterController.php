@@ -53,7 +53,21 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             
-        ]);
+        ],
+        [
+            'name.required' => 'Tên là bắt buộc.',
+            'name.string' => 'Tên phải là một chuỗi ký tự.',
+            'name.max' => 'Tên không được vượt quá 255 ký tự.',
+            
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email không hợp lệ.',
+            'email.unique' => 'Email này đã được sử dụng.',
+            
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.min' => 'Mật khẩu phải có ít nhất 8 ký tự.',
+            'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
+        ]
+        );
     }
 
     /**
@@ -64,12 +78,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-            $avatarPath = null;  // Mặc định không có avatar
+            // $avatarPath = null;  // Mặc định không có avatar
 
-        if (isset($data['avatar'])) {
-            // public/avatars
-            $avatarPath = $data['avatar']->store('avatars', 'public');
-        }
+        // if (isset($data['avatar'])) {
+        //     // public/avatars
+        //     $avatarPath = $data['avatar']->store('avatars', 'public');
+        // }
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

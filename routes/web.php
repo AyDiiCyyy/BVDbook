@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Client\ContactController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/', function () {
     return view('client.layouts');
 });
+//
+
+// Route cho trang liên hệ, sử dụng ContactController
+Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 
 // Sử dụng middleware `auth` để yêu cầu đăng nhập trước khi truy cập vào các route admin
 Route::middleware(['auth', 'admin.role'])->group(function () {
