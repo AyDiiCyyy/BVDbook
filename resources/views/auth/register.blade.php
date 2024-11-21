@@ -86,16 +86,11 @@
                                                         class="form-control @error('password') is-invalid @enderror"
                                                         name="password" required autocomplete="new-password">
 
-                                                    {{-- @error('password')
+                                                    @error('password')
                                                         <span class="invalid-feedback" role="alert">
                                                             <strong>{{ $message }}</strong>
                                                         </span>
-                                                    @enderror --}}
-                                                    @error('password')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ __('Mật khẩu xác nhận không khớp.') }}</strong>
-                                                    </span>
-                                                @enderror
+                                                    @enderror
                                                 </div>
                                             </div>
 

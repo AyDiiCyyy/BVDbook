@@ -5,11 +5,13 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ContactController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Đăng nhập, đăng ký
 Auth::routes();
+
 
 
 
@@ -104,3 +106,6 @@ Route::get('/about', function () {
 });
 //Sản phẩm chi tiết
 Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
+
+// Route cho trang liên hệ, sử dụng ContactController
+Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');

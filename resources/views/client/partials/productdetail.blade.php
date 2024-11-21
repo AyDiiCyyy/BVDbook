@@ -14,7 +14,7 @@
                     <div class="breadcrumb-content">
                         <h1 class="breadcrumb-hrading">{{ $productDetail->name }}</h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Trang chủ</a></li>
                             <li>{{ $productDetail->name }}</li>
                         </ul>
                     </div>
@@ -77,7 +77,7 @@
                                     </li>
                                 @else
                                     <li class="old-price not-cut ">
-                                        {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                        {{ number_format($productDetail->price, 0, '.', '.') }}₫
                                     </li>
                                 @endif
                             </ul>
@@ -285,7 +285,7 @@
 
                         </div>
                         <ul class="product-flag">
-                            <li class="new">New</li>
+                            <li class="new">Mới</li>
                         </ul>
                         <div class="product-decs">
                             <a class="inner-link"
@@ -316,7 +316,7 @@
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>
@@ -366,7 +366,7 @@
 
                         </div>
                         <ul class="product-flag">
-                            <li class="new">New</li>
+                            <li class="new">Mới</li>
                         </ul>
                         <div class="product-decs">
                             <a class="inner-link"
@@ -397,7 +397,7 @@
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>

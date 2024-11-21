@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('client.partials.head')
+    @include('client.partials.head') 
     <title>@yield('title', 'Login')</title>
 </head>
-<body>
+<body>   
     <div id="main">
 
         <!-- offcanvas overlay start -->

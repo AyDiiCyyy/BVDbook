@@ -29,8 +29,8 @@
                             <li><a href="cart.html">Cart Page</a></li>
                             <li><a href="checkout.html">Checkout Page</a></li>
                             <li><a href="compare.html">Compare Page</a></li>
-                            <li><a href="{{ route('login') }}">Login & Regiter Page</a></li>
-                            <li><a href="{{ route('register') }}">Account Page</a></li>
+                            <li><a href="#">Login & Regiter Page</a></li>
+                            <li><a href="#">Account Page</a></li>
                             <li><a href="wishlist.html">Wishlist Page</a></li>
                         </ul>
                     </li>
@@ -38,7 +38,7 @@
                         <a href="#">Giới Thiệu</a>
                         
                     </li>
-                    <li><a href="contact.html">Liên hệ</a></li>
+                    <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
                 </ul>
             </div>
             <!-- Main Navigation Area end -->

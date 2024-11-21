@@ -77,7 +77,7 @@ class HomeController extends Controller
         $getListComments = Comment::where('product_id',$productDetail->id)->with('user')->get();
         // dd($getListComments);
         
-        return view('productDetail', compact('productDetail','galleriesOfProduct','categoriesOfProduct', 'relatedProducts', 'getProductsByCategory','getListComments'));
+        return view('client.partials.productdetail', compact('productDetail','galleriesOfProduct','categoriesOfProduct', 'relatedProducts', 'getProductsByCategory','getListComments'));
     }
 
 }
