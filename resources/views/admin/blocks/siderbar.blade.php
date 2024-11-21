@@ -22,9 +22,9 @@
                 <li class="nav-item"> <a href="{{route('admin.category.create')}}" class="nav-link"> <i
                             class="nav-icon bi bi-circle"></i>
                         <p>Thêm mới</p>
-                    </a> 
-               
-             
+                    </a>
+
+
 
             </ul>
         </li>
@@ -57,12 +57,12 @@
         </p>
     </a>
     <ul class="nav nav-treeview">
-        <li class="nav-item"> <a href="{{ route('vouchers.index') }}" class="nav-link"> <i
+        <li class="nav-item"> <a href="{{ route('admin.vouchers.index') }}" class="nav-link"> <i
                     class="nav-icon bi bi-circle"></i>
                 <p>Danh sách</p>
             </a>
         </li>
-        <li class="nav-item"> <a href="{{ route('vouchers.create') }}" class="nav-link"> <i
+        <li class="nav-item"> <a href="{{ route('admin.vouchers.create') }}" class="nav-link"> <i
                     class="nav-icon bi bi-circle"></i>
                 <p>Thêm mới</p>
             </a>

@@ -39,10 +39,10 @@
                 <div class="row mb-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <!-- Nút "Thêm mới" -->
-                        <a href="{{ route('vouchers.create') }}" class="btn btn-success">Thêm mới</a>
+                        <a href="{{ route('admin.vouchers.create') }}" class="btn btn-success">Thêm mới</a>
 
                         <!-- Form tìm kiếm -->
-                        <form method="GET" action="{{ route('vouchers.index') }}" class="d-flex">
+                        <form method="GET" action="{{ route('admin.vouchers.index') }}" class="d-flex">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control"
                                     placeholder="Tìm kiếm vouchers" value="{{ request('search') }}">
@@ -83,14 +83,14 @@
                                     <button
                                         class="toggle-status-btn btn btn-sm {{ $voucher->status === 'active' ? 'btn-success' : 'btn-danger' }} text-white"
                                         data-id="{{ $voucher->id }}" data-status="{{ $voucher->status }}"
-                                        data-url="{{ route('vouchers.toggleStatus', $voucher->id) }}">
+                                        data-url="{{ route('admin.vouchers.toggleStatus', $voucher->id) }}">
                                         {{ $voucher->status === 'active' ? 'Còn hiệu lực' : 'Hết hiệu lực' }}
                                     </button>
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->start)->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->end)->format('d/m/Y') }}</td>
                                 <td>
-                                    <a href="{{ route('vouchers.edit', $voucher->id) }}"
+                                    <a href="{{ route('admin.vouchers.edit', $voucher->id) }}"
                                         class="btn btn-warning btn-sm">Sửa</a>
                                 </td>
                             </tr>

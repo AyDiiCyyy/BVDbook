@@ -25,7 +25,7 @@
                     <!-- Left Column -->
                     <div class="col-md-6">
                         <div class="card card-primary card-outline mb-4">
-                            <form action="{{ route('vouchers.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.vouchers.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <!-- Tên Voucher -->
