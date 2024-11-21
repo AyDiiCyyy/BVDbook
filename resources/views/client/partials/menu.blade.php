@@ -17,10 +17,9 @@
                     <li class="menu-dropdown">
                         <a href="#">Danh mục <i class="ion-ios-arrow-down"></i></a>
                         <ul class="sub-menu">
-                            <li><a href="about.html">Sách Giáo Khoa</a></li>
-                            <li><a href="cart.html">Sách tô màu</a></li>
-                            <li><a href="checkout.html">Sách tập tô</a></li>
-                            <li><a href="compare.html">Văn học</a></li>
+                            @foreach ($categoryAll as $category) 
+                            <li><a href="{{ route('danhmucSanpham', ['slug'=>$category->slug]) }}">{{$category->name}}</a></li>
+                            @endforeach
                         </ul>
                     </li>
                     <li class="menu-dropdown">
@@ -53,18 +52,9 @@
                             <div class="search-category">
                                 <select class="bootstrap-select" name="poscats">
                                     <option value="0">Danh mục</option>
-                                    <option value="">
-                                        Sách giáo khoa
-                                    </option>
-                                    <option value="">
-                                        Sách tập tô
-                                    </option>
-                                    <option value="">
-                                        Truyện
-                                    </option>
-                                    <option value="">
-                                        Văn học
-                                    </option>
+                                    @foreach ($categoryAll as $category )
+                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach​
                                 </select>
                             </div>
                             <button type="submit"><i class="ion-ios-search-strong"></i></button>

@@ -14,7 +14,8 @@ class HomeController extends Controller
 
     public function proCate($slug) {
         $category = Category::where('slug',$slug)->firstOrFail();
-        $products = $category-> CategoryProducts()->paginate(self::PAGINATION);
+        $productId = $category->CategoryProducts()->pluck('product_id');
+        $products= Product::query()->whereIn('id',$productId)->paginate(self::PAGINATION);
         return view('client.page.productCategory', compact('category', 'products'));
 
     }

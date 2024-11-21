@@ -44,9 +44,9 @@
                                     <article class="list-product">
                                         <div class="img-block">
                                             <a href="single-product.html" class="thumbnail">
-                                                <img class="first-img" src="{{ asset($product->product->image) }}"
+                                                <img class="first-img" src="{{ asset($product->image) }}"
                                                     alt="" />
-                                                <img class="second-img" src="{{ asset($product->product->image) }}"
+                                                <img class="second-img" src="{{ asset($product->image) }}"
                                                     alt="" />
                                             </a>
 
@@ -56,16 +56,16 @@
                                         </ul>
                                         <div class="product-decs">
                                             <a class="inner-link"
-                                                href="shop-4-column.html"><span>{{ $product->category->name }}</span></a>
+                                                href="shop-4-column.html"><span>{{$category->name}}</span></a>
                                             <h2><a href="single-product.html"
-                                                    class="product-link">{{ $product->product->name }}</a></h2>
+                                                    class="product-link">{{ $product->name }}</a></h2>
                                             <div class="pricing-meta">
                                                 <ul>
-                                                    <li class="old-price">{{ $product->product->price }} VND</li>
-                                                    <li class="current-price">{{ $product->product->sale }} VND</li>
-                                                    @if ($product->product->sale)
+                                                    <li class="old-price">{{ $product->price }} VND</li>
+                                                    <li class="current-price">{{ $product->sale }} VND</li>
+                                                    @if ($product->sale)
                                                         <li class="discount-price">
-                                                            -{{ round((($product->product->price - $product->product->sale) / $product->product->price) * 100) }}%
+                                                            -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
                                                         </li>
                                                     @endif
                                                 </ul>
