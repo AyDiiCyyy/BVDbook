@@ -26,6 +26,7 @@
                     </ul>
                 </li>
                 <li class="nav-item menu-open"> <a href="#" class="nav-link active"> <i
+<<<<<<< HEAD
                             class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Sản phẩm
@@ -43,6 +44,25 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+=======
+                    class="nav-icon bi bi-speedometer"></i>
+                <p>
+                    Danh mục
+                    <i class="nav-arrow bi bi-chevron-right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item"> <a href="{{route('admin.category.index')}}" class="nav-link active"> <i
+                            class="nav-icon bi bi-circle"></i>
+                        <p>Danh sách</p>
+                    </a> </li>
+                <li class="nav-item"> <a href="{{route('admin.category.create')}}" class="nav-link"> <i
+                            class="nav-icon bi bi-circle"></i>
+                        <p>Thêm mới</p>
+                    </a>
+
+
+>>>>>>> c5198a5ea26f1b31b593d9c8c1b79cae8e38639a
 
                     </ul>
                 </li>
@@ -65,8 +85,34 @@
                             </a>
                         </li>
 
+<<<<<<< HEAD
                     </ul>
                 </li>
+=======
+    </ul>
+</li>
+<li class="nav-item menu-open">
+    <a href="#" class="nav-link active"> <i class="nav-icon fas fa-ticket-alt"></i>
+        <p>
+            Vouchers
+            <i class="nav-arrow bi bi-chevron-right"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview">
+        <li class="nav-item"> <a href="{{ route('admin.voucher.index') }}" class="nav-link"> <i
+                    class="nav-icon bi bi-circle"></i>
+                <p>Danh sách</p>
+            </a>
+        </li>
+        <li class="nav-item"> <a href="{{ route('admin.voucher.create') }}" class="nav-link"> <i
+                    class="nav-icon bi bi-circle"></i>
+                <p>Thêm mới</p>
+            </a>
+        </li>
+
+    </ul>
+</li>
+>>>>>>> c5198a5ea26f1b31b593d9c8c1b79cae8e38639a
             </ul> <!--end::Sidebar Menu-->
         </nav>
     </div> <!--end::Sidebar Wrapper-->

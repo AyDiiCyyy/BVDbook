@@ -3,15 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\CategoryProduct;
 use App\Models\Comment;
 use App\Models\Product;
-use App\Models\ProductGallery;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function index()
+    {
+        return redirect('/');
+    }
     public function  getProductDetail($slug)
     {
         // whereHas là lọc các bản ghi của model chính dựa trên điều kiện của mối quan hệ
@@ -38,4 +54,5 @@ class HomeController extends Controller
         
         return view('productDetail', compact('productDetail','galleriesOfProduct','categoriesOfProduct', 'relatedProducts', 'getProductsByCategory','getListComments'));
     }
+    
 }
