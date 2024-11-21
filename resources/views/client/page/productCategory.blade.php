@@ -1,7 +1,7 @@
 @extends('client.layouts')
 
 @section('title')
-    Trang Chủ
+    Danh mục sản phẩm
 @endsection
 
 @section('content')

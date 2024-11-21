@@ -23,7 +23,7 @@
                     @foreach ($product as $item)
                     <article class="list-product">
                         <div class="img-block">
-                            <a href="single-product.html" class="thumbnail">
+                            <a href="{{ route('danhmucSanpham', ['slug'=>$item->slug]) }}" class="thumbnail">
                                 <img class="first-img"
                                     src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
                                     alt="" />
