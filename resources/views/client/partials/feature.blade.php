@@ -31,14 +31,11 @@
                                     src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
                                     alt="" />
                             </a>
-                            
+
                         </div>
                         <div class="product-decs">
-                            {{-- @php
-                                dd($item);
-                            @endphp --}}
                             <a class="inner-link" href="shop-4-column.html"><span>{{$item->ProductCategories?->first()?->category->name}}</span></a>
-                            <h2><a href="single-product.html" class="product-link">{{Str::limit($item->name,18,'...')}}</a></h2>
+                            <h2><a href="single-product.html" class="product-link">{{Str::limit($item->name, 15, '...' )}}</a></h2>
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>
@@ -49,21 +46,25 @@
                             <div class="pricing-meta">
                                 @if ($item->sale)
                                 <ul>
-                                    <li class="old-price">{{number_format($item->price, 0, ',')}}₫</li>
-                                    <li class="current-price">{{number_format($item->sale, 0, ',')}}₫</li>
+                                    <li class="old-price">{{number_format($item->price,0,".",'.')}}₫</li>
+                                    <li class="current-price">{{number_format($item->sale,0,".",'.')}}₫</li>
                                 </ul>
-                                @else
+                                @else 
                                 <ul>
-                                    <li class="old-price not-cut">{{number_format($item->price, 0, ',')}}₫</li>
+                                    <li class="old-price not-cut">{{number_format($item->price,0,".",'.')}}₫</li>
                                 </ul>
+
                                 @endif
                                 
                             </div>
                         </div>
                     </article>
                     @endforeach
+                    
+                    
                 </div>
                 @endforeach
+                
             </div>
             <!-- Feature slide 2 End -->
         </div>

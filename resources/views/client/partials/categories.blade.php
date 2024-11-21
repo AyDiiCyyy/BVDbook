@@ -13,138 +13,27 @@
     <!-- Category Slider Start -->
     <div class="category-slider owl-carousel owl-nav-style">
         <!-- Single item -->
+        @foreach ($categories as $category)
         <div class="category-item">
-            <div class="category-list mb-30px">
+            @foreach ($category as $item )
+            <div class="category-list {{ $loop->first ? 'mb-30px' : '' }}">
                 <div class="category-thumb">
                     <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-1.jpg') }}" alt="" />
+                        <img src="{{ asset('client/assets/images/category/1.png') }}" alt="" />
                     </a>
                 </div>
                 <div class="desc-listcategoreis">
                     <div class="name_categories">
-                        <h4>Fresh Vegetables</h4>
+                        <h4>{{$item->name}}</h4>
                     </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
+                    <span class="number_product">{{$item->product_count}} sản phẩm</span>
+                    <a href="{{ route('danhmucSanpham', ['slug'=>$item->slug]) }}"> Mua ngay <i
                             class="ion-android-arrow-dropright-circle"></i></a>
                 </div>
             </div>
-            <div class="category-list">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-2.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Fresh Salad & Dips</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
+            @endforeach
         </div>
-        <!-- Single item -->
-        <div class="category-item">
-            <div class="category-list mb-30px">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-3.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Fresh Fruit</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-            <div class="category-list">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-4.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Baking & Cooking</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Single item -->
-        <div class="category-item">
-            <div class="category-list mb-30px">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-5.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Fresh Cream & Custard</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-            <div class="category-list">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-6.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Milk, Butter & Eggs</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Single item -->
-        <div class="category-item">
-            <div class="category-list mb-30px">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-7.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Spreads & Margarine</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-            <div class="category-list">
-                <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/product-image/organic/thumb-8.jpg') }}" alt="" />
-                    </a>
-                </div>
-                <div class="desc-listcategoreis">
-                    <div class="name_categories">
-                        <h4>Fresh Vegetables</h4>
-                    </div>
-                    <span class="number_product">17 Products</span>
-                    <a href="shop-4-column.html"> Shop Now <i
-                            class="ion-android-arrow-dropright-circle"></i></a>
-                </div>
-            </div>
-        </div>
-        <!-- Single item -->
+        @endforeach
     </div>
     <!-- Category Slider Start -->
 </div>
