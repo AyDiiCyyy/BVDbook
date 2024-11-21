@@ -25,7 +25,7 @@
                     <!-- Left Column -->
                     <div class="col-md-6">
                         <div class="card card-primary card-outline mb-4">
-                            <form action="{{ route('admin.vouchers.update', $voucher->id) }}" method="POST"
+                            <form action="{{ route('admin.voucher.update', $voucher->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
@@ -119,7 +119,7 @@
                                 <!-- Submit Button -->
                                 <div class="mb-3 d-flex justify-content-center mt-5">
                                     <button type="submit" class="btn btn-success">Cập nhật</button>
-                                    <a href="{{ route('admin.vouchers.index') }}" class="btn btn-info ms-3">Danh sách</a>
+                                    <a href="{{ route('admin.voucher.index') }}" class="btn btn-info ms-3">Danh sách</a>
                                 </div>
                             </div>
                         </div>
