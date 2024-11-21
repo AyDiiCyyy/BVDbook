@@ -12,9 +12,6 @@
             <div class="col-8 d-lg-block d-none">
                 <div class="header-right-nav">
                     <ul>
-                        <li>
-                            <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>So sánh (0)</a>
-                        </li>
                         <li class="border-color-black">
                             <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Sản phẩm yêu thích
                                 (0)</a>
@@ -25,13 +22,28 @@
                         <div class="header-bottom-set dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
-                                data-bs-toggle="dropdown"> Setting <i
-                                    class="ion-ios-arrow-down"></i></button>
+                                data-bs-toggle="dropdown"> Settings <i class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="my-account.html">Tài khoản</a></li>
-                                <li><a class="dropdown-item" href="checkout.html">Đơn mua</a></li>
-                                <li><a class="dropdown-item" href="login.html">Đăng nhập</a></li>
-                                <li><a class="dropdown-item" href="login.html">Đăng xuất</a></li>
+                                <li><a class="dropdown-item" href="#">My account</a></li>
+                                <li><a class="dropdown-item" href="#">Checkout</a></li>
+
+                                @guest
+                                    <!-- Hiển thị Login khi chưa đăng nhập -->
+                                    <li><a class="dropdown-item" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                                @endguest
+
+                                @auth
+                                    <!-- Hiển thị Logout khi đã đăng nhập -->
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
+                                        </a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                @endauth
                             </ul>
                         </div>
                     </div>

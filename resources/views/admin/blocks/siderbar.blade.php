@@ -7,8 +7,7 @@
     <div class="sidebar-wrapper">
         <nav class="mt-2"> <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-                <li class="nav-item"> <a href="#" class="nav-link "> <i
-                            class="nav-icon bi bi-speedometer"></i>
+                <li class="nav-item"> <a href="#" class="nav-link "> <i class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Danh mục
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -28,8 +27,7 @@
 
                     </ul>
                 </li>
-                <li class="nav-item"> <a href="#" class="nav-link"> <i
-                            class="nav-icon bi bi-speedometer"></i>
+                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-speedometer"></i>
                         <p>
                             Sản phẩm
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -57,12 +55,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="{{ route('vouchers.index') }}" class="nav-link"> <i
+                        <li class="nav-item"> <a href="{{ route('admin.voucher.index') }}" class="nav-link"> <i
                                     class="nav-icon bi bi-circle"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        <li class="nav-item"> <a href="{{ route('vouchers.create') }}" class="nav-link"> <i
+                        <li class="nav-item"> <a href="{{ route('admin.voucher.create') }}" class="nav-link"> <i
                                     class="nav-icon bi bi-circle"></i>
                                 <p>Thêm mới</p>
                             </a>
