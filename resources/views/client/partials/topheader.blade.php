@@ -4,7 +4,7 @@
             <!--Left Start-->
             <div class="col-lg-4 col-md-12">
                 <div class="text-lg-start text-center">
-                    <p class="color-black">Welcome you to Ecolife store!</p>
+                    <p class="color-black">Chào mừng bạn đến với BVD Book!!!</p>
                 </div>
             </div>
             <!--Left End-->
@@ -12,11 +12,8 @@
             <div class="col-8 d-lg-block d-none">
                 <div class="header-right-nav">
                     <ul>
-                        <li>
-                            <a href="compare.html"><i class="ion-ios-shuffle-strong"></i>Compare (0)</a>
-                        </li>
                         <li class="border-color-black">
-                            <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Wishlist
+                            <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Sản phẩm yêu thích
                                 (0)</a>
                         </li>
                     </ul>
@@ -49,35 +46,6 @@
                                 @endauth
                             </ul>
                         </div>
-                        <!-- Single Wedge Start -->
-                        <div class="header-top-curr dropdown">
-                            <button
-                                class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
-                                data-bs-toggle="dropdown"><img class="me-2"
-                                    src="{{ asset('client/assets/images/icons/1.jpg') }}" alt="">English<i
-                                    class="ion-ios-arrow-down"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="#"><img
-                                            src="{{ asset('client/assets/images/icons/1.jpg') }}"
-                                            alt="">English</a></li>
-                                <li><a class="dropdown-item" href="#"><img
-                                            src="{{ asset('client/assets/images/icons/2.jpg') }}"
-                                            alt="">Français</a></li>
-                            </ul>
-                        </div>
-                        <!-- Single Wedge End -->
-                        <!-- Single Wedge Start -->
-                        <div class="header-top-curr dropdown">
-                            <button
-                                class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black pr-0"
-                                data-bs-toggle="dropdown">USD $
-                                <i class="ion-ios-arrow-down"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                                <li><a class="dropdown-item" href="#">USD $</a></li>
-                                <li><a class="dropdown-item" href="#">EUR €</a></li>
-                            </ul>
-                        </div>
-                        <!-- Single Wedge End -->
                     </div>
                     <!-- Header Top Language Currency -->
                 </div>

@@ -2,22 +2,18 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ContactController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // Đăng nhập, đăng ký
 Auth::routes();
 
-// Route cho trang chủ người dùng sau khi đăng nhập
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Trang chính của client
-Route::get('/', function () {
-    return view('client.layouts');
-});
-Route::get('/about', function () {
-    return view('client.partials.gioithieu');
-});
+
 
 // Sử dụng middleware `auth` để yêu cầu đăng nhập trước khi truy cập vào các route admin
 Route::middleware(['auth', 'admin.role'])->group(function () {
@@ -76,9 +72,40 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
         ]);
 
         Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
+
+
+
+        Route::prefix('user')->as('user.')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('index');
+            Route::post('admin/user/change-active', [UserController::class, 'changeActive'])->name('changeActive');
+            Route::get('/create', [UserController::class, 'create'])->name('create');
+            Route::post('/store', [UserController::class, 'store'])->name('store');
+            Route::get('/show/{id}', [UserController::class, 'show'])->name('show');
+            Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
+            Route::put('update/{id}', [UserController::class, 'update'])->name('update');
+            Route::delete('/{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
+    
+        });
     });
 
 });
 
 
 
+
+
+
+
+
+
+// router client
+Route::get('/',[HomeController::class,'index'])->name('index');
+Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSanpham');
+Route::get('/about', function () {
+    return view('client.partials.gioithieu');
+});
+//Sản phẩm chi tiết
+Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
+
+// Route cho trang liên hệ, sử dụng ContactController
+Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');

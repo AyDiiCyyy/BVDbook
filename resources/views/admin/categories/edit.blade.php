@@ -23,7 +23,7 @@
                             @csrf
                             @method('PUT')
                             <div class="card-body">
-                                <div class="mb-3">
+                                {{-- <div class="mb-3">
                                     <label class="form-label">Danh mục cha: </label>
                                     <select name="parent_id" id="parent_category" class="form-select">
                                         <option value="">Chọn danh mục cha</option>
@@ -44,7 +44,7 @@
                                     @error('parent_id')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
-                                </div>
+                                </div> --}}
                         
                                 <div class="mb-3">
                                     <label class="form-label">Tên danh mục: </label>

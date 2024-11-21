@@ -8,8 +8,8 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-1.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>Miễn phí giao hàng</h4>
-                        <p>Cho tất cả đơn hàng trên 100.000 VND.</p>
+                        <h4>Miễn phí vận chuyển</h4>
+                        <p>Miễn phí vận chuyển cho tất cả đơn hàng</p>
                     </div>
                 </div>
             </div>
@@ -20,8 +20,8 @@
                     <img src="{{ asset('client/assets/images/icons/static-icons-2.png') }}" alt=""
                         class="img-responsive" />
                     <div class="single-static-meta">
-                        <h4>Miễn phí hoàn trả</h4>
-                        <p>Hoàn trả miễn phí trong vòng 7 ngày.</p>
+                        <h4>Trả hàng miễn phí</h4>
+                        <p>Trả hàng miễn phí trong vòng 9 ngày</p>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                         class="img-responsive" />
                     <div class="single-static-meta">
                         <h4>Thanh toán an toàn 100%</h4>
-                        <p>Thanh toán của bạn an toàn với chúng tôi.</p>
+                        <p>Thanh toán của bạn sẽ an toàn với chúng tôi.</p>
                     </div>
                 </div>
             </div>

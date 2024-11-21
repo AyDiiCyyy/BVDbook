@@ -9,14 +9,13 @@
                 </div>
                 <!-- footer logo -->
                 <div class="about-footer">
-                    <p class="text-info">We are a team of designers and developers that create high quality
-                        HTML template</p>
+                    <p class="text-info">BVDBook nhận đặt hàng trực tuyến và giao hàng tận nơi.</p>
                     <div class="need-help">
                         <p class="phone-info">
-                            NEED HELP?
+                            HỖ TRỢ
                             <span>
-                                (+800) 345 678 <br />
-                                (+800) 123 456
+                                (+84) 9877777777 <br />
+                                (+84) 8386688666 
                             </span>
                         </p>
                     </div>
@@ -44,15 +43,14 @@
             <!-- footer single wedget -->
             <div class="col-md-6 col-lg-2 mt-res-sx-30px mt-res-md-30px">
                 <div class="single-wedge">
-                    <h4 class="footer-herading">Information</h4>
+                    <h4 class="footer-herading">DỊCH VỤ</h4>
                     <div class="footer-links">
                         <ul>
-                            <li><a href="#">Delivery</a></li>
-                            <li><a href="about.html">About Us</a></li>
-                            <li><a href="#">Secure Payment</a></li>
-                            <li><a href="contact.html">Contact Us</a></li>
-                            <li><a href="#">Sitemap</a></li>
-                            <li><a href="#">Stores</a></li>
+                            <li><a href="#">Chính sách giao hàng</a></li>
+                            <li><a href="about.html">Giới Thiệu BVDBook </a></li>
+                            <li><a href="#">Chính sách bảo mật thanh toán</a></li>
+                            <li><a href="contact.html">Liên hệ </a></li>
+                            <li><a href="#">Hệ thống trung tâm - nhà sách</a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,15 +58,15 @@
             <!-- footer single wedget -->
             <div class="col-md-6 col-lg-2 mt-res-md-50px mt-res-sx-30px mt-res-md-30px">
                 <div class="single-wedge">
-                    <h4 class="footer-herading">Custom Links</h4>
+                    <h4 class="footer-herading">HỖ TRỢ</h4>
                     <div class="footer-links">
                         <ul>
-                            <li><a href="#">Legal Notice</a></li>
-                            <li><a href="#">Prices Drop</a></li>
-                            <li><a href="#">New Products</a></li>
+                            <li><a href="#">Chính sách đổi trả - hoàn tiền</a></li>
+                            <li><a href="#">Chính sách bảo hành - bồi hoàn</a></li>
+                            {{-- <li><a href="#">New Products</a></li>
                             <li><a href="#">Best Sales</a></li>
                             <li><a href="login.html">Login</a></li>
-                            <li><a href="my-account.html">My Account</a></li>
+                            <li><a href="my-account.html">My Account</a></li> --}}
                         </ul>
                     </div>
                 </div>
@@ -76,10 +74,9 @@
             <!-- footer single wedget -->
             <div class="col-md-6 col-lg-4 mt-res-md-50px mt-res-sx-30px mt-res-md-30px">
                 <div class="single-wedge">
-                    <h4 class="footer-herading">Newsletter</h4>
+                    <h4 class="footer-herading">Đăng ký thành viên</h4>
                     <div class="subscrib-text">
-                        <p>You may unsubscribe at any moment. For that purpose, please find our contact info
-                            in the legal notice.</p>
+                        <p>Bạn hoàn toàn có thể hủy đăng ký nhận thông tin bất cứ lúc nào nếu không còn quan tâm.</p>
                     </div>
                     <div id="mc_embed_signup" class="subscribe-form">
                         <form id="mc-embedded-subscribe-form" class="validate" novalidate="" target="_blank"
@@ -87,7 +84,7 @@
                             action="http://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef">
                             <div id="mc_embed_signup_scroll" class="mc-form">
                                 <input class="email" type="email" required=""
-                                    placeholder="Enter your email here.." name="EMAIL" value="" />
+                                    placeholder="Nhập mail của bạn tại đây..." name="EMAIL" value="" />
                                 <div class="mc-news" aria-hidden="true"
                                     style="position: absolute; left: -5000px;">
                                     <input type="text" value="" tabindex="-1"
@@ -100,10 +97,10 @@
                             </div>
                         </form>
                     </div>
-                    <div class="img_app">
+                    {{-- <div class="img_app">
                         <a href="#"><img src="{{ asset('client/assets/images/icons/app_store.png') }}" alt="" /></a>
                         <a href="#"><img src="{{ asset('client/assets/images/icons/google_play.png') }}" alt="" /></a>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <!-- footer single wedget -->
@@ -115,7 +112,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-lg-5 text-center text-md-start order-2 order-md-1 mt-4 mt-md-0">
-                <p class="copy-text">Copyright © <a href="https://hasthemes.com/"> HasThemes</a>. All Rights
+                <p class="copy-text">Copyright © <a href="https://hasthemes.com/"> BVDBook</a>. All Rights
                     Reserved</p>
             </div>
             <div class="col-md-6 col-lg-7 text-center text-md-end order-1 order-md-2">

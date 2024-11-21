@@ -154,7 +154,6 @@
                                                             'children' => $category->childrenRecursive,
                                                             'depth' => 1,
                                                             'cateData' => $selectedCategories
-
                                                         ])
                                                     @endif
                                                 @endforeach

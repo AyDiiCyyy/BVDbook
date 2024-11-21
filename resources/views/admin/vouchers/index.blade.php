@@ -62,7 +62,7 @@
                             <th scope="col">Mã Voucher</th>
                             <th scope="col">Giá Khuyến Mãi</th>
                             <th scope="col">Giới Hạn Sử Dụng</th>
-                            <th scope="col">Giá Đơn Tối Thiểu</th>
+                            <th scope="col">Đơn Hàng Tối Thiểu</th>
                             <th scope="col">Trạng Thái</th>
                             <th scope="col">Ngày Bắt Đầu</th>
                             <th scope="col">Ngày Kết Thúc</th>

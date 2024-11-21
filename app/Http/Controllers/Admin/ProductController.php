@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
     use StorageImageTrait;
-    const PAGINATION = 10;
+    const PAGINATION = 5;
     public function index(Request $request)
     {
         $name = $request->name;

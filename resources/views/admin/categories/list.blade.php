@@ -38,14 +38,14 @@
                                     <input type="text" name="name" class="form-control" placeholder="Tìm kiếm theo tên" value="{{ request('name') }}">
                                 </div>
                                 <div class="col-4">
-                                    <select name="parent_id" class="form-control">
+                                    {{-- <select name="parent_id" class="form-control">
                                         <option value="" selected>--Danh mục cha--</option>
                                         @foreach($allCategories as $cat)
                                             <option value="{{ $cat->id }}" {{ request('parent_id') == $cat->id ? 'selected' : '' }}>
                                                 {{ $cat->name }}
                                             </option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
                                 </div>
                                 <div class="col-4">
                                     <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -69,8 +69,8 @@
                         <tr>
                             <th scope="col">Tên danh mục</th>
                             <th scope="col">Ảnh</th>
-                            <th scope="col">Slug</th>
-                            <th scope="col">Danh mục cha</th>
+                            <th scope="col">Đường Dẫn</th>
+                            <th scope="col"></th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
@@ -87,7 +87,7 @@
                                 </td>
                                 <td>{{ $category->slug }}</td>
                                 <td>
-                                    {{ $category->parent ? $category->parent->name : 'Danh mục chính' }}
+                                    {{-- {{ $category->parent ? $category->parent->name : 'Danh mục chính' }} --}}
                                 </td>
 
                                 <td>

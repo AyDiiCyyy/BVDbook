@@ -13,9 +13,9 @@
     </div>
     <!-- Slider Arae End -->
     <!-- Banner Area Start -->
-    <div class="banner-3-area">
+    {{-- <div class="banner-3-area">
         @include('client.partials.banner')
-    </div>
+    </div> --}}
     <!-- Banner Area End -->
     <!-- Static Area Start -->
     <section class="static-area mtb-60px">
@@ -44,9 +44,9 @@
     </section>
     <!-- Recent product area end -->
     <!-- Blog area Start -->
-    <section class="blog-area mb-30px">
+    {{-- <section class="blog-area mb-30px">
         @include('client.partials.blog')
-    </section>
+    </section> --}}
     <!-- Blog Area End -->
     <!-- Category Area Start -->
     <section class="categorie-area">
