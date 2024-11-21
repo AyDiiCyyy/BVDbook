@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Breadcrumb Area Start -->
-    <section class="breadcrumb-area">
+    <section class="breadcrumb-area" style="background-color:rgb(215, 229, 229)">
         <div class="container" style="margin-top: -50px">
             <div class="row">
                 <div class="col-md-12">
@@ -24,13 +24,13 @@
     <!-- Breadcrumb Area End -->
 
     <!-- About Area Start -->
-    <section class="about-area" style="margin-top: -80px">
-        <div class="container">
+    <section class="about-area" style="margin-top: -100px; background-color:rgb(215, 229, 229)">
+        <div class="container" >
             <div class="row align-items-center">
                 <div class="col-lg-6">
                     <div class="about-image">
-                        <img src="{{ asset('client/assets/images/about/bookstore.jpg') }}" alt="Giới thiệu"
-                            class="img-fluid rounded shadow-sm" />
+                        <img src="{{ asset('client/assets/images/about.jpg') }}" alt="Giới thiệu"
+                            class="img-fluid rounded shadow" width="600px" height="400px" />
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -62,7 +62,7 @@
             <div class="row mt-5">
                 <div class="col-md-4">
                     <div class="single-about text-center">
-                        <img src="{{ asset('client/assets/images/icons/company.png') }}" alt="Công ty" class="mb-3" />
+                        <img src="{{ asset('client/assets/images/about1.jpg') }}" alt="Công ty" class="mb-3" width="350px"/>
                         <h4>Công Ty</h4>
                         <p>
                             BVD Book được thành lập từ năm 2024 với mục tiêu là cầu nối giữa tác giả, dịch giả, nhà xuất bản
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="single-about text-center">
-                        <img src="{{ asset('client/assets/images/icons/team.png') }}" alt="Đội ngũ" class="mb-3" />
+                        <img src="{{ asset('client/assets/images/about2.jpg') }}" alt="Đội ngũ" class="mb-3" width="350px"/>
                         <h4>Đội Ngũ</h4>
                         <p>
                             Chúng tôi sở hữu nền tảng công nghệ hiện đại và đội ngũ phát triển sản phẩm chất lượng cao,
@@ -86,8 +86,8 @@
                 </div>
                 <div class="col-md-4">
                     <div class="single-about text-center">
-                        <img src="{{ asset('client/assets/images/icons/testimonial.png') }}" alt="Khách hàng"
-                            class="mb-3" />
+                        <img src="{{ asset('client/assets/images/about3.jpg') }}" alt="Khách hàng"
+                            class="mb-3"  width="350px"/>
                         <h4>Khách Hàng</h4>
                         <p>
                             Hơn 10,000 khách hàng tin tưởng sử dụng dịch vụ của chúng tôi mỗi năm là minh chứng rõ ràng
