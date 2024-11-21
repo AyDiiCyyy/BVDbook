@@ -102,3 +102,5 @@ Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSan
 Route::get('/about', function () {
     return view('client.partials.gioithieu');
 });
+//Sản phẩm chi tiết
+Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
