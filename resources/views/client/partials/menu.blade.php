@@ -42,7 +42,9 @@
                 </ul>
             </div>
             <!-- Main Navigation Area end -->
-            <div class="header_account_area">
+            <div class="header_account_area ">
+                <div class="header_account_list me-2">   
+                </div>
                 <!-- Search start -->
                 <div class="header_account_list search_list" style="height: auto">
                     <a href="javascript:void(0)"><i class="ion-ios-search-strong"></i></a>

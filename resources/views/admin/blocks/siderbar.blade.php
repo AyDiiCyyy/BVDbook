@@ -48,7 +48,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link "> <i class="nav-icon fas fa-ticket-alt"></i>
+                    <a href="#" class="nav-link "> <i class="bi bi-ticket-perforated-fill"></i>
                         <p>
                             Vouchers
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -68,7 +68,24 @@
 
                     </ul>
                 </li>
-            </ul> <!--end::Sidebar Menu-->
+                <li class="nav-item">
+                    <a href="#" class="nav-link active"> <i class="bi bi-person-circle"></i>
+                        <p>
+                            Người dùng
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a href="{{ route('admin.user.index') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Danh sách người dùng</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </li>
+            </ul>
         </nav>
     </div> <!--end::Sidebar Wrapper-->
 </aside> <!--end::Sidebar--> <!--begin::App Main-->
