@@ -77,7 +77,7 @@
                                     </li>
                                 @else
                                     <li class="old-price not-cut ">
-                                        {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                        {{ number_format($productDetail->price, 0, '.', '.') }}₫
                                     </li>
                                 @endif
                             </ul>

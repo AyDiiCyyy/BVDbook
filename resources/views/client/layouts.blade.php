@@ -13,13 +13,13 @@
         <!-- Header Area Start  -->
         <header class="main-header">
             <!-- Header top Area Start  -->
-                @include('client.partials.topheader')
+            @include('client.partials.topheader')
             <!-- Header top Area end  -->
 
             <!-- Header Navigation Area Start  -->
             <div class="header-navigation sticky-nav d-none d-lg-block">
                 <!--  Logo And Menu-->
-                    @include('client.partials.menu')
+                @include('client.partials.menu')
                 <!--  Logo And Menu end-->
             </div>
             <!--Header Bottom Account End -->
@@ -38,8 +38,20 @@
         <!--  Main Header End -->
 
         @yield('content')
+        <!-- Footer Area start -->
+        <footer class="footer-area">
+            @include('client.partials.footer')
+        </footer>
+        <!--  Footer Area End -->
+    </div>
 
-    
+    <!-- Modal (product show) -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog">
+        @include('client.partials.productshow')
+
+    </div>
+    <!-- Modal end -->
+
 
     @include('client.partials.js')
 </body>
