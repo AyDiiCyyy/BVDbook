@@ -79,10 +79,10 @@
                             <td>
                                 @if ($user->avatar)
                                 {{-- lấy ảnh từ storage --}}
-                                    {{-- <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="avatar-circle"> --}}
+                                    <img src="{{ asset('storage/' . $user->avatar) }}" alt="{{ $user->name }}" class="avatar-circle">
                                     
                                 {{-- ảnh mẫu fake data --}}
-                                <img src="{{ asset('assets/img/user2-160x160.jpg') }}" alt="User  Image" class="avatar-circle">
+                                {{-- <img src="{{ asset('assets/img/user2-160x160.jpg') }}" alt="User  Image" class="avatar-circle"> --}}
                                 @else
                                     <img src="{{ asset('assets/img/user2-160x160.jpg') }}" alt="User  Image" class="avatar-circle">
                                 @endif
