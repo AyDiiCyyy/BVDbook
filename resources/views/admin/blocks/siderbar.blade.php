@@ -34,17 +34,16 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="{{ route('admin.product.create') }}" class="nav-link"> <i
-                                    class="nav-icon bi bi-circle"></i>
-                                <p>Thêm mới</p>
-                            </a>
-                        </li>
                         <li class="nav-item"> <a href="{{ route('admin.product.index') }}" class="nav-link"> <i
                                     class="nav-icon bi bi-circle"></i>
                                 <p>Danh sách</p>
                             </a>
                         </li>
-
+                        <li class="nav-item"> <a href="{{ route('admin.product.create') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Thêm mới</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -69,7 +68,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link active"> <i class="bi bi-person-circle"></i>
+                    <a href="#" class="nav-link"> <i class="bi bi-person-circle"></i>
                         <p>
                             Người dùng
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -85,6 +84,25 @@
 
                     </ul>
                 </li>
+                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-speedometer"></i>
+                    <p>
+                        Slide
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item"> <a href="{{ route('admin.slide.index') }}" class="nav-link"> <i
+                                class="nav-icon bi bi-circle"></i>
+                            <p>Danh sách</p>
+                        </a>
+                    </li>
+                    <li class="nav-item"> <a href="{{ route('admin.slide.create') }}" class="nav-link"> <i
+                                class="nav-icon bi bi-circle"></i>
+                            <p>Thêm mới</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             </ul>
         </nav>
     </div> <!--end::Sidebar Wrapper-->

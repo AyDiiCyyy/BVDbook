@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\HomeController;
@@ -20,6 +21,16 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
 
     // Routes cho phần admin
     Route::prefix('admin')->as('admin.')->group(function () {
+        // Routes cho quản lý slide
+        Route::prefix('slide')->as('slide.')->group(function (){
+            Route::get('/', [SlideController::class, 'index'])->name('index');
+            Route::get('/create', [SlideController::class, 'create'])->name('create');
+            Route::post('/store', [SlideController::class,'store'])->name('store');
+            Route::get('/edit/{id}', [SlideController::class, 'edit'])->name('edit');
+            Route::put('update/{id}', [SlideController::class, 'update'])->name('update');
+            Route::post('/changeActive', [SlideController::class, 'changeActive'])->name('changeActive');
+            Route::post('/changeOrder', [SlideController::class, 'changeOrder'])->name('changeOrder');
+        });
 
         // Routes cho quản lý danh mục
         Route::prefix('category')->as('category.')->group(function () {
@@ -71,7 +82,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             'destroy' => 'voucher.destroy',
         ]);
 
-        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
+        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleS:tatus'])->name('voucher.toggleStatus');
 
 
 
