@@ -45,8 +45,7 @@
                         class="img-responsive" />
                     <div class="single-static-meta">
                         <h4>Hỗ trợ 24/7</h4>
-                        <p>Liên hệ với chúng tôi 24 giờ một ngày
-                        </p>
+                        <p>Liên hệ với chúng tôi 24/7.</p>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
+
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +26,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $category = Category::query()->orderBy('id','desc')->get();
         View::share('categoryAll', $category);
-        \Illuminate\Pagination\Paginator::useBootstrapFive();
+        Paginator::useBootstrapFive();
     }
 }

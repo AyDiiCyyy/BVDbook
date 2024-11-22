@@ -25,7 +25,7 @@
                     <!-- Left Column -->
                     <div class="col-md-6">
                         <div class="card card-primary card-outline mb-4">
-                            <form action="{{ route('vouchers.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.voucher.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <!-- Tên Voucher -->
@@ -68,9 +68,9 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Số tiền tối thiểu (Min Order Amount) -->
+                                    <!-- Đơn Hàng tối thiểu (Min Order Amount) -->
                                     <div class="mb-3">
-                                        <label class="form-label">Số tiền tối thiểu</label>
+                                        <label class="form-label">Đơn Hàng tối thiểu</label>
                                         <input type="number" class="form-control" name="min_order_amount"
                                             value="{{ old('min_order_amount') }}">
                                         @error('min_order_amount')

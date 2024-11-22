@@ -47,11 +47,12 @@
                                     <ul>
                                         <li class="old-price">{{ number_format($new->price, 0, ',') }}₫</li>
                                         <li class="current-price">{{ number_format($new->sale, 0, ',') }}₫</li>
-                                        <li class="discount-price">-{{ round((($new->price - $new->sale) / $new->price) * 100) }}%</li>
+                                        <li class="discount-price">
+                                            -{{ round((($new->price - $new->sale) / $new->price) * 100) }}%</li>
                                     </ul>
                                 @else
                                     <ul>
-<li class="old-price not-cut">{{number_format($new->price, 0, ',')}}₫</li>
+                                        <li class="old-price not-cut">{{ number_format($new->price, 0, ',') }}₫</li>
                                     </ul>
                                 @endif
                             </div>

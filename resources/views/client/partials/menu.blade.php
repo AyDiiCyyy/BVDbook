@@ -4,7 +4,7 @@
         <!--  Logo Area Start-->
         <div class="col-md-2 col-sm-2">
             <div class="logo">
-                <a href="index.html"><img src="{{ asset('client/assets/images/logo/logo-3.jpg') }}" alt="" /></a>
+                <a href="{{ route('index') }}"><img src="{{ asset('client/assets/images/logo/logo5.png') }}" alt="" width="124px" height="34px"/></a>
             </div>
         </div>
         <!--  Logo Area end-->
@@ -12,7 +12,7 @@
             <div class="main-navigation">
                 <ul>
                     <li class="menu-dropdown">
-                        <a href="#">Trang chủ</a>
+                        <a href="{{ route('index') }}">Trang chủ</a>
                     </li>
                     <li class="menu-dropdown">
                         <a href="#">Danh mục <i class="ion-ios-arrow-down"></i></a>
@@ -29,8 +29,8 @@
                             <li><a href="cart.html">Cart Page</a></li>
                             <li><a href="checkout.html">Checkout Page</a></li>
                             <li><a href="compare.html">Compare Page</a></li>
-                            <li><a href="login.html">Login & Regiter Page</a></li>
-                            <li><a href="my-account.html">Account Page</a></li>
+                            <li><a href="#">Login & Regiter Page</a></li>
+                            <li><a href="#">Account Page</a></li>
                             <li><a href="wishlist.html">Wishlist Page</a></li>
                         </ul>
                     </li>
@@ -38,13 +38,15 @@
                         <a href="#">Giới Thiệu</a>
                         
                     </li>
-                    <li><a href="contact.html">Liên hệ</a></li>
+                    <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
                 </ul>
             </div>
             <!-- Main Navigation Area end -->
-            <div class="header_account_area">
+            <div class="header_account_area ">
+                <div class="header_account_list me-2">   
+                </div>
                 <!-- Search start -->
-                <div class="header_account_list search_list">
+                <div class="header_account_list search_list" style="height: auto">
                     <a href="javascript:void(0)"><i class="ion-ios-search-strong"></i></a>
                     <div class="dropdown_search">
                         <form action="#">
@@ -54,7 +56,7 @@
                                     <option value="0">Danh mục</option>
                                     @foreach ($categoryAll as $category )
                                     <option value="{{$category->id}}">{{$category->name}}</option>
-                                    @endforeach​
+                                    @endforeach
                                 </select>
                             </div>
                             <button type="submit"><i class="ion-ios-search-strong"></i></button>
