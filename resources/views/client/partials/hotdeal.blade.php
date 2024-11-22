@@ -16,7 +16,7 @@
             <article class="list-product">
                 <div class="hot-item-inner">
                     <div class="img-block">
-                        <a href="single-product.html" class="thumbnail">
+                        <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                             <img class="first-img"
                                 src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
                                 alt="" />

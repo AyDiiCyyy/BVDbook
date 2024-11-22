@@ -5,9 +5,8 @@
 @endsection
 
 @section('content')
-
     <!-- Breadcrumb Area start -->
-    <section class="breadcrumb-area">
+    <section class="breadcrumb-area" style="margin-top: -30px" >
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -24,7 +23,7 @@
     </section>
     <!-- Breadcrumb Area End -->
     <!-- Shop details Area start -->
-    <section class="product-details-area mtb-60px">
+    <section class="product-details-area mtb-60px" style="margin-top: -50px">
         <div class="container">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12">
@@ -34,10 +33,10 @@
                                 <img class="zoompro" src="{{ asset($productDetail->image) }}" alt="" />
                             </div>
                         </div>
-                        <div id="gallery" class="product-dec-slider-2">    
-                                <a class="active" >
-                                    <img src="{{ asset($productDetail->image) }}" alt="" />
-                                </a>
+                        <div id="gallery" class="product-dec-slider-2">
+                            <a class="active">
+                                <img src="{{ asset($productDetail->image) }}" alt="" />
+                            </a>
                             @foreach ($galleriesOfProduct as $gallery)
                                 <a>
                                     <img src="{{ asset($gallery) }}" alt="" />
@@ -95,7 +94,8 @@
                                 <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                             </div>
                             <div class="pro-details-cart btn-hover">
-                                <a href="#"> + Thêm Giỏ Hàng</a>
+                                <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
+                                    Thêm Giỏ Hàng</a>
                             </div>
                         </div>
                         <div class="pro-details-wish-com">
@@ -221,7 +221,7 @@
                                     <div class="ratting-form">
                                         <form action="#">
                                             <div class="star-box">
-                                               
+
                                                 <div class="rating-product">
                                                     <i class="ion-android-star"></i>
                                                     <i class="ion-android-star"></i>
@@ -291,7 +291,7 @@
                             <a class="inner-link"
                                 href="#"><span>{{ implode(' ', $categoriesOfProduct) }}</span></a>
                             <h2><a href="{{ route('productDetail', $related->slug) }}"
-                                    class="product-link">{{Str::limit($related->name, 15, '...' )}}</a></h2>
+                                    class="product-link">{{ Str::limit($related->name, 15, '...') }}</a></h2>
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>
@@ -372,7 +372,7 @@
                             <a class="inner-link"
                                 href="#"><span>{{ implode(' ', $categoriesOfProduct) }}</span></a>
                             <h2><a href="{{ route('productDetail', $product->slug) }}"
-                                    class="product-link">{{ Str::limit($product->name, 15, '...' ) }}</a></h2>
+                                    class="product-link">{{ Str::limit($product->name, 15, '...') }}</a></h2>
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>
@@ -421,4 +421,88 @@
         </div>
     </section>
     <!-- Recent product area end -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+        $(document).ready(function() {
+            // Xử lý sự kiện click vào nút "Thêm Giỏ Hàng"
+            $('.pro-details-cart a').click(function(e) {
+                e.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+                // Lấy ID sản phẩm và số lượng từ giao diện người dùng
+                let productId = "{{ $productDetail->id }}"; // ID sản phẩm từ Blade
+                let quantity = $('.cart-plus-minus-box').val(); // Số lượng sản phẩm
+
+                // Kiểm tra nếu số lượng hợp lệ
+                if (quantity <= 0) {
+                    alert("Số lượng không hợp lệ!");
+                    return;
+                }
+
+                // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                $.ajax({
+                    url: "{{ route('cart.add') }}", // URL của route cart.add
+                    method: "POST", // Phương thức POST
+                    data: {
+                        _token: "{{ csrf_token() }}", // CSRF token
+                        product_id: productId, // ID sản phẩm
+                        quantity: quantity // Số lượng sản phẩm
+                    },
+                    success: function(response) {
+                        // Hiển thị thông báo thành công từ response
+                        alert(response.message);
+
+                        // Cập nhật tổng giá trị giỏ hàng (nếu có)
+                        $('#total-price').text('Tổng giá trị: ' + response.total_price + '₫');
+                    },
+                    error: function(xhr) {
+                        // Xử lý lỗi khi người dùng chưa đăng nhập
+                        if (xhr.status === 401) {
+                            alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+                            window.location.href =
+                                "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                        } else {
+                            alert('Có lỗi xảy ra, vui lòng thử lại');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
+@section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.pro-details-cart a').click(function(e) {
+                e.preventDefault();
+
+                let productId = "{{ $productDetail->id }}";
+                let quantity = $('.cart-plus-minus-box').val();
+
+                $.ajax({
+                    url: "{{ route('cart.add') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        product_id: productId,
+                        quantity: quantity
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 401) {
+                            alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+                            window.location.href = "{{ route('login') }}";
+                        } else {
+                            alert('Có lỗi xảy ra, vui lòng thử lại');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
