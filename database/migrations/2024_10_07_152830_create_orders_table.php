@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('order_code', 20)->unique();
             $table->foreignId('user_id')->constrained('users','id');
             $table->foreignId('voucher_id')->constrained('vouchers','id');
             $table->string('name',255);
@@ -22,7 +23,7 @@ return new class extends Migration
             $table->tinyInteger('shipping')->default(1);
             $table->decimal('total_money',10,2);
             $table->integer('status')->default(1);
-            $table->tinyInteger('payment_status');
+            $table->tinyInteger('payment_status');// Chưa thanh toán - Đã thanh toán
             $table->softDeletes();
             $table->timestamps();
         });

@@ -7,8 +7,6 @@
 </head>
 
 <body class="home-3">
-
-    <!--====== PRELOADER PART ENDS ======-->
     <div id="main">
         <!-- Header Area Start  -->
         <header class="main-header">
@@ -38,6 +36,7 @@
         <!--  Main Header End -->
 
         @yield('content')
+
         <!-- Footer Area start -->
         <footer class="footer-area">
             @include('client.partials.footer')
@@ -51,7 +50,6 @@
 
     </div>
     <!-- Modal end -->
-
 
     @include('client.partials.js')
 </body>

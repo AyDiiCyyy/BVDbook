@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Voucher\StoreVoucherRequest;
 use App\Http\Requests\Voucher\UpdateVoucherRequest;
 use App\Models\Voucher;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -14,33 +15,50 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
         $status = $request->input('status', 'active');
+        $search = $request->input('search', null);
 
-        if ($status == 'deleted') {
-            // Lấy các voucher đã bị xóa mềm
-            $data['vouchers'] = Voucher::onlyTrashed()->orderByDesc('id')->paginate(10);
-        } else {
-            // Lấy các voucher chưa bị xóa mềm
-            $data['vouchers'] = Voucher::orderByDesc('id')->paginate(10);
+        $query = Voucher::query();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'LIKE', '%' . $search . '%')
+                    ->orWhere('sku', 'LIKE', '%' . $search . '%');
+            });
         }
+
+        $data['vouchers'] = $query->orderByDesc('id')->paginate(10);
 
         $currentDate = now();
 
         foreach ($data['vouchers'] as $voucher) {
-            if ($voucher->start > $currentDate) {
-                // Nếu ngày bắt đầu lớn hơn ngày hiện tại, voucher sắp ra mắt
-                $voucher->isUpcoming = true;
-                $voucher->isExpired = false;
-            } elseif ($voucher->end < $currentDate) {
-                // Nếu ngày kết thúc nhỏ hơn ngày hiện tại, voucher đã hết hạn
+            // Nếu voucher đã bị thay đổi thủ công, không cập nhật trạng thái tự động
+            if ($voucher->is_manually_updated) {
+                continue; // Bỏ qua voucher đã thay đổi thủ công
+            }
+
+            $endDate = Carbon::parse($voucher->end);
+
+            if ($endDate->endOfDay()->lessThan($currentDate)) {
+                // Nếu ngày kết thúc đã qua và voucher chưa thay đổi trạng thái, cập nhật thành 'expired'
+                if ($voucher->status !== 'expired') {
+                    $voucher->status = 'expired';
+                    $voucher->save();
+                }
                 $voucher->isExpired = true;
                 $voucher->isUpcoming = false;
             } else {
-                // Voucher đang hoạt động
+                // Nếu ngày kết thúc chưa qua, cập nhật trạng thái thành 'active'
+                if ($voucher->status !== 'active') {
+                    $voucher->status = 'active';
+                    $voucher->save();
+                }
                 $voucher->isExpired = false;
                 $voucher->isUpcoming = false;
             }
         }
+
         $data['status'] = $status;
+        $data['search'] = $search;
 
         return view('admin.vouchers.index', $data);
     }
@@ -54,7 +72,7 @@ class VoucherController extends Controller
     {
         try {
             Voucher::create($request->validated());
-            return redirect()->route('vouchers.index')->with('success', 'Thêm mới voucher thành công.');
+            return redirect()->route('admin.voucher.index')->with('success', 'Thêm mới voucher thành công.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
         }
@@ -71,39 +89,32 @@ class VoucherController extends Controller
         try {
             $voucher = Voucher::withTrashed()->findOrFail($id);
             $voucher->update($request->validated());
-            return redirect()->route('vouchers.index')->with('success', 'Cập nhật voucher thành công.');
+            return redirect()->route('admin.voucher.index')->with('success', 'Cập nhật voucher thành công.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
         }
     }
 
-    public function destroy($id)
+
+    public function toggleStatus(Request $request, $id)
     {
         try {
-            $voucher = Voucher::withTrashed()->findOrFail($id);
+            $voucher = Voucher::findOrFail($id);
 
-            if ($voucher->trashed()) {
-                // Nếu bản ghi đã bị xóa mềm, thì xóa vĩnh viễn
-                $voucher->forceDelete();
-                return redirect()->route('vouchers.index')->with('success', 'Xóa vĩnh viễn voucher thành công.');
-            } else {
-                // Nếu bản ghi chưa bị xóa mềm, thì xóa mềm
-                $voucher->delete();
-                return redirect()->route('vouchers.index')->with('success', 'Xóa voucher thành công.');
-            }
+            // Đổi trạng thái giữa 'active' và 'expired'
+            $voucher->status = $voucher->status === 'active' ? 'expired' : 'active';
+            $voucher->is_manually_updated = true; // Đánh dấu voucher đã được thay đổi thủ công
+            $voucher->save();
+
+            return response()->json([
+                'success' => true,
+                'newStatus' => $voucher->status === 'active' ? 'Còn hiệu lực' : 'Hết hiệu lực'
+            ]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
         }
     }
-
-    public function restore($id)
-{
-    try {
-        $voucher = Voucher::onlyTrashed()->findOrFail($id);
-        $voucher->restore();
-        return redirect()->route('vouchers.index')->with('success', 'Khôi phục voucher thành công.');
-    } catch (Exception $e) {
-        return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()]);
-    }
-}
 }

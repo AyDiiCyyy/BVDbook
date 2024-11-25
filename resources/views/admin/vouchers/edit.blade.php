@@ -25,7 +25,7 @@
                     <!-- Left Column -->
                     <div class="col-md-6">
                         <div class="card card-primary card-outline mb-4">
-                            <form action="{{ route('vouchers.update', $voucher->id) }}" method="POST"
+                            <form action="{{ route('admin.voucher.update', $voucher->id) }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
@@ -70,9 +70,9 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Số tiền tối thiểu (Min Order Amount) -->
+                                    <!-- Đơn Hàng tối thiểu (Min Order Amount) -->
                                     <div class="mb-3">
-                                        <label class="form-label">Số tiền tối thiểu</label>
+                                        <label class="form-label">Đơn Hàng tối thiểu</label>
                                         <input type="number" class="form-control @error('min_order_amount') is-invalid @enderror" name="min_order_amount"
                                             value="{{ old('min_order_amount', $voucher->min_order_amount) }}">
                                         @error('min_order_amount')
@@ -119,7 +119,7 @@
                                 <!-- Submit Button -->
                                 <div class="mb-3 d-flex justify-content-center mt-5">
                                     <button type="submit" class="btn btn-success">Cập nhật</button>
-                                    <a href="{{ route('vouchers.index') }}" class="btn btn-info ms-3">Danh sách</a>
+                                    <a href="{{ route('admin.voucher.index') }}" class="btn btn-info ms-3">Danh sách</a>
                                 </div>
                             </div>
                         </div>
@@ -131,4 +131,5 @@
 @endsection
 
 @section('js')
+
 @endsection
