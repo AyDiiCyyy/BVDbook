@@ -79,9 +79,35 @@
                                                 {{ number_format($cartItem->products->price * $cartItem->quantity, 0, '.', '.') }}₫
                                             </td>
                                             <td class="product-remove">
-                                                <a href="#"><i class="fa fa-pencil-alt"></i></a>
-                                                <a href="#"><i class="fa fa-times"></i></a>
+                                                <a href="#" class="remove-item" data-id="{{ $cartItem->id }}"><i
+                                                        class="fa fa-times"></i></a>
                                             </td>
+                                            <!-- Thêm modal confirm xóa -->
+                                            <div class="modal" id="confirmDeleteModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="confirmDeleteModalLabel"
+                                                                style="margin-right: 275px">Xác nhận
+                                                                xóa sản phẩm</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary btn-sm"
+                                                                id="cancelDeleteBtn" data-dismiss="modal">Hủy</button>
+                                                            <button type="button" class="btn btn-danger btn-sm"
+                                                                id="confirmDeleteBtn">Xóa</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -120,18 +146,26 @@
     <!-- Cart area end -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         $(document).ready(function() {
+
+            // Hàm định dạng số tiền
+            function formatCurrency(number) {
+                return new Intl.NumberFormat('vi-VN').format(number) + '₫';
+            }
             // Lắng nghe sự kiện click trên các thẻ <a> với class .minus và .plus
             $('.minus, .plus').on('click', function(e) {
                 e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển trang)
 
                 var cartId = $(this).data('id'); // Lấy ID của sản phẩm trong giỏ hàng
-                var quantityInput = $(this).parent().children('.cart-quantity')
-                    .val(); // Tìm thẻ <input> chứa số lượng
-
+                var quantityInput = $(this).siblings('.cart-quantity');
+                var currentQuantity = parseInt(quantityInput.val()); // Lấy giá trị số lượng hiện tại
                 var action = $(this).data('action');
+
+                // Kiểm tra nếu là nút minus và số lượng hiện tại <= 1
+                if (action === 'minus' && currentQuantity <= 1) {
+                    return; // Không làm gì nếu số lượng <= 1
+                }
 
                 // Gửi AJAX request để cập nhật giỏ hàng
                 $.ajax({
@@ -139,7 +173,7 @@
                     method: 'POST',
                     data: {
                         cart_item_id: cartId,
-                        quantity: quantityInput,
+                        quantity: currentQuantity,
                         action: action,
                         _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
                     },
@@ -150,8 +184,9 @@
                         if (response.status === 'success') {
                             $(".cart-quantity-" + response.cart_id).val(response
                                 .cart_item_quantity);
-                            $('product-subtotal-' + response.cart_id).text(response
-                                .cart_item_price);
+                            $('.product-subtotal-' + response.cart_id).text(formatCurrency(
+                                response
+                                .cart_item_price));
                             $('#subtotal').text(response.totalPrice);
                             $('#totalPrice').text(response.totalPrice);
                         } else {
@@ -159,6 +194,54 @@
                         }
                     }
                 });
+            });
+
+
+            $('.remove-item').on('click', function(e) {
+                e.preventDefault();
+
+                var cartItemId = $(this).data('id');
+
+                $('#confirmDeleteModal').modal('show');
+
+                $('#confirmDeleteBtn').off('click').on('click', function() {
+                    $.ajax({
+                        url: '/cart/remove',
+                        method: 'POST',
+                        data: {
+                            cart_item_id: cartItemId,
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Xóa sản phẩm khỏi bảng
+                                $('tr').has('.remove-item[data-id="' + cartItemId +
+                                    '"]').remove();
+
+                                // Cập nhật tổng tiền từ dữ liệu trả về
+                                $('#subtotal').text(formatCurrency(response.subtotal));
+                                $('#totalPrice').text(formatCurrency(response
+                                    .totalPrice));
+
+                                $('#confirmDeleteModal').modal('hide');
+                            } else {
+                                alert(response.message);
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Hàm định dạng tiền tệ
+            function formatCurrency(amount) {
+                return amount.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                });
+            }
+            // Đóng modal khi hủy bỏ
+            $('#cancelDeleteBtn').on('click', function() {
+                $('#confirmDeleteModal').modal('hide');
             });
         });
     </script>

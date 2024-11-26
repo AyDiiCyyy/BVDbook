@@ -79,7 +79,7 @@ class CartController extends Controller
         });
 
         // Tính phí vận chuyển
-        $shippingFee = 7;
+        $shippingFee = 0;
 
         // Tính thuế
         $taxes = 0;
@@ -128,7 +128,7 @@ class CartController extends Controller
         $total_price = Cart::query()->where('status', 0)->where('user_id', Auth::id())->sum('total_price');
 
         // Cập nhật phí vận chuyển và thuế
-        $shippingFee = 7;
+        $shippingFee = 0;
         $taxes = 0;
 
         // Tính tổng giá trị giỏ hàng
@@ -142,4 +142,55 @@ class CartController extends Controller
             'totalPrice' => number_format($totalPrice, 0, '.', '.')
         ]);
     }
+
+    public function remove(Request $request)
+    {
+        $cart_id = $request->get('cart_item_id');
+
+        if (empty($cart_id)) {
+            return response()->json(['status' => 'error', 'message' => 'ID sản phẩm không hợp lệ']);
+        }
+
+        // Lấy sản phẩm từ giỏ hàng
+        $cartItem = Cart::find($cart_id);
+
+        if (!$cartItem) {
+            return response()->json(['status' => 'error', 'message' => 'Không tìm thấy sản phẩm trong giỏ']);
+        }
+
+        // Xóa sản phẩm khỏi giỏ hàng
+        $cartItem->delete();
+
+        // Lấy lại giỏ hàng hiện tại
+        $cartItems = Cart::with('products')->where('user_id', Auth::id())->get();
+
+        // Tính lại tổng giá trị giỏ hàng
+        $subtotal = $cartItems->sum(function ($item) {
+            return $item->products ? $item->products->price * $item->quantity : 0;
+        });
+
+        // Phí vận chuyển và thuế
+        $shippingFee = 0;
+        $taxes = 0;
+
+        // Tính tổng tiền
+        $totalPrice = $subtotal + $shippingFee + $taxes;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Sản phẩm đã được xóa',
+            'subtotal' => $subtotal,
+            'totalPrice' => $totalPrice,
+            'cartItems' => $cartItems
+        ]);
+    }
+
+    public function getCart()
+{
+    $cartItems = Cart::where('user_id', Auth::id())->with('products')->get();
+
+    // Trả về view giỏ hàng dưới dạng HTML
+    return view('client.partials.cartright', compact('cartItems'))->render();
+}
+
 }

@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Breadcrumb Area start -->
-    <section class="breadcrumb-area" style="margin-top: -30px" >
+    <section class="breadcrumb-area" style="margin-top: -30px">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -424,7 +424,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-
         $(document).ready(function() {
             // Xử lý sự kiện click vào nút "Thêm Giỏ Hàng"
             $('.pro-details-cart a').click(function(e) {
@@ -453,8 +452,10 @@
                         // Hiển thị thông báo thành công từ response
                         alert(response.message);
 
-                        // Cập nhật tổng giá trị giỏ hàng (nếu có)
-                        $('#total-price').text('Tổng giá trị: ' + response.total_price + '₫');
+                        $('#cart-count').text(response.cart_count);
+                        // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                        updateCartRight();
+
                     },
                     error: function(xhr) {
                         // Xử lý lỗi khi người dùng chưa đăng nhập
@@ -468,41 +469,23 @@
                     }
                 });
             });
+            // Hàm cập nhật giỏ hàng ở phần cartright
+            function updateCartRight() {
+                $.ajax({
+                    url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                    method: "GET",
+                    success: function(response) {
+                        $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                    },
+                    error: function() {
+                        alert('Không thể tải giỏ hàng, vui lòng thử lại.');
+                    }
+                });
+            }
+
         });
     </script>
 @endsection
 
 @section('js')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('.pro-details-cart a').click(function(e) {
-                e.preventDefault();
-
-                let productId = "{{ $productDetail->id }}";
-                let quantity = $('.cart-plus-minus-box').val();
-
-                $.ajax({
-                    url: "{{ route('cart.add') }}",
-                    method: "POST",
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        product_id: productId,
-                        quantity: quantity
-                    },
-                    success: function(response) {
-                        alert(response.message);
-                    },
-                    error: function(xhr) {
-                        if (xhr.status === 401) {
-                            alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
-                            window.location.href = "{{ route('login') }}";
-                        } else {
-                            alert('Có lỗi xảy ra, vui lòng thử lại');
-                        }
-                    }
-                });
-            });
-        });
-    </script>
 @endsection

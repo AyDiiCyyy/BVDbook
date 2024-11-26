@@ -36,7 +36,7 @@ class CartServiceProvider extends ServiceProvider
                 });
 
                 // Phí vận chuyển và thuế
-                $shippingFee = 7;
+                $shippingFee = 0;
                 $taxes = 0;
                 $totalPrice = $subtotal + $shippingFee + $taxes;
 
