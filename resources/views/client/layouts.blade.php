@@ -11,13 +11,13 @@
         <!-- Header Area Start  -->
         <header class="main-header">
             <!-- Header top Area Start  -->
-            @include('client.partials.topheader')
+                @include('client.partials.topheader')
             <!-- Header top Area end  -->
 
             <!-- Header Navigation Area Start  -->
             <div class="header-navigation sticky-nav d-none d-lg-block">
                 <!--  Logo And Menu-->
-                @include('client.partials.menu')
+                    @include('client.partials.menu')
                 <!--  Logo And Menu end-->
             </div>
             <!--Header Bottom Account End -->
