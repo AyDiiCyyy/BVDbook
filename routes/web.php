@@ -85,23 +85,21 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [UserController::class, 'update'])->name('update');
             Route::delete('/{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
-
         });
     });
-
 });
 
 
 
 
 // router client
-Route::get('/',[HomeController::class,'index'])->name('index');
-Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSanpham');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('danhmuc/{slug}', [HomeController::class, 'proCate'])->name('danhmucSanpham');
 Route::get('/about', function () {
     return view('client.partials.gioithieu');
-});
+})->name('about');
 //Sản phẩm chi tiết
-Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
+Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
 
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');

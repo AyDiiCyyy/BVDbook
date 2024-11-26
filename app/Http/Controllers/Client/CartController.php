@@ -28,6 +28,17 @@ class CartController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Sản phẩm không tồn tại'], 404);
         }
 
+        if ($product->deleted_at) {
+            return response()->json(['status' => 'error', 'message' => 'Sản phẩm đã bị xóa bởi nhà cung cấp'], 400);
+        }
+
+        if ($product->quantity == 0) {
+            return response()->json(['status' => 'error', 'message' => 'Sản phẩm đã hết hàng'], 400);
+        }
+
+        if ($product->active == 0) {
+            return response()->json(['status' => 'error', 'message' => 'Sản phẩm hiện không hoạt động'], 400);
+        }
         $user = Auth::user();
 
         // Kiểm tra xem giỏ hàng có sản phẩm này chưa
@@ -65,7 +76,7 @@ class CartController extends Controller
         if (!Auth::check()) {
             return redirect()->route('login'); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
         }
-
+        $messages = $this->checkCartStatus();
         $user = Auth::user();
 
         // Lấy tất cả các sản phẩm trong giỏ hàng của người dùng
@@ -88,7 +99,7 @@ class CartController extends Controller
         $totalPrice = $subtotal + $shippingFee + $taxes;
 
         // Truyền dữ liệu vào view
-        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'taxes', 'totalPrice'));
+        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'taxes', 'totalPrice', 'messages'));
     }
 
     public function updateCart(Request $request)
@@ -186,11 +197,40 @@ class CartController extends Controller
     }
 
     public function getCart()
-{
-    $cartItems = Cart::where('user_id', Auth::id())->with('products')->get();
+    {
+        $cartItems = Cart::where('user_id', Auth::id())->with('products')->get();
+        $messages = $this->checkCartStatus();
 
-    // Trả về view giỏ hàng dưới dạng HTML
-    return view('client.partials.cartright', compact('cartItems'))->render();
-}
+        // Trả về view giỏ hàng dưới dạng HTML
+        return view('client.partials.cartright', compact('cartItems', 'messages'))->render();
+    }
 
+    public function checkCartStatus()
+    {
+        $userId = Auth::id();
+        $cartItems = Cart::where('user_id', $userId)->get();
+        $messages = []; // Lưu thông báo cho các sản phẩm bị xóa hoặc hết hàng
+
+        foreach ($cartItems as $item) {
+            $product = Product::withTrashed()->find($item->product_id); // Lấy cả sản phẩm bị xóa mềm
+
+            if (!$product || $product->deleted_at || $product->quantity == 0 || $product->active == 0) {
+                // Thêm thông báo vào mảng
+                if ($product && $product->deleted_at) {
+                    $messages[] = 'Sản phẩm ' . $item->product_name . ' đã bị xóa bởi nhà cung cấp.';
+                } elseif ($product && $product->quantity == 0) {
+                    $messages[] = 'Sản phẩm ' . $item->product_name . ' đã hết hàng.';
+                } elseif ($product && $product->active == 0) {
+                    $messages[] = 'Sản phẩm ' . $item->product_name . ' hiện không hoạt động.';
+                } else {
+                    $messages[] = 'Sản phẩm không tồn tại.';
+                }
+
+                // Xóa sản phẩm không hợp lệ khỏi giỏ hàng
+                $item->delete();
+            }
+        }
+
+        return $messages;
+    }
 }

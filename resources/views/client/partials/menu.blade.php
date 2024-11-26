@@ -17,7 +17,7 @@
                     <li class="menu-dropdown">
                         <a href="#">Danh mục <i class="ion-ios-arrow-down"></i></a>
                         <ul class="sub-menu">
-                            @foreach ($categoryAll as $category) 
+                            @foreach ($categoryAll as $category)
                             <li><a href="{{ route('danhmucSanpham', ['slug'=>$category->slug]) }}">{{$category->name}}</a></li>
                             @endforeach
                         </ul>
@@ -35,15 +35,15 @@
                         </ul>
                     </li>
                     <li class="menu-dropdown">
-                        <a href="#">Giới Thiệu</a>
-                        
+                        <a href="{{ route('about') }}">Giới Thiệu</a>
+
                     </li>
                     <li><a href="{{ route('contact.index') }}">Liên Hệ</a></li>
                 </ul>
             </div>
             <!-- Main Navigation Area end -->
             <div class="header_account_area ">
-                <div class="header_account_list me-2">   
+                <div class="header_account_list me-2">
                 </div>
                 <!-- Search start -->
                 <div class="header_account_list search_list" style="height: auto">

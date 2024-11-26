@@ -97,14 +97,14 @@
                     // Gọi hàm cập nhật giỏ hàng mà không cần reload
                     updateCartRight();
                 },
-                error: function(xhr) {
+                error: function(xhr, status, error) {
                     // Xử lý lỗi khi người dùng chưa đăng nhập
                     if (xhr.status === 401) {
                         alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
                         window.location.href =
                             "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
                     } else {
-                        alert('Có lỗi xảy ra, vui lòng thử lại');
+                        alert('Có lỗi xảy ra: ' + response.message);
                     }
                 }
             });

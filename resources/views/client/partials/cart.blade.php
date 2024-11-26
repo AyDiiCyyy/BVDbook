@@ -22,11 +22,18 @@
         </div>
     </section>
     <!-- Breadcrumb Area End -->
-
     <!-- Cart area start -->
     <div class="cart-main-area mtb-60px">
         <div class="container">
             <h3 class="cart-page-title">Giỏ hàng của tôi</h3>
+            @if (!empty($messages))
+                @foreach ($messages as $message)
+                    <div class="alert alert-warning">
+                        {{ $message }}
+                    </div>
+                @endforeach
+            @endif
+
             <div class="row">
                 <div class="col-lg-12">
                     <form action="#">
@@ -118,7 +125,6 @@
                                     <h4>Tổng tiền : <span
                                             id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}₫</span></h4>
                                     <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span></h4>
-                                    <h4>Thuế : <span>{{ number_format($taxes, 0, '.', '.') }}₫</span></h4>
                                     <h4 class="shop-total">Thành tiền :
                                         <span id="totalPrice">{{ number_format($totalPrice, 0, '.', '.') }}₫</span>
                                     </h4>

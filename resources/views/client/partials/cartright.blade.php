@@ -24,7 +24,6 @@
                                     {{ $cartItem->quantity }} x <span
                                         class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
                                 </span>
-                                <a href="#" class="remove" data-id="{{ $cartItem->id }}">×</a>
                             </div>
                         </li>
                     @else
@@ -44,9 +43,6 @@
         @endif
         @if (isset($shippingFee))
             <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span></h4>
-        @endif
-        @if (isset($subtotal))
-            <h4>Thuế : <span>{{ number_format($taxes, 0, '.', '.') }}₫</span></h4>
         @endif
         @if (isset($subtotal))
             <h4 class="shop-total">Thành tiền : <span>{{ number_format($totalPrice, 0, '.', '.') }}₫</span></h4>
