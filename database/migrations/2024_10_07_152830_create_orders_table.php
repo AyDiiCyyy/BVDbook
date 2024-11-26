@@ -23,7 +23,7 @@ return new class extends Migration
             $table->tinyInteger('shipping')->default(1);
             $table->decimal('total_money',10,2);
             $table->integer('status')->default(1);
-            $table->tinyInteger('payment_status');// Chưa thanh toán - Đã thanh toán
+            $table->tinyInteger('payment_status');
             $table->softDeletes();
             $table->timestamps();
         });
