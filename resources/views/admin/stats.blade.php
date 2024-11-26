@@ -1,11 +1,5 @@
 @extends('layouts.admin')
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/css/adminlte.css') }}">
-
-    <!--end::Required Plugin(AdminLTE)--><!-- apexcharts -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.css"
-        integrity="sha256-4MX+61mt9NVvvuPjUWdUdyfZfxSB1/Rf9WtqRHgG5S0=" crossorigin="anonymous">
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -185,14 +179,10 @@
     </main>
 @endsection
 @section('js')
-
-    <script src="{{ asset('assets/js/adminlte.js') }}"></script> <!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
         integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
-
-
     <script>
         $(document).ready(function() {
             const defaultLabels = @json($labels);
@@ -269,8 +259,6 @@
             });
         });
     </script>
-
-
     <script>
         function updateBarChart(data) {
             const ctxBar = document.getElementById('barChart').getContext('2d');
@@ -305,7 +293,6 @@
             });
         }
     </script>
-
     <script>
         // Truyền dữ liệu từ PHP sang JavaScript
         const bestSellingPercentage = @json($bestSellingPercentage);
