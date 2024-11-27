@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\CartController;
@@ -23,7 +24,10 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
 
     // Routes cho phần admin
     Route::prefix('admin')->as('admin.')->group(function () {
-
+        Route::prefix('statistic')->as('statistic.')->group(function () {
+            Route::get('/' ,[StatsController::class,'index'])->name('index');
+            Route::post('/revenue', [StatsController::class, 'getRevenue'])->name('getRevenue');
+        });
         // Routes cho quản lý danh mục
         Route::prefix('category')->as('category.')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
@@ -44,6 +48,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/create', 'create')->name('create');
             Route::post('/store', 'store')->name('store');
             Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::get('/show/{id}', 'show')->name('show');
             Route::post('/update/{id}', 'update')->name('update');
             Route::delete('/destroy/{id}', 'destroy')->name('destroy');
         });
