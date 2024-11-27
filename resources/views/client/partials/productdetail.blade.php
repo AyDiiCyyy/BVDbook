@@ -324,7 +324,8 @@
                         </div>
                         <div class="add-to-link">
                             <ul>
-                                <li class="cart"><a class="cart-btn" href="#">Thêm Giỏ Hàng </a></li>
+                                <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $related->id }}"
+                                        href="#">Thêm Giỏ Hàng </a></li>
                                 <li>
                                     <a href="#"><i class="ion-android-favorite-outline"></i></a>
                                 </li>
@@ -405,7 +406,8 @@
                         </div>
                         <div class="add-to-link">
                             <ul>
-                                <li class="cart"><a class="cart-btn" href="#">Thêm Giỏ Hàng </a></li>
+                                <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $product->id }}"
+                                        href="#">Thêm Giỏ Hàng </a></li>
                                 <li>
                                     <a href="#"><i class="ion-android-favorite-outline"></i></a>
                                 </li>
@@ -463,12 +465,57 @@
                             alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
                             window.location.href =
                                 "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                            alert(xhr.responseJSON.message);
                         } else {
+                            // Thông báo chung nếu không có message cụ thể
                             alert('Có lỗi xảy ra, vui lòng thử lại');
                         }
                     }
                 });
             });
+            $('.add-to-cart').off('click').on('click', function(e) {
+                e.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+                // Lấy ID sản phẩm và số lượng từ giao diện người dùng
+                let productId = $(this).data('product-id');
+
+                // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                $.ajax({
+                    url: "{{ route('cart.add') }}", // URL của route cart.add
+                    method: "POST", // Phương thức POST
+                    data: {
+                        _token: "{{ csrf_token() }}", // CSRF token
+                        product_id: productId, // ID sản phẩm
+                        quantity: 1
+                    },
+                    success: function(response) {
+                        // Hiển thị thông báo thành công từ response
+                        alert(response.message);
+
+                        $('#cart-count').text(response.cart_count);
+                        // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                        updateCartRight();
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi khi người dùng chưa đăng nhập
+                        if (xhr.status === 401) {
+                            alert(
+                                'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+                            window.location.href =
+                                "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                            alert(xhr.responseJSON.message);
+                        } else {
+                            // Thông báo chung nếu không có message cụ thể
+                            alert('Có lỗi xảy ra, vui lòng thử lại');
+                        }
+                    }
+                });
+            });
+
             // Hàm cập nhật giỏ hàng ở phần cartright
             function updateCartRight() {
                 $.ajax({
