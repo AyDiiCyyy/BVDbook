@@ -1,4 +1,4 @@
-<div class="inner">
+<div class="inner" id="cart-right">
     <div class="head">
         <span class="title">Giỏ hàng</span>
         <button class="offcanvas-close">×</button>
@@ -22,9 +22,8 @@
                                     <p>Số lượng X Giá sản phẩm: </p>
                                     <br>
                                     {{ $cartItem->quantity }} x <span
-                                        class="amount" >{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
+                                        class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
                                 </span>
-                                <a href="#" class="remove" data-id="{{ $cartItem->id }}">×</a>
                             </div>
                         </li>
                     @else
@@ -39,15 +38,20 @@
         </ul>
     </div>
     <div class="shopping-cart-total">
-        <h4>Tổng tiền : <span>{{ number_format($subtotal, 0, '.', '.') }}₫</span></h4>
-        <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span></h4>
-        <h4>Thuế : <span>{{ number_format($taxes, 0, '.', '.') }}₫</span></h4>
-        <h4 class="shop-total">Thành tiền : <span>{{ number_format($totalPrice, 0, '.', '.') }}₫</span></h4>
+        @if (isset($subtotal))
+            <h4>Tổng tiền : <span>{{ number_format($subtotal, 0, '.', '.') }}₫</span></h4>
+        @endif
+        @if (isset($shippingFee))
+            <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span></h4>
+        @endif
+        @if (isset($subtotal))
+            <h4 class="shop-total">Thành tiền : <span>{{ number_format($totalPrice, 0, '.', '.') }}₫</span></h4>
+        @endif
     </div>
     <div class="foot">
         <div class="buttons">
             <a href="{{ route('cart.show') }}" class="btn btn-dark btn-hover-primary mb-30px">Xem giỏ hàng</a>
-            <a href="#" class="btn btn-outline-dark current-btn">Thanh toán</a>
+            <a href="{{ route('checkout') }}" class="btn btn-outline-dark current-btn">Thanh toán</a>
         </div>
     </div>
 </div>

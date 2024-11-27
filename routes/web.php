@@ -102,7 +102,6 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
         Route::resource('comments', CommentController::class);  // Các route cho CRUD bình luận
         Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore');
     });
-
 });
 
 
@@ -113,17 +112,14 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('danhmuc/{slug}', [HomeController::class, 'proCate'])->name('danhmucSanpham');
 Route::get('/about', function () {
     return view('client.partials.gioithieu');
-});
+})->name('about');
 //Sản phẩm chi tiết
 Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
 
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 
-// Giỏ hàng
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
-Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+
 
 
 
@@ -143,5 +139,14 @@ Route::middleware('auth')->group(function () {
     Route::get('account/orders', [MyAccountController::class, 'showOrders'])->name('client.account.orders');
     Route::get('account/order/{order}', [MyAccountController::class, 'showOrderDetail'])->name('client.account.order-detail');
     Route::patch('orders/{orderId}/cancel', [MyAccountController::class, 'cancelOrder'])->name('client.orders.cancel');
+});
 
+// giỏ hàng
+Route::middleware('auth')->group(function () {
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
+    Route::get('/cart/quantity', [CartController::class, 'getCartQuantity'])->name('cart.quantity');
 });

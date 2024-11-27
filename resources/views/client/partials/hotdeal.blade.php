@@ -32,8 +32,8 @@
                 <div class="product-wrapper" style="margin-top: 5%">
                     <div class="product-decs">
                         <a class="inner-link"
-                            href="shop-4-column.html"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
-                        <h2><a href="single-product.html"
+                            href="#"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                        <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}"
                                 class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
                         <div class="rating-product">
                             <i class="ion-android-star"></i>
@@ -52,26 +52,80 @@
                         </div>
                         <div class="add-to-link">
                             <ul>
-                                <li class="cart" data-id="{{$product->id}}" data-url=""><a
-                                        class="cart-btn">Thêm vào giỏ hàng </a></li>
-                                <li>
-                                    <a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a>
+                                <li class="cart">
+                                    <a href="#" class="cart-btn add-to-cart" data-id="{{ $product->id }}">Thêm
+                                        vào giỏ hàng</a>
                                 </li>
-                                <li>
-                                    <a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a>
-                                </li>
+                                <li><a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a></li>
+                                <li><a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a></li>
                             </ul>
                         </div>
                     </div>
                     <div class="in-stock">Chỉ còn: <span>{{ $product->quantity }} Sản phẩm</span></div>
-                    <div class="clockdiv">
-                        {{-- <div class="title_countdown">Nhanh lên! <br> Ưu đãi sắp kết thúc</div> --}}
-                        {{-- <div data-countdown="2024/11/19"></div> --}}
-                    </div>
                 </div>
             </article>
         @endforeach
-
     </div>
-    <!-- Hot Deal Slider 2 Start -->
+    <!-- Hot Deal Slider 2 End -->
 </div>
+
+<!-- Thêm AJAX để xử lý giỏ hàng -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Gỡ bỏ sự kiện click cũ nếu có
+        $('.add-to-cart').off('click').on('click', function(e) {
+            e.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+            // Lấy ID sản phẩm và số lượng từ giao diện người dùng
+            let productId = $(this).data('id');
+
+            // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+            $.ajax({
+                url: "{{ route('cart.add') }}", // URL của route cart.add
+                method: "POST", // Phương thức POST
+                data: {
+                    _token: "{{ csrf_token() }}", // CSRF token
+                    product_id: productId, // ID sản phẩm
+                    quantity: 1
+                },
+                success: function(response) {
+                    // Hiển thị thông báo thành công từ response
+                    alert(response.message);
+
+                    $('#cart-count').text(response.cart_count);
+                    // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                    updateCartRight();
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý lỗi khi người dùng chưa đăng nhập
+                    if (xhr.status === 401) {
+                        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+                        window.location.href =
+                            "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                        alert(xhr.responseJSON.message);
+                    } else {
+                        // Thông báo chung nếu không có message cụ thể
+                        alert('Có lỗi xảy ra, vui lòng thử lại');
+                    }
+                }
+            });
+        });
+
+        // Hàm cập nhật giỏ hàng ở phần cartright
+        function updateCartRight() {
+            $.ajax({
+                url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                method: "GET",
+                success: function(response) {
+                    $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                },
+                error: function() {
+                    alert('Không thể tải giỏ hàng, vui lòng thử lại.');
+                }
+            });
+        }
+    });
+</script>
