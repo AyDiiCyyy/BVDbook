@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users','id');
             $table->foreignId('voucher_id')->constrained('vouchers','id');
+            $table->string('order_code', 255)->unique();
             $table->string('name',255);
             $table->string('phone',100);
             $table->string('address',255);
