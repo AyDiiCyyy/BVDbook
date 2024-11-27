@@ -7,7 +7,7 @@
     <div class="sidebar-wrapper">
         <nav class="mt-2"> <!--begin::Sidebar Menu-->
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
-                <li class="nav-item"> <a href="#" class="nav-link "> <i class="nav-icon bi bi-speedometer"></i>
+                <li class="nav-item"> <a href="#" class="nav-link "> <i class="bi bi-tags"></i>
                         <p>
                             Danh mục
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -27,7 +27,7 @@
 
                     </ul>
                 </li>
-                <li class="nav-item"> <a href="#" class="nav-link"> <i class="nav-icon bi bi-speedometer"></i>
+                <li class="nav-item"> <a href="#" class="nav-link"> <i class="bi bi-archive"></i>
                         <p>
                             Sản phẩm
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -68,7 +68,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link active"> <i class="bi bi-person-circle"></i>
+                    <a href="#" class="nav-link "> <i class="bi bi-person-circle"></i>
                         <p>
                             Người dùng
                             <i class="nav-arrow bi bi-chevron-right"></i>
@@ -78,6 +78,23 @@
                         <li class="nav-item"> <a href="{{ route('admin.user.index') }}" class="nav-link"> <i
                                     class="nav-icon bi bi-circle"></i>
                                 <p>Danh sách người dùng</p>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link"> <i class="bi bi-bag-check"></i>
+                        <p>
+                          Đơn hàng
+                            <i class="nav-arrow bi bi-chevron-right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item"> <a href="{{ route('admin.order.index') }}" class="nav-link"> <i
+                                    class="nav-icon bi bi-circle"></i>
+                                <p>Danh sách đơn hàng</p>
                             </a>
                         </li>
 
