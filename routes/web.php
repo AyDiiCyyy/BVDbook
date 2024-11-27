@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use Illuminate\Support\Facades\Auth;
@@ -84,28 +85,28 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [UserController::class, 'update'])->name('update');
             Route::delete('/{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
-    
         });
     });
-
 });
-
-
-
-
-
 
 
 
 
 // router client
-Route::get('/',[HomeController::class,'index'])->name('index');
-Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSanpham');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('danhmuc/{slug}', [HomeController::class, 'proCate'])->name('danhmucSanpham');
 Route::get('/about', function () {
     return view('client.partials.gioithieu');
-});
+})->name('about');
 //Sản phẩm chi tiết
-Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
+Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
 
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
+
+// Giỏ hàng
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
