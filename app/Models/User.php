@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         $this->notify(new CustomResetPassword($token));
     }
+
+    // public function voucher_active(){
+    //     return $this->belongsToMany(Voucher::class, 'user_vouchers', 'user_id', 'voucher_id')
+    //     ->withPivot('active')->wherePivot('active',1);
+    // }
 }

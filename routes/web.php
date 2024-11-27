@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use Illuminate\Support\Facades\Auth;
@@ -113,4 +114,8 @@ Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.u
 
 
 
-
+//thanh toán
+Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
+Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
+Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
+Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
