@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\UserVoucher;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -87,7 +88,7 @@ class OrderController extends Controller
             'status' => 'required|integer|min:1|max:6',
         ]);
     
-        $order = Order::with('OrderDetails')->find($request->id);
+        $order = Order::with(['OrderDetails', 'Voucher'])->find($request->id);
     
         if ($order->status == 6) { 
             return response()->json(['status' => false, 'message' => 'Đơn hàng đã hủy, không thể thay đổi trạng thái.']);
@@ -97,15 +98,27 @@ class OrderController extends Controller
             return response()->json(['status' => false, 'message' => 'Không thể lùi trạng thái đơn hàng.']);
         }
     
-       
         if ($request->status == 6) {
-           
             foreach ($order->OrderDetails as $detail) {
                 $product = $detail->product; 
                 $product->increment('quantity', $detail->quantity);
             }
-        }
+            if ($order->voucher_id != 0) {
+                $voucher = $order->Voucher;
     
+                if ($voucher) {
+                    $voucher->increment('usage_limit');
+                    $userVoucher = UserVoucher::where('voucher_id', $voucher->id)
+                        ->where('user_id', $order->user_id)
+                        ->first();
+    
+                    if ($userVoucher) {
+                        $userVoucher->active = 1; 
+                        $userVoucher->save();
+                    }
+                }
+            }
+        }
         $order->status = $request->status;
         $order->save();
     
