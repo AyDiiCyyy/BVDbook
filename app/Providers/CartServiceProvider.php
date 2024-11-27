@@ -30,6 +30,8 @@ class CartServiceProvider extends ServiceProvider
                 // Lấy sản phẩm trong giỏ hàng
                 $cartItems = Cart::with('products')->where('user_id', $user->id)->get();
 
+                $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity'); // Tính tổng số lượng trong giỏ hàng
+
                 // Tính tổng giá trị giỏ hàng
                 $subtotal = $cartItems->sum(function ($cartItem) {
                     return $cartItem->products ? $cartItem->products->price * $cartItem->quantity : 0;
@@ -47,6 +49,7 @@ class CartServiceProvider extends ServiceProvider
                     'shippingFee' => $shippingFee,
                     'taxes' => $taxes,
                     'totalPrice' => $totalPrice,
+                    'totalQuantity' => $totalQuantity,
                 ]);
             }
         });

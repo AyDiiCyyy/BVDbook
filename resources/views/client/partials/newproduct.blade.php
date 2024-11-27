@@ -101,6 +101,7 @@
                     alert(response.message);
 
                     $('#cart-count').text(response.cart_count);
+                    $('#item-quantity-tag').text(response.total_quantity);
                     // Gọi hàm cập nhật giỏ hàng mà không cần reload
                     updateCartRight();
                 },

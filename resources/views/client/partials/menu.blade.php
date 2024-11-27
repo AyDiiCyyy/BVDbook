@@ -4,7 +4,8 @@
         <!--  Logo Area Start-->
         <div class="col-md-2 col-sm-2">
             <div class="logo">
-                <a href="{{ route('index') }}"><img src="{{ asset('client/assets/images/logo/logo5.png') }}" alt="" width="124px" height="34px"/></a>
+                <a href="{{ route('index') }}"><img src="{{ asset('client/assets/images/logo/logo5.png') }}" alt=""
+                        width="124px" height="34px" /></a>
             </div>
         </div>
         <!--  Logo Area end-->
@@ -18,7 +19,9 @@
                         <a href="#">Danh mục <i class="ion-ios-arrow-down"></i></a>
                         <ul class="sub-menu">
                             @foreach ($categoryAll as $category)
-                            <li><a href="{{ route('danhmucSanpham', ['slug'=>$category->slug]) }}">{{$category->name}}</a></li>
+                                <li><a
+                                        href="{{ route('danhmucSanpham', ['slug' => $category->slug]) }}">{{ $category->name }}</a>
+                                </li>
                             @endforeach
                         </ul>
                     </li>
@@ -54,8 +57,8 @@
                             <div class="search-category">
                                 <select class="bootstrap-select" name="poscats">
                                     <option value="0">Danh mục</option>
-                                    @foreach ($categoryAll as $category )
-                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @foreach ($categoryAll as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -68,7 +71,7 @@
                 <div class="cart-info d-flex">
                     <div class="mini-cart-warp">
                         <a href="#offcanvas-cart" class="count-cart color-white offcanvas-toggle">
-                            <span class="item-quantity-tag">02</span>
+                            <span class="item-quantity-tag">{{ $totalQuantity }}</span>
                         </a>
 
                     </div>
@@ -79,3 +82,24 @@
     </div>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateCartQuantity() {
+        $.ajax({
+            url: '{{ route('cart.quantity') }}',
+            method: 'GET',
+            success: function(response) {
+                $('.item-quantity-tag').text(response.total_quantity);
+                updateCartQuantity(); // Cập nhật số lượng ngay sau khi thêm
+            },
+            error: function() {
+                console.error('Không thể cập nhật số lượng giỏ hàng');
+            }
+        });
+    }
+
+    // Gọi hàm cập nhật khi cần thiết, ví dụ khi thêm sản phẩm vào giỏ hàng thành công
+    $(document).ready(function() {
+        updateCartQuantity(); // Cập nhật ngay khi load trang
+    });
+</script>
