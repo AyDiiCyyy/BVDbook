@@ -1,184 +1,102 @@
 @extends('client.layouts')
 
 @section('title')
-    My Account
+    Trang Tài Khoản
 @endsection
 
 @section('content')
-    <!-- Breadcrumb Area start -->
     <section class="breadcrumb-area">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-hrading">Account Page</h1>
+                        <h1 class="breadcrumb-hrading">Trang Tài Khoản</h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="index.html">Home</a></li>
-                            <li>My Account</li>
+                            <li><a href="index.html">Trang Chủ</a></li>
+                            <li>Tài Khoản Của Tôi</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- Breadcrumb Area End -->
-    <!-- account area start -->
-    <div class="checkout-area mtb-60px">
+
+    <div class="account-area mtb-60px">
         <div class="container">
             <div class="row">
-                <div class="mx-auto col-lg-9">
-                    <div class="checkout-wrapper">
-                        <div id="faq" class="panel-group">
-                            <div class="panel panel-default single-my-account">
-                                <div class="panel-heading my-account-title">
-                                    <h3 class="panel-title"><span>1 .</span> <a data-bs-toggle="collapse" data-parent="#faq"
-                                            href="#my-account-1">Edit your account information </a></h3>
-                                </div>
-                                <div id="my-account-1" class="panel-collapse collapse show">
-                                    <div class="panel-body">
-                                        <div class="myaccount-info-wrapper">
-                                            <div class="account-info-wrapper">
-                                                <h4>My Account Information</h4>
-                                                <h5>Your Personal Details</h5>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-6 col-md-6">
-                                                    <div class="billing-info">
-                                                        <label>First Name</label>
-                                                        <input type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6">
-                                                    <div class="billing-info">
-                                                        <label>Last Name</label>
-                                                        <input type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12">
-                                                    <div class="billing-info">
-                                                        <label>Email Address</label>
-                                                        <input type="email" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6">
-                                                    <div class="billing-info">
-                                                        <label>Telephone</label>
-                                                        <input type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6">
-                                                    <div class="billing-info">
-                                                        <label>Fax</label>
-                                                        <input type="text" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="billing-back-btn">
-                                                <div class="billing-back">
-                                                    <a href="#"><i class="fa fa-arrow-up"></i> back</a>
-                                                </div>
-                                                <div class="billing-btn">
-                                                    <button type="submit">Continue</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="col-md-3">
+                    <div class="list-group">
+                        <a href="{{ route('my-account') }}" class="list-group-item list-group-item-action">Hồ Sơ</a>
+                        <a href="{{ route('client.account.update-profile') }}" class="list-group-item list-group-item-action">thông tin</a>
+                        <a href="{{ route('client.account.orders') }}" class="list-group-item list-group-item-action">Đơn Hàng</a>
+                        <a href="#" class="list-group-item list-group-item-action">Voucher</a>
+                        <a href="{{ route('client.account.change-password.form') }}"class="list-group-item list-group-item-action">Đổi Mật Khẩu</a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                        <a href="#" class="btn btn-danger mt-3" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng Xuất</a>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div id="profile" class="collapse show">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Thông Tin Hồ Sơ</h5>
                             </div>
-                            <div class="panel panel-default single-my-account">
-                                <div class="panel-heading my-account-title">
-                                    <h3 class="panel-title"><span>2 .</span> <a data-bs-toggle="collapse" data-parent="#faq"
-                                            href="#my-account-2">Change your password </a></h3>
-                                </div>
-                                <div id="my-account-2" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="myaccount-info-wrapper">
-                                            <div class="account-info-wrapper">
-                                                <h4>Change Password</h4>
-                                                <h5>Your Password</h5>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-12">
-                                                    <div class="billing-info">
-                                                        <label>Password</label>
-                                                        <input type="password" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12">
-                                                    <div class="billing-info">
-                                                        <label>Password Confirm</label>
-                                                        <input type="password" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="billing-back-btn">
-                                                <div class="billing-back">
-                                                    <a href="#"><i class="fa fa-arrow-up"></i> back</a>
-                                                </div>
-                                                <div class="billing-btn">
-                                                    <button type="submit">Continue</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <img src="{{ $user->avatar ? asset('storage/' . $user->avatar) : asset('assets/img/avatar.png') }}"
+                                            alt="Avatar" class="img-fluid"
+                                            style="width: 150px; height: 150px; object-fit: cover;">
                                     </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default single-my-account">
-                                <div class="panel-heading my-account-title">
-                                    <h3 class="panel-title"><span>3 .</span> <a data-bs-toggle="collapse" data-parent="#faq"
-                                            href="#my-account-3">Modify your address book entries </a></h3>
-                                </div>
-                                <div id="my-account-3" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <div class="myaccount-info-wrapper">
-                                            <div class="account-info-wrapper">
-                                                <h4>Address Book Entries</h4>
-                                            </div>
-                                            <div class="entries-wrapper">
-                                                <div class="row">
-                                                    <div
-                                                        class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                                        <div class="entries-info text-center">
-                                                            <p>Jone Deo</p>
-                                                            <p>hastech</p>
-                                                            <p>28 Green Tower,</p>
-                                                            <p>Street Name.</p>
-                                                            <p>New York City,</p>
-                                                            <p>USA</p>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        class="col-lg-6 col-md-6 d-flex align-items-center justify-content-center">
-                                                        <div class="entries-edit-delete text-center">
-                                                            <a class="edit" href="#">Edit</a>
-                                                            <a href="#">Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="billing-back-btn">
-                                                <div class="billing-back">
-                                                    <a href="#"><i class="fa fa-arrow-up"></i> back</a>
-                                                </div>
-                                                <div class="billing-btn">
-                                                    <button type="submit">Continue</button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-8">
+                                        <p><strong>Tên:</strong> {{ Auth::user()->name }}</p>
+                                        <p><strong>Email:</strong> {{ Auth::user()->email }}</p>
+                                        <p><strong>Địa Chỉ:</strong> {{ Auth::user()->address }}</p>
+                                        <p><strong>Số điện thoại:</strong> {{ Auth::user()->phone }}</p>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="panel panel-default single-my-account">
-                                <div class="panel-heading my-account-title">
-                                    <h3 class="panel-title"><span>4 .</span> <a href="wishlist.html">Modify your wish list
-                                        </a></h3>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Thông Tin Đơn Hàng và Voucher </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="position-relative"
+                                            style="width: 120px; height: 120px; background-image: url('{{ asset('assets/img/donhang.jfif') }}'); background-size: cover; background-position: center; border-radius: 10px;">
+                                            <div class="position-absolute top-0 end-0 p-2"
+                                                style="right: 5px; top: 5px; background-color: rgba(0, 123, 255, 0.7); border-radius: 20%;">
+                                                <p class="text-white fs-4 mb-0">{{ $orderCount }}</p>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('client.account.orders') }}" class="btn btn-primary mt-2">Xem Chi Tiết Đơn Hàng</a>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="position-relative"
+                                            style="width: 120px; height: 120px; background-image: url('{{ asset('assets/img/voucher.png') }}'); background-size: cover; background-position: center; border-radius: 10px;">
+                                            <div class="position-absolute top-0 end-0 p-2"
+                                                style="right: 5px; top: 5px; background-color: rgba(0, 123, 255, 0.7); border-radius: 20%;">
+                                                <p class="text-white fs-4 mb-0">4</p>
+                                            </div>
+                                        </div>
+                                        <a href="#" class="btn btn-primary mt-2">Xem Các Voucher</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-    <!-- account area end -->
 @endsection

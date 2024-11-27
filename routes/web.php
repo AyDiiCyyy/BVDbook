@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StatsController;
 use App\Http\Controllers\Admin\UserController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
+use App\Http\Controllers\Client\MyAccountController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -97,6 +99,8 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::post('/change-status', [OrderController::class, 'changeActive'])->name('changeActive');
             Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
         });
+        Route::resource('comments', CommentController::class);  // Các route cho CRUD bình luận
+        Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore');
     });
 
 });
@@ -105,13 +109,13 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
 
 
 // router client
-Route::get('/',[HomeController::class,'index'])->name('index');
-Route::get('danhmuc/{slug}',[HomeController::class,'proCate'])->name('danhmucSanpham');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('danhmuc/{slug}', [HomeController::class, 'proCate'])->name('danhmucSanpham');
 Route::get('/about', function () {
     return view('client.partials.gioithieu');
 });
 //Sản phẩm chi tiết
-Route::get('/sanpham/{slug}',[HomeController::class,'getProductDetail'])->name('productDetail');
+Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
 
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
@@ -128,3 +132,16 @@ Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
 Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
 Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
 Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
+//account
+Route::middleware('auth')->group(function () {
+    Route::get('account', [MyAccountController::class, 'index'])->name('my-account');
+    Route::get('account/update-profile', [MyAccountController::class, 'editProfile'])->name('client.account.editProfile.form');
+    Route::post('account/update-profile', [MyAccountController::class, 'updateProfile'])->name('client.account.update-profile');
+    Route::get('account/change-password', [MyAccountController::class, 'showChangePasswordForm'])->name('client.account.change-password.form');
+    Route::post('account/change-password', [MyAccountController::class, 'changePassword'])->name('client.account.change-password');
+    Route::put('account/update-password', [MyAccountController::class, 'updatePassword'])->name('client.account.update-password');
+    Route::get('account/orders', [MyAccountController::class, 'showOrders'])->name('client.account.orders');
+    Route::get('account/order/{order}', [MyAccountController::class, 'showOrderDetail'])->name('client.account.order-detail');
+    Route::patch('orders/{orderId}/cancel', [MyAccountController::class, 'cancelOrder'])->name('client.orders.cancel');
+
+});
