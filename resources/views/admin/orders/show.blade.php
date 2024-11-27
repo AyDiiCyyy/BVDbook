@@ -15,8 +15,9 @@
         <div class="container-fluid">
             <h5 class="fw-bold m-2">Đơn hàng: <span class="text-uppercase ">{{ $order->order_code }}</span></h5>
             <div class="row">
-                <div class="col-7 card mb-4 p-2">
-                    <div class="card-header">
+                <div class="col-7 h-100">
+                    <div class="card mb-4 p-2 ">
+                          <div class="card-header">
                         <h5 class="fw-bold">Thông tin sản phẩm</h5>
                     </div>
                     <div class="card-body">
@@ -50,6 +51,41 @@
                             </tbody>
                         </table>
                     </div>
+                    </div>
+                    <div class="card mb-4 p-2 ">
+                        <div class="card-header">
+                            <h5 class="fw-bold">Thông tin thanh toán</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:30%;">Tổng tiền sản phẩm:</td>
+                                        <td><strong>{{ number_format($totalAmount, 0, ',', '.') }} đ</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phương thức thanh toán:</td>
+                                        <td><strong>{{ $order->payment == 1 ? 'Ship COD' : 'Thanh toán online' }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Voucher giảm giá:</td>
+                                        <td><strong>{{ $order->Voucher ?  number_format($order->Voucher->discount_amount, 0, ',', '.') . ' đ' : 'Không có' }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Số tiền phải trả:</td>
+                                        <td><strong>{{ number_format($totalAmount - ($order->Voucher ? $order->Voucher->discount_amount : 0), 0, ',', '.') }} đ</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Trạng thái thanh toán:</td>
+                                        <td><strong class="{{ $order->payment_status == 1 ? 'text-warning' : 'text-success' }}">
+                                            {{ $order->payment_status == 1 ? 'Chưa thanh toán' : 'Đã thanh toán' }}
+                                        </strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="col-5">
                     <div class="card mb-4">
@@ -79,44 +115,6 @@
                             </table>
                         </div>
                     </div> 
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-7 card mb-4 p-2">
-                    <div class="card-header">
-                        <h5 class="fw-bold">Thông tin thanh toán</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <td style="width:30%;">Tổng tiền sản phẩm:</td>
-                                    <td><strong>{{ number_format($totalAmount, 0, ',', '.') }} đ</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Phương thức thanh toán:</td>
-                                    <td><strong>{{ $order->payment == 1 ? 'Ship COD' : 'Thanh toán online' }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Voucher giảm giá:</td>
-                                    <td><strong>{{ $order->Voucher ?  number_format($order->Voucher->discount_amount, 0, ',', '.') . ' đ' : 'Không có' }}</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Số tiền phải trả:</td>
-                                    <td><strong>{{ number_format($totalAmount - ($order->Voucher ? $order->Voucher->discount_amount : 0), 0, ',', '.') }} đ</strong></td>
-                                </tr>
-                                <tr>
-                                    <td>Trạng thái thanh toán:</td>
-                                    <td><strong class="{{ $order->payment_status == 1 ? 'text-warning' : 'text-success' }}">
-                                        {{ $order->payment_status == 1 ? 'Chưa thanh toán' : 'Đã thanh toán' }}
-                                    </strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-5">
                     <div class="card mb-4">
                         <div class="card-header">
                             <h5 class="fw-bold">Địa chỉ nhận hàng</h5>

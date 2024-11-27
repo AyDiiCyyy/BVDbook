@@ -104,9 +104,6 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
     });
 });
 
-
-
-
 // router client
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('danhmuc/{slug}', [HomeController::class, 'proCate'])->name('danhmucSanpham');
