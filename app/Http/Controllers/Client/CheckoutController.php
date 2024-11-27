@@ -248,6 +248,7 @@ class CheckoutController extends Controller
                 $cart->delete();
             }
             if ($request->payment == 0) {
+                
                 Mail::to($request->email)->send(new CheckoutEmail($order));
                 DB::commit();
                 return response()->json(['status' => 'success', 'message' => 'Đặt hàng thành công']);

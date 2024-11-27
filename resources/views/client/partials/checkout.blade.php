@@ -103,7 +103,46 @@
         align-items: center;
         font-size: 14px;
     }
+
+    #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        /* Màn hình mờ */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        /* Màu nền */
+        border-top: 5px solid #3498db;
+        /* Màu hiệu ứng */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 </style>
+<div id="loading" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
 <!-- checkout area start -->
 <div class="checkout-area mt-60px mb-40px">
     <div class="container">
@@ -263,6 +302,15 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
+        function showLoading() {
+            document.getElementById("loading").style.display = "flex";
+        }
+
+        // Ẩn hiệu ứng loading
+        function hideLoading() {
+            document.getElementById("loading").style.display = "none";
+        }
+
         function checkVoucher() {
             var voucher = $('#input_voucher_ajax').val();
             var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -410,9 +458,12 @@
                     redirect: 'có cái nịt',
                     _token: csrfToken,
                 },
+                beforeSend: function() {
+                    showLoading(); // Hiển thị hiệu ứng trước khi gửi request
+                },
                 success: function(response) {
                     console.log(response);
-                    
+
                     if (response.status == 'success') {
                         Swal.fire({
                             title: "Đặt hàng thành công!",
@@ -426,9 +477,9 @@
                         });
                     } else if (response.status == 'url') {
                         // console.log(response.url);
-                        
+
                         window.location.href = response.url;
-                    }else {
+                    } else {
                         Swal.fire({
                             title: "Đặt hàng thất bại!",
                             text: 'Đã có lỗi trong quá trình đặt hàng',
@@ -442,6 +493,9 @@
                     console.error("Error: " + error);
                     console.error("Response Text: " + xhr.responseText);
                 },
+                complete: function() {
+                    hideLoading(); // Ẩn hiệu ứng sau khi xử lý xong
+                }
 
             });
         }
