@@ -59,6 +59,8 @@ class CartController extends Controller
             ]);
         }
 
+        $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity');
+
         // Tính lại tổng giá trị của giỏ hàng
         $totalPrice = $product->price * $cartItem->quantity;
 
@@ -66,7 +68,8 @@ class CartController extends Controller
             'status' => 'success',
             'message' => 'Sản phẩm đã được thêm vào giỏ hàng',
             'cart_item' => $cartItem,  // In chi tiết của item đã cập nhật
-            'total_price' => $totalPrice  // Trả về tổng giá trị của giỏ hàng
+            'total_price' => $totalPrice,  // Trả về tổng giá trị của giỏ hàng
+            'total_quantity' => $totalQuantity  // Trả về tổng số lượng giỏ hàng
         ]);
     }
 
@@ -232,5 +235,15 @@ class CartController extends Controller
         }
 
         return $messages;
+    }
+
+    public function getCartQuantity()
+    {
+        if (!Auth::check()) {
+            return response()->json(['total_quantity' => 0]);
+        }
+
+        $totalQuantity = Cart::where('user_id', Auth::id())->sum('quantity');
+        return response()->json(['total_quantity' => $totalQuantity]);
     }
 }

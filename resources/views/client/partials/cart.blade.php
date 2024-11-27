@@ -161,7 +161,7 @@
             }
             // Lắng nghe sự kiện click trên các thẻ <a> với class .minus và .plus
             $('.minus, .plus').on('click', function(e) {
-                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ <a> (chuyển trang)
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ 
 
                 var cartId = $(this).data('id'); // Lấy ID của sản phẩm trong giỏ hàng
                 var quantityInput = $(this).siblings('.cart-quantity');
@@ -175,7 +175,7 @@
 
                 // Gửi AJAX request để cập nhật giỏ hàng
                 $.ajax({
-                    url: '/cart/update', // Đường dẫn tới phương thức update
+                    url: '/cart/update',
                     method: 'POST',
                     data: {
                         cart_item_id: cartId,

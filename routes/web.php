@@ -105,8 +105,11 @@ Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 
 // Giỏ hàng
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
-Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
+Route::middleware('auth')->group(function () {
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
+    Route::get('/cart/quantity', [CartController::class, 'getCartQuantity'])->name('cart.quantity');
+});
