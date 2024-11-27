@@ -138,7 +138,11 @@
                         alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
                         window.location.href =
                             "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                    } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                        alert(xhr.responseJSON.message);
                     } else {
+                        // Thông báo chung nếu không có message cụ thể
                         alert('Có lỗi xảy ra, vui lòng thử lại');
                     }
                 }
