@@ -24,8 +24,8 @@
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
                                 data-bs-toggle="dropdown"> Settings <i class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">My account</a></li>
-                                <li><a class="dropdown-item" href="#">Checkout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('my-account') }}">Tài Khoản của tôi</a></li>
+                                <li><a class="dropdown-item" href="#">Thanh toán</a></li>
 
                                 @guest
                                     <!-- Hiển thị Login khi chưa đăng nhập -->
