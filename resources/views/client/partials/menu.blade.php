@@ -71,7 +71,7 @@
                 <div class="cart-info d-flex">
                     <div class="mini-cart-warp">
                         <a href="#offcanvas-cart" class="count-cart color-white offcanvas-toggle">
-                            <span class="item-quantity-tag">{{ $totalQuantity }}</span>
+                            <span class="item-quantity-tag">{{ $totalQuantity ?? 0 }}</span>
                         </a>
 
                     </div>

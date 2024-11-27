@@ -239,6 +239,7 @@ class CartController extends Controller
 
     public function getCartQuantity()
     {
+        
         if (!Auth::check()) {
             return response()->json(['total_quantity' => 0]);
         }
