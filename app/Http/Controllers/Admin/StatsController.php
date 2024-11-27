@@ -127,11 +127,20 @@ class StatsController extends Controller
         $revenueLast14Days = Order::select(
             DB::raw('DATE(created_at) as day'),
             DB::raw('SUM(total_money) as revenue')
-        )->where('created_at', '>=', Carbon::now()->subDays(14))
-            ->groupBy('day')->orderBy('day', 'asc')->get();
-        foreach ($revenueLast14Days as $item) {
-            $revenue[] = $item->revenue;
-            $labels[] = Carbon::parse($item->day)->translatedFormat('d/m/Y');
+        )
+            ->where('created_at', '>=', Carbon::now()->subDays(14))
+            ->groupBy('day')
+            ->orderBy('day', 'asc')
+            ->get();
+        
+        if ($revenueLast14Days->isNotEmpty()) {
+            foreach ($revenueLast14Days as $item) {
+                $revenue[] = $item->revenue;
+                $labels[] = Carbon::parse($item->day)->translatedFormat('d/m/Y');
+            }
+        } else {
+            $revenue = [0]; 
+            $labels = ['Không có dữ liệu'];
         }
         // Tỷ lệ bán chạy
         $rateProductsSell = OrderDetail::query()
@@ -147,6 +156,7 @@ class StatsController extends Controller
             ->orderByDesc('total_revenue')
             ->get();
         // Phân nhóm sản phẩm bán chạy
+
         $bestSelling = $rateProductsSell->filter(function ($product) {
             return $product->total_sold >= 20; 
         });
@@ -159,11 +169,15 @@ class StatsController extends Controller
             return $product->total_sold < 6; 
         });
         $totalProducts = $rateProductsSell->count();
-       
-        $bestSellingPercentage = ($bestSelling->count() / $totalProducts) * 100;
-        
-        $averageSellingPercentage = ($averageSelling->count() / $totalProducts) * 100;
-        $lowSellingPercentage = ($lowSelling->count() / $totalProducts) * 100;
+        if ($totalProducts > 0) {
+            $bestSellingPercentage = ($bestSelling->count() / $totalProducts) * 100;
+            $averageSellingPercentage = ($averageSelling->count() / $totalProducts) * 100;
+            $lowSellingPercentage = ($lowSelling->count() / $totalProducts) * 100;
+        } else {
+            $bestSellingPercentage = 0;
+            $averageSellingPercentage = 0;
+            $lowSellingPercentage = 0;
+        }
         // dd($lowSelling->count());
 
         return view('admin.stats', compact(
