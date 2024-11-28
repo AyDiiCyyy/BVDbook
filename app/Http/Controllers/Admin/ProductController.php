@@ -164,6 +164,15 @@ class ProductController extends Controller
             return back()->with(['status_failed' => $e->getMessage()]);
         }
     }
+    public function show($id)
+    {
+        $product = Product::query()->findOrFail($id);
+        $categories = Category::query()->where('parent_id', 0)->get();
+        $categoriesOfProduct = Category::whereHas('CategoryProducts', function ($query) use ($product) {
+            $query->where('product_id',$product->id);
+        })->pluck('name')->toArray();
+        return view('admin.products.show', compact('product', 'categories', 'categoriesOfProduct'));
+    }
     public function edit($id)
     {
         $product = Product::query()->findOrFail($id);

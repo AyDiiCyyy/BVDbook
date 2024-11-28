@@ -71,13 +71,13 @@
                                             </td>
                                             <td class="product-quantity">
                                                 <div class="input-group quantity-wrapper" style="width: 120px;">
-                                                    <a href="#" class="btn btn-outline-secondary btn-sm minus"
+                                                    <a class="btn btn-outline-secondary btn-sm minus"
                                                         data-id="{{ $cartItem->id }}" data-action="minus">−</a>
                                                     <input type="text"
                                                         class="form-control text-center cart-quantity cart-quantity-{{ $cartItem->id }}"
                                                         data-id="{{ $cartItem->id }}" value="{{ $cartItem->quantity }}"
                                                         min="1">
-                                                    <a href="#" class="btn btn-outline-secondary btn-sm plus"
+                                                    <a class="btn btn-outline-secondary btn-sm plus"
                                                         data-id="{{ $cartItem->id }}" data-action="plus">+</a>
                                                 </div>
                                             </td>

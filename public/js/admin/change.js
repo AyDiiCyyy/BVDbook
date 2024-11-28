@@ -75,6 +75,14 @@ $(document).ready(function () {
         });
     }
 
+
+    // function addToCart(item){
+        
+    //         console.log(item.data("id"));
+            
+        
+    // }
+
 // Event handler for toggling active status
     $(".toggle-active-btn").click(function () {
         toggleStatus($(this), "active");
@@ -90,4 +98,10 @@ $(document).ready(function () {
         changeOrder($(this));
         
     })
+
+    // giỏ hàng
+    // $(".cart").click(function () {
+    //     addToCart($(this));
+    // });
+
 });

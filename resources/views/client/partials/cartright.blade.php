@@ -51,7 +51,7 @@
     <div class="foot">
         <div class="buttons">
             <a href="{{ route('cart.show') }}" class="btn btn-dark btn-hover-primary mb-30px">Xem giỏ hàng</a>
-            <a href="#" class="btn btn-outline-dark current-btn">Thanh toán</a>
+            <a href="{{ route('checkout') }}" class="btn btn-outline-dark current-btn">Thanh toán</a>
         </div>
     </div>
 </div>
