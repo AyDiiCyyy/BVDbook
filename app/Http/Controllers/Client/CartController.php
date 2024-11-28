@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -48,21 +49,25 @@ class CartController extends Controller
 
         if ($cartItem) {
             // Nếu có rồi, cộng thêm số lượng
-            $cartItem->quantity += $validated['quantity'];
-            $cartItem->save();
+            $total_cart_item = $cartItem->quantity + $validated['quantity'];
+            $cartItem->update([
+                'quantity' => $total_cart_item,
+                'total_price' => $total_cart_item * $product->price,
+                //'updated_at' => Carbon::now(),
+            ]);
+            //$cartItem->save();
         } else {
             // Nếu chưa có, tạo mới giỏ hàng
             $cartItem = Cart::create([
                 'user_id' => $user->id,
                 'product_id' => $product->id,
-                'quantity' => $validated['quantity']
+                'quantity' => $validated['quantity'],
+                'total_price' => $product->price * $validated['quantity'],
             ]);
         }
 
         $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity');
-
-        // Tính lại tổng giá trị của giỏ hàng
-        $totalPrice = $product->price * $cartItem->quantity;
+        $totalPrice = Cart::where('user_id', $user->id)->sum('total_price');
 
         return response()->json([
             'status' => 'success',
@@ -95,14 +100,11 @@ class CartController extends Controller
         // Tính phí vận chuyển
         $shippingFee = 0;
 
-        // Tính thuế
-        $taxes = 0;
-
         // Tính tổng giá trị
-        $totalPrice = $subtotal + $shippingFee + $taxes;
+        $totalPrice = $subtotal + $shippingFee;
 
         // Truyền dữ liệu vào view
-        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'taxes', 'totalPrice', 'messages'));
+        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'totalPrice', 'messages'));
     }
 
     public function updateCart(Request $request)
@@ -128,9 +130,9 @@ class CartController extends Controller
 
         // Cập nhật số lượng sản phẩm
         if ($action == "plus") {
-            $cart_item_quantity = $quantity + 1;
+            $cart_item_quantity = $quantity += 1;
         } else {
-            $cart_item_quantity = $quantity - 1;
+            $cart_item_quantity = $quantity -= 1;
         }
 
         $cart_item_price = $product->price * $cart_item_quantity;
@@ -141,12 +143,11 @@ class CartController extends Controller
 
         $total_price = Cart::query()->where('status', 0)->where('user_id', Auth::id())->sum('total_price');
 
-        // Cập nhật phí vận chuyển và thuế
+        // Cập nhật phí vận chuyển
         $shippingFee = 0;
-        $taxes = 0;
 
         // Tính tổng giá trị giỏ hàng
-        $totalPrice = $total_price + $shippingFee + $taxes;
+        $totalPrice = $total_price + $shippingFee;
 
         return response()->json([
             'status' => 'success',
@@ -185,10 +186,9 @@ class CartController extends Controller
 
         // Phí vận chuyển và thuế
         $shippingFee = 0;
-        $taxes = 0;
 
         // Tính tổng tiền
-        $totalPrice = $subtotal + $shippingFee + $taxes;
+        $totalPrice = $subtotal + $shippingFee;
 
         return response()->json([
             'status' => 'success',

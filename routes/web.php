@@ -27,7 +27,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
     // Routes cho phần admin
     Route::prefix('admin')->as('admin.')->group(function () {
         Route::prefix('statistic')->as('statistic.')->group(function () {
-            Route::get('/' ,[StatsController::class,'index'])->name('index');
+            Route::get('/', [StatsController::class, 'index'])->name('index');
             Route::post('/revenue', [StatsController::class, 'getRevenue'])->name('getRevenue');
         });
         // Routes cho quản lý danh mục
@@ -88,11 +88,10 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
         Route::prefix('user')->as('user.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::post('admin/user/change-active', [UserController::class, 'changeActive'])->name('changeActive');
-   
+
             Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [UserController::class, 'update'])->name('update');
-        
-    
+            Route::delete('/{id}/destroy', [UserController::class, 'destroy'])->name('destroy');
         });
         Route::prefix('order')->as('order.')->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
@@ -116,15 +115,25 @@ Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 
+// Giỏ hàng
+Route::middleware('auth')->group(function () {
+    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+    Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
+    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
+    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
+    Route::get('/cart/quantity', [CartController::class, 'getCartQuantity'])->name('cart.quantity');
+});
+
 
 
 
 
 //thanh toán
-Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
-Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
-Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
-Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
+Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::post('checkvoucher', [CheckoutController::class, 'checkvoucher'])->name('checkvoucher');
+Route::post('usevoucher', [CheckoutController::class, 'usevoucher'])->name('usevoucher');
+Route::post('pay', [CheckoutController::class, 'pay'])->name('pay');
 //account
 Route::middleware('auth')->group(function () {
     Route::get('account', [MyAccountController::class, 'index'])->name('my-account');
@@ -136,14 +145,4 @@ Route::middleware('auth')->group(function () {
     Route::get('account/orders', [MyAccountController::class, 'showOrders'])->name('client.account.orders');
     Route::get('account/order/{order}', [MyAccountController::class, 'showOrderDetail'])->name('client.account.order-detail');
     Route::patch('orders/{orderId}/cancel', [MyAccountController::class, 'cancelOrder'])->name('client.orders.cancel');
-});
-
-// giỏ hàng
-Route::middleware('auth')->group(function () {
-    Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
-    Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
-    Route::post('/cart/update', [CartController::class, 'updateCart'])->name('cart.update');
-    Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-    Route::get('/cart/get', [CartController::class, 'getCart'])->name('cart.get');
-    Route::get('/cart/quantity', [CartController::class, 'getCartQuantity'])->name('cart.quantity');
 });

@@ -9,19 +9,17 @@
                 @foreach ($cartItems as $cartItem)
                     @if ($cartItem->products)
                         <!-- Kiểm tra xem product có tồn tại không -->
-                        <li>
-                            <a href="#" class="image">
-                                <img src="{{ asset($cartItem->products->image) }}" alt="Cart product Image">
+                        <li style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <a href="#" class="image" style="flex-shrink: 0;">
+                                <img src="{{ asset($cartItem->products->image) }}" alt="Cart product Image"
+                                    style="width: 120px; height: 150px; object-fit: cover; border-radius: 8px;">
                             </a>
-                            <div class="content">
-                                <p>Tên sản phẩm: </p>
-                                <a href="{{ asset($cartItem->products->image) }}" class="title">
-                                    {{ $cartItem->products->name }}
-                                </a>
+                            <div class="content" style="flex: 1; padding-left: 10px;">
+                                <p style="margin: 0; font-size: 14px; word-wrap: break-word; max-width: 200px;">Tên sản
+                                    phẩm: {{ $cartItem->products->name }}</p>
                                 <span class="quantity-price">
-                                    <p>Số lượng X Giá sản phẩm: </p>
-                                    <br>
-                                    {{ $cartItem->quantity }} x <span
+                                    <p style="margin: 5px 0 0;">Số lượng: {{ $cartItem->quantity }}</p>
+                                    Giá sản phẩm: <span
                                         class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
                                 </span>
                             </div>
