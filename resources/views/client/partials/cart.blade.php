@@ -147,7 +147,7 @@
                                             <a href="{{ route('index') }}">Tiếp tục mua sắm</a>
                                         </div>
                                         <div class="cart-clear">
-                                            <a href="#">Thanh toán</a>
+                                            <a href="{{ route('checkout') }}">Thanh toán</a>
                                         </div>
                                     </div>
                                 </div>

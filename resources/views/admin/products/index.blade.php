@@ -140,11 +140,8 @@
 
                             <td class="text-center align-middle">
                                 <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
-                                <form action="{{ route('admin.product.destroy', $product->id) }}" method="post" class="d-inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button onclick="return confirm('Bạn có muốn xóa không')" type="submit" class="btn btn-danger">Xóa</button>
-                                </form>
+                                <a href="{{ route('admin.product.show', $product->id) }}" class="btn btn-dark">Chi tiết</a>
+                                
                             </td>
                             
 

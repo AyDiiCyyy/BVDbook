@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users','id');
             $table->tinyInteger('active');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
