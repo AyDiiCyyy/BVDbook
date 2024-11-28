@@ -134,6 +134,7 @@ Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout'
 Route::post('checkvoucher', [CheckoutController::class, 'checkvoucher'])->name('checkvoucher');
 Route::post('usevoucher', [CheckoutController::class, 'usevoucher'])->name('usevoucher');
 Route::post('pay', [CheckoutController::class, 'pay'])->name('pay');
+
 //account
 Route::middleware('auth')->group(function () {
     Route::get('account', [MyAccountController::class, 'index'])->name('my-account');
