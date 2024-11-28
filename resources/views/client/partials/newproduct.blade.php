@@ -97,13 +97,25 @@
                     quantity: 1
                 },
                 success: function(response) {
+                    console.log(response);
+                    $('#cart-count').text(response.cart_count);
+                    // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                    $(".item-quantity-tag").html(response.total_quantity);
+                    $.ajax({
+                        url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                        method: "GET",
+                        success: function(response) {
+                            console.log(response);
+                            $('#cart-right').html(
+                                response); // Cập nhật phần tử giỏ hàng
+                        },
+                        error: function() {
+                            alert('Không thể tải giỏ hàng, vui lòng thử lại.');
+                        }
+                    });
+
                     // Hiển thị thông báo thành công từ response
                     alert(response.message);
-
-                    $('#cart-count').text(response.cart_count);
-                    $('#item-quantity-tag').text(response.total_quantity);
-                    // Gọi hàm cập nhật giỏ hàng mà không cần reload
-                    updateCartRight();
                 },
                 error: function(xhr) {
                     // Xử lý lỗi khi người dùng chưa đăng nhập
@@ -128,6 +140,7 @@
                 url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
                 method: "GET",
                 success: function(response) {
+                    console.log(response);
                     $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
                 },
                 error: function() {
