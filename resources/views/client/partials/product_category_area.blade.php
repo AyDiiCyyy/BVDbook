@@ -104,7 +104,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -138,25 +138,52 @@
                                 response); // Cập nhật phần tử giỏ hàng
                         },
                         error: function() {
-                            alert('Không thể tải giỏ hàng, vui lòng thử lại.');
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: "Không thể tải giỏ hàng, vui lòng thử lại!",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
                         }
                     });
 
                     // Hiển thị thông báo thành công từ response
-                    alert(response.message);
+                    Swal.fire({
+                        title: "Thành công!",
+                        text: "Sản phẩm đã được thêm vào giỏ hàng!",
+                        icon: "success",
+                        confirmButtonText: "OK",
+                    });
                 },
                 error: function(xhr) {
                     // Xử lý lỗi khi người dùng chưa đăng nhập
                     if (xhr.status === 401) {
-                        alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
-                        window.location.href =
-                            "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        }).then(() => {
+                            window.location.href =
+                                "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                        });
+
                     } else if (xhr.responseJSON && xhr.responseJSON.message) {
                         // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
-                        alert(xhr.responseJSON.message);
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: xhr.responseJSON.message, // Lấy message từ server
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
                     } else {
                         // Thông báo chung nếu không có message cụ thể
-                        alert('Có lỗi xảy ra, vui lòng thử lại');
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: "Có lỗi xảy ra, vui lòng thử lại sau!",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
                     }
                 }
             });
@@ -171,7 +198,12 @@
                     $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
                 },
                 error: function() {
-                    alert('Không thể tải giỏ hàng, vui lòng thử lại.');
+                    Swal.fire({
+                        title: "Thất bại!",
+                        text: "Không thể tải giỏ hàng, vui lòng thử lại!",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
                 }
             });
         }

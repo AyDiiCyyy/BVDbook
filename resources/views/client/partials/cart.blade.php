@@ -90,32 +90,6 @@
                                                     <a href="#" class="remove-item" data-id="{{ $cartItem->id }}"><i
                                                             class="fa fa-times"></i></a>
                                                 </td>
-                                                <!-- Thêm modal confirm xóa -->
-                                                <div class="modal" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                                                    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="confirmDeleteModalLabel"
-                                                                    style="margin-right: 275px">Xác nhận
-                                                                    xóa sản phẩm</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary btn-sm"
-                                                                    id="cancelDeleteBtn" data-dismiss="modal">Hủy</button>
-                                                                <button type="button" class="btn btn-danger btn-sm"
-                                                                    id="confirmDeleteBtn">Xóa</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -160,7 +134,7 @@
         </div>
     </div>
     <!-- Cart area end -->
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -204,7 +178,12 @@
                             $('#subtotal').text(response.totalPrice);
                             $('#totalPrice').text(response.totalPrice);
                         } else {
-                            alert(response.message); // Thông báo lỗi nếu có
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: response.message, // Lấy thông báo lỗi từ server
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
                         }
                     }
                 });
@@ -216,36 +195,57 @@
 
                 var cartItemId = $(this).data('id');
 
-                $('#confirmDeleteModal').modal('show');
+                // Hiển thị SweetAlert để xác nhận xóa
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+                    text: "Sản phẩm sẽ bị xóa khỏi giỏ hàng.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonText: 'Xóa'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/cart/remove',
+                            method: 'POST',
+                            data: {
+                                cart_item_id: cartItemId,
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    // Xóa sản phẩm khỏi bảng
+                                    $('tr').has('.remove-item[data-id="' + cartItemId +
+                                        '"]').remove();
 
-                $('#confirmDeleteBtn').off('click').on('click', function() {
-                    $.ajax({
-                        url: '/cart/remove',
-                        method: 'POST',
-                        data: {
-                            cart_item_id: cartItemId,
-                            _token: $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response) {
-                            if (response.status === 'success') {
-                                // Xóa sản phẩm khỏi bảng
-                                $('tr').has('.remove-item[data-id="' + cartItemId +
-                                    '"]').remove();
+                                    // Cập nhật tổng tiền từ dữ liệu trả về
+                                    $('#subtotal').text(formatCurrency(response
+                                        .subtotal));
+                                    $('#totalPrice').text(formatCurrency(response
+                                        .totalPrice));
 
-                                // Cập nhật tổng tiền từ dữ liệu trả về
-                                $('#subtotal').text(formatCurrency(response.subtotal));
-                                $('#totalPrice').text(formatCurrency(response
-                                    .totalPrice));
-
-                                $('#confirmDeleteModal').modal('hide');
-                            } else {
-                                alert(response.message);
+                                    Swal.fire({
+                                        title: "Thành công!",
+                                        text: "Xóa sản phẩm thành công",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Thất bại!",
+                                        text: response
+                                            .message, // Lấy thông báo lỗi từ server
+                                        icon: "error",
+                                        confirmButtonText: "OK",
+                                    });
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 });
             });
-
             // Hàm định dạng tiền tệ
             function formatCurrency(amount) {
                 return amount.toLocaleString('vi-VN', {
