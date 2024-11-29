@@ -5,9 +5,8 @@
 @endsection
 
 @section('content')
-
     <!-- Breadcrumb Area start -->
-    <section class="breadcrumb-area">
+    <section class="breadcrumb-area" style="margin-top: -30px">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -24,7 +23,7 @@
     </section>
     <!-- Breadcrumb Area End -->
     <!-- Shop details Area start -->
-    <section class="product-details-area mtb-60px">
+    <section class="product-details-area mtb-60px" style="margin-top: -50px">
         <div class="container">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-12">
@@ -34,10 +33,10 @@
                                 <img class="zoompro" src="{{ asset($productDetail->image) }}" alt="" />
                             </div>
                         </div>
-                        <div id="gallery" class="product-dec-slider-2">    
-                                <a class="active" >
-                                    <img src="{{ asset($productDetail->image) }}" alt="" />
-                                </a>
+                        <div id="gallery" class="product-dec-slider-2">
+                            <a class="active">
+                                <img src="{{ asset($productDetail->image) }}" alt="" />
+                            </a>
                             @foreach ($galleriesOfProduct as $gallery)
                                 <a>
                                     <img src="{{ asset($gallery) }}" alt="" />
@@ -95,7 +94,8 @@
                                 <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                             </div>
                             <div class="pro-details-cart btn-hover">
-                                <a href="#"> + Thêm Giỏ Hàng</a>
+                                <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
+                                    Thêm Giỏ Hàng</a>
                             </div>
                         </div>
                         <div class="pro-details-wish-com">
@@ -221,7 +221,7 @@
                                     <div class="ratting-form">
                                         <form action="#">
                                             <div class="star-box">
-                                               
+
                                                 <div class="rating-product">
                                                     <i class="ion-android-star"></i>
                                                     <i class="ion-android-star"></i>
@@ -291,7 +291,7 @@
                             <a class="inner-link"
                                 href="#"><span>{{ implode(' ', $categoriesOfProduct) }}</span></a>
                             <h2><a href="{{ route('productDetail', $related->slug) }}"
-                                    class="product-link">{{Str::limit($related->name, 15, '...' )}}</a></h2>
+                                    class="product-link">{{ Str::limit($related->name, 15, '...') }}</a></h2>
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>
@@ -324,7 +324,8 @@
                         </div>
                         <div class="add-to-link">
                             <ul>
-                                <li class="cart"><a class="cart-btn" href="#">Thêm Giỏ Hàng </a></li>
+                                <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $related->id }}"
+                                        href="#">Thêm Giỏ Hàng </a></li>
                                 <li>
                                     <a href="#"><i class="ion-android-favorite-outline"></i></a>
                                 </li>
@@ -372,7 +373,7 @@
                             <a class="inner-link"
                                 href="#"><span>{{ implode(' ', $categoriesOfProduct) }}</span></a>
                             <h2><a href="{{ route('productDetail', $product->slug) }}"
-                                    class="product-link">{{ Str::limit($product->name, 15, '...' ) }}</a></h2>
+                                    class="product-link">{{ Str::limit($product->name, 15, '...') }}</a></h2>
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>
@@ -405,7 +406,8 @@
                         </div>
                         <div class="add-to-link">
                             <ul>
-                                <li class="cart"><a class="cart-btn" href="#">Thêm Giỏ Hàng </a></li>
+                                <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $product->id }}"
+                                        href="#">Thêm Giỏ Hàng </a></li>
                                 <li>
                                     <a href="#"><i class="ion-android-favorite-outline"></i></a>
                                 </li>
@@ -421,4 +423,204 @@
         </div>
     </section>
     <!-- Recent product area end -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Xử lý sự kiện click vào nút "Thêm Giỏ Hàng"
+            $('.pro-details-cart a').click(function(e) {
+                e.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+                // Lấy ID sản phẩm và số lượng từ giao diện người dùng
+                let productId = "{{ $productDetail->id }}"; // ID sản phẩm từ Blade
+                let quantity = $('.cart-plus-minus-box').val(); // Số lượng sản phẩm
+
+                // Kiểm tra nếu số lượng hợp lệ
+                if (quantity <= 0) {
+                    Swal.fire({
+                        title: "Thất bại!",
+                        text: "Số lượng không hợp lệ!",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+
+                    return;
+                }
+
+                // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                $.ajax({
+                    url: "{{ route('cart.add') }}", // URL của route cart.add
+                    method: "POST", // Phương thức POST
+                    data: {
+                        _token: "{{ csrf_token() }}", // CSRF token
+                        product_id: productId, // ID sản phẩm
+                        quantity: quantity // Số lượng sản phẩm
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#cart-count').text(response.cart_count);
+                        // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                        $(".item-quantity-tag").html(response.total_quantity);
+                        $.ajax({
+                            url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                            method: "GET",
+                            success: function(response) {
+                                console.log(response);
+                                $('#cart-right').html(
+                                    response); // Cập nhật phần tử giỏ hàng
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: "Thất bại!",
+                                    text: "Không thể tải giỏ hàng, vui lòng thử lại!",
+                                    icon: "error",
+                                    confirmButtonText: "OK",
+                                });
+                            }
+                        });
+
+                        // Hiển thị thông báo thành công từ response
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: "Sản phẩm đã được thêm vào giỏ hàng!",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+
+                    },
+                    error: function(xhr) {
+                        // Xử lý lỗi khi người dùng chưa đăng nhập
+                        if (xhr.status === 401) {
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            }).then(() => {
+                                window.location.href =
+                                    "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                            });
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: xhr.responseJSON.message, // Lấy message từ server
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        } else {
+                            // Thông báo chung nếu không có message cụ thể
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: "Có lỗi xảy ra, vui lòng thử lại sau!",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    }
+                });
+            });
+            $('.add-to-cart').off('click').on('click', function(e) {
+                e.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+                // Lấy ID sản phẩm và số lượng từ giao diện người dùng
+                let productId = $(this).data('product-id');
+
+                // Gửi yêu cầu AJAX để thêm sản phẩm vào giỏ hàng
+                $.ajax({
+                    url: "{{ route('cart.add') }}", // URL của route cart.add
+                    method: "POST", // Phương thức POST
+                    data: {
+                        _token: "{{ csrf_token() }}", // CSRF token
+                        product_id: productId, // ID sản phẩm
+                        quantity: 1
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#cart-count').text(response.cart_count);
+                        // Gọi hàm cập nhật giỏ hàng mà không cần reload
+                        $(".item-quantity-tag").html(response.total_quantity);
+                        $.ajax({
+                            url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                            method: "GET",
+                            success: function(response) {
+                                console.log(response);
+                                $('#cart-right').html(
+                                    response); // Cập nhật phần tử giỏ hàng
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: "Thất bại!",
+                                    text: "Không thể tải giỏ hàng, vui lòng thử lại sau!",
+                                    icon: "error",
+                                    confirmButtonText: "OK",
+                                });
+                            }
+                        });
+
+                        // Hiển thị thông báo thành công
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: "Sản phẩm đã được thêm vào giỏ hàng!",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        // Xử lý lỗi khi người dùng chưa đăng nhập
+                        if (xhr.status === 401) {
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: "Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            }).then(() => {
+                                window.location.href =
+                                    "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+                            });
+                        } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                            // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: xhr.responseJSON.message, // Lấy message từ server
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        } else {
+                            // Thông báo chung nếu không có message cụ thể
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: "Có lỗi xảy ra, vui lòng thử lại sau!",
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Hàm cập nhật giỏ hàng ở phần cartright
+            function updateCartRight() {
+                $.ajax({
+                    url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                    method: "GET",
+                    success: function(response) {
+                        $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: "Không thể tải giỏ hàng, vui lòng thử lại!",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    }
+                });
+            }
+
+        });
+    </script>
+@endsection
+
+@section('js')
 @endsection

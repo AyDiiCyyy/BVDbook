@@ -60,7 +60,7 @@
                                         @foreach($orders as $order)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $order->sku }}</td>
+                                                <td>{{ $order->order_code  }}</td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
                                                 <td>{{ number_format($order->total_money, 0, ',', '.') }} VND</td>
                                                 <td>
