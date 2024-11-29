@@ -111,7 +111,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link active"> 
+                    <a href="#" class="nav-link"> 
                         <i class="nav-icon bi bi-chat-left"></i> 
                         <p>
                             Quản lí bình luận
@@ -126,8 +126,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
-                       
+                </li>      
             </ul>
         </nav>
     </div> <!--end::Sidebar Wrapper-->
