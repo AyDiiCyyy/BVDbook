@@ -79,7 +79,6 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
         Route::prefix('user')->as('user.')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('index');
             Route::post('admin/user/change-active', [UserController::class, 'changeActive'])->name('changeActive');
-   
             Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
             Route::put('update/{id}', [UserController::class, 'update'])->name('update');
         
