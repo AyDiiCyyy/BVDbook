@@ -49,7 +49,8 @@
                             </div>
 
                             <div class="ms-2">
-                                <select name="status" class="form-select" style="width: 170px;" onchange="this.form.submit()">
+                                <select name="status" class="form-select" style="width: 170px;"
+                                    onchange="this.form.submit()">
                                     <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả trạng
                                         thái</option>
                                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang hoạt
@@ -118,6 +119,8 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.voucher-status').forEach(cell => {
@@ -149,13 +152,29 @@
                                     button.classList.remove('btn-success');
                                     button.classList.add('btn-danger');
                                 }
+                                Swal.fire({
+                                    title: "Thành công!",
+                                    text: "Thay đổi trạng thái voucher thành công",
+                                    icon: "success",
+                                    confirmButtonText: "OK",
+                                });
                             } else {
-                                alert(data.message);
+                                Swal.fire({
+                                    title: "Thất bại!",
+                                    text: data.message,
+                                    icon: "error",
+                                    confirmButtonText: "OK",
+                                });
                             }
                         })
                         .catch(error => {
                             console.error('Có lỗi xảy ra:', error);
-                            alert('Không thể thay đổi trạng thái voucher.');
+                            Swal.fire({
+                                title: "Lỗi!",
+                                text: "Không thể thay đổi trạng thái voucher.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
                         });
                 });
             });
