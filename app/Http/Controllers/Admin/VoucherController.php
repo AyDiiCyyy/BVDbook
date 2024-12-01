@@ -14,7 +14,7 @@ class VoucherController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->input('status', 'active');
+        $status = $request->input('status', 'all');
         $search = $request->input('search', null);
 
         $query = Voucher::query();
@@ -26,7 +26,16 @@ class VoucherController extends Controller
             });
         }
 
+        // Thêm điều kiện lọc theo trạng thái
+        if ($status === 'active') {
+            $query->where('status', 'active');
+        } elseif ($status === 'expired') {
+            $query->where('status', 'expired');
+        }
+
+
         $data['vouchers'] = $query->orderByDesc('id')->paginate(10);
+
 
         $currentDate = now();
 

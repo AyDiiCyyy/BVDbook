@@ -50,13 +50,23 @@ class CartController extends Controller
         if ($cartItem) {
             // Nếu có rồi, cộng thêm số lượng
             $total_cart_item = $cartItem->quantity + $validated['quantity'];
+
+            // Kiểm tra tổng số lượng không vượt quá số lượng trong kho
+            if ($total_cart_item > $product->quantity) {
+                return response()->json(['status' => 'error', 'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho'], 400);
+            }
+
             $cartItem->update([
                 'quantity' => $total_cart_item,
                 'total_price' => $total_cart_item * $product->price,
                 //'updated_at' => Carbon::now(),
             ]);
-            //$cartItem->save();
         } else {
+
+            if ($validated['quantity'] > $product->quantity) {
+                return response()->json(['status' => 'error', 'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho'], 400);
+            }
+
             // Nếu chưa có, tạo mới giỏ hàng
             $cartItem = Cart::create([
                 'user_id' => $user->id,
@@ -133,6 +143,14 @@ class CartController extends Controller
             $cart_item_quantity = $quantity += 1;
         } else {
             $cart_item_quantity = $quantity -= 1;
+        }
+
+        // Kiểm tra số lượng tồn kho
+        if ($cart_item_quantity > $product->quantity) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho.'
+            ]);
         }
 
         $cart_item_price = $product->price * $cart_item_quantity;

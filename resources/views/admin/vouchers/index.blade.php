@@ -38,15 +38,25 @@
                 <!--begin::Row-->
                 <div class="row mb-3">
                     <div class="d-flex justify-content-between align-items-center">
-                        <!-- Nút "Thêm mới" -->
                         <a href="{{ route('admin.voucher.create') }}" class="btn btn-success">Thêm mới</a>
 
-                        <!-- Form tìm kiếm -->
-                        <form method="GET" action="{{ route('admin.voucher.index') }}" class="d-flex">
-                            <div class="input-group">
-                                <input type="text" name="search" class="form-control"
-                                    placeholder="Tìm kiếm vouchers" value="{{ request('search') }}">
+                        <!-- Form tìm kiếm và lọc trạng thái -->
+                        <form method="GET" action="{{ route('admin.voucher.index') }}" class="d-flex align-items-center">
+                            <div class="input-group me-2">
+                                <input type="text" name="search" class="form-control" placeholder="Tìm kiếm vouchers"
+                                    value="{{ request('search') }}">
                                 <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            </div>
+
+                            <div class="ms-2">
+                                <select name="status" class="form-select" style="width: 170px;" onchange="this.form.submit()">
+                                    <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả trạng
+                                        thái</option>
+                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang hoạt
+                                        động</option>
+                                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Hết hạn
+                                    </option>
+                                </select>
                             </div>
                         </form>
                     </div>
