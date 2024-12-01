@@ -12,106 +12,343 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StatsController extends Controller
-{
-
-    // SELECT categories.name as category_name, orders.status , SUM(order_details.quantity) as total_sold  FROM order_details 
-    // JOIN orders ON order_details.order_id = orders.id
-    // JOIN products ON order_details.product_id = products.id
-    // JOIN category_products ON  products.id = category_products.product_id
-    // JOIN categories ON category_products.category_id = categories.id 
-    // WHERE orders.status = 4
-    // GROUP BY category_name
-    // ORDER BY  total_sold DESC
-    // LIMIT 10;
-    public function getRevenue(Request $request)
+{   
+     public function getRevenue(Request $request)
     {
         $filter = $request->input('filter');
         $selectedDate = $request->input('date');
-
         $revenue = [];
         $labels = [];
         try {
-            // Kiểm tra xem giá trị selectedDate có hợp lệ không
-            if (!$selectedDate) {
+            if (!$filter) {
                 return response()->json([
-                    'error' => 'Ngày/tháng/năm không hợp lệ.',
+                    'error' => 'Bộ lọc là bắt buộc.',
                 ], 400);
             }
 
-            // Chuyển đổi selectedDate thành đối tượng Carbon
-            $date = Carbon::parse($selectedDate);
-            Log::info('Received Date: ' . $selectedDate); // Ghi log giá trị nhận được từ frontend
+            // Lọc 14 ngày
+            if ($filter === '14day') {
+                // Doanh thu 14 ngày
+                $revenueLast14Days = Order::select(
+                    DB::raw('DATE(created_at) as day'),
+                    DB::raw('SUM(total_money) as revenue')
+                )
+                    ->where('status', 4)
+                    ->where('created_at', '>=', Carbon::now()->subDays(14))
+                    ->where('payment_status',1)
+                    ->groupBy('day')
+                    ->orderBy('day', 'asc')
+                    ->get();
+                // Kiểm tra nếu có dữ liệu
+                if ($revenueLast14Days->isNotEmpty()) {
+                    foreach ($revenueLast14Days as $item) {
+                        $revenue[] = $item->revenue;
+                        $labels[] = Carbon::parse($item->day)->translatedFormat('d/m/Y');
+                    }
+                } else {
+                    $revenue = [0];
+                    $labels = ['Không có dữ liệu'];
+                }
+                // Trạng thái 14 ngày
+                $ordersCount = Order::query()
+                    ->where('created_at', '>=', Carbon::now()->subDays(14))
+                    ->whereIn('status', [1, 2, 5])
+                    ->get()
+                    ->groupBy('status');
+                // Lợi nhuận thuần 14 ngày
+                $netProfit = Order::query()
+                    ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
+                    ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
+                    - SUM(
+                        CASE 
+                            WHEN orders.shipping = 1 THEN 0
+                            WHEN orders.shipping = 2 THEN 30000
+                            WHEN orders.shipping = 3 THEN 60000
+                            ELSE 0
+                        END
+                    ) AS net_revenue
+                '))->where('orders.created_at', '>=', Carbon::now()->subDays(14))
+                    ->where('payment_status',1)
+                    ->where('orders.status', 4)
+                    ->first();
+                $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                // Top 10 sản phẩm bán chạy 14 ngày
+                $bestSellerTop10 = OrderDetail::query()
+                    ->join('products', 'order_details.product_id', '=', 'products.id')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->select(
+                        'products.name as product_name',
+                        DB::raw('SUM(order_details.quantity) as total_sold'),
+                        DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                    )
+                    ->where('orders.status', 4)
+                    ->where('orders.created_at', '>=', Carbon::now()->subDays(14))
+                    ->groupBy('product_name', 'order_details.product_id')
+                    ->orderByDesc('total_sold')
+                    ->limit(10)->get();
 
-            // Kiểm tra nếu có filter và selectedDate
-            if ($filter && $selectedDate) {
-                // Set up Tiếng Việt cho Carbon
+                // Tỷ lệ
+                $completedOrder = Order::query()
+                    ->where('created_at', '>=', Carbon::now()->subDays(14))
+                    ->where('status', 4)->count();
+                $cancelOrder = Order::query()
+                    ->where('created_at', '>=', Carbon::now()->subDays(14))
+                    ->where('status', 6)->count();
+                return response()->json([
+                    'revenue' => $revenue,
+                    'labels' => $labels,
+                    'netProfitRevenue' => $netProfitRevenue,
+                    'pendingOrder' => $ordersCount->get(1, collect())->count(),
+                    'orderProcessing' => $ordersCount->get(2, collect())->count(),
+                    'cancelConfirm' => $ordersCount->get(5, collect())->count(),
+                    'bestSellerTop10' => $bestSellerTop10,
+                    'completedOrder' => $completedOrder,
+                    'cancelOrder' => $cancelOrder,
+                ]);
+            }
+
+            // Xử lý theo ngày, tháng, năm nếu filter có selectedDate
+            if ($selectedDate) {
+                $date = Carbon::parse($selectedDate);
                 Carbon::setLocale('vi');
-
-                // Kiểm tra nếu filter là 'year'
                 if ($filter === 'year') {
                     // Tạo ngày đầu tiên của năm từ giá trị người dùng nhập
                     $date = Carbon::createFromFormat('Y', $selectedDate)->startOfYear();
                 }
-
-                // Kiểm tra nếu ngày, tháng, hoặc năm không hợp lệ
-                // if (!$date || !$date->isValid()) {
-                //     return response()->json([
-                //         'error' => 'Ngày không hợp lệ.',
-                //     ], 400);
-                // }
-
-                // Xử lý theo loại bộ lọc
-                if ($filter === 'day') {
-                    // Lọc theo ngày
-                    $revenue[] = Order::whereDate('created_at', $date)->sum('total_money');
-                    $labels[] = $date->toDateString();
-                } elseif ($filter === 'month') {
-                    // Lọc theo tháng
-                    $revenue[] = Order::whereYear('created_at', $date->year)
-                        ->whereMonth('created_at', $date->month)
+                switch ($filter) {
+                    case 'day':
+                        // Doanh thu theo ngày 
+                        $revenue[] = Order::whereDate('created_at', $date)
+                        ->where('status', 4)
+                        ->where('payment_status',1)
                         ->sum('total_money');
-                    $labels[] = $date->translatedFormat('F Y');
-                } elseif ($filter === 'year') {
-                    // Lọc theo năm
-                    for ($month = 1; $month <= 12; $month++) {
+                        $labels[] = $date->translatedFormat('d/m/Y');
+                        // Trạng thái theo ngày
+                        $pendingOrder = $this->getOrderStatusCount($date, 1, 'day'); // Trạng thái chờ xác nhận
+                        $orderProcessing = $this->getOrderStatusCount($date, 2, 'day'); // Trạng thái đang xử lý
+                        $cancelConfirm = $this->getOrderStatusCount($date, 5, 'day'); // Trạng thái hủy xác nhận
+                        // Lợi nhuận thuần theo ngày
+                        $netProfit = Order::query()
+                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
+                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
+                                    - SUM(
+                                        CASE 
+                                            WHEN orders.shipping = 1 THEN 0
+                                            WHEN orders.shipping = 2 THEN 30000
+                                            WHEN orders.shipping = 3 THEN 60000
+                                            ELSE 0
+                                        END
+                                    ) AS net_revenue
+                                '))
+                            ->whereDate('orders.created_at', $date)
+                            ->where('orders.status', 4)
+                            ->where('payment_status',1)
+                            ->first();
+                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Top 10 sản phẩm bán chạy theo ngày
+                        $bestSellerTop10 = OrderDetail::query()
+                            ->join('products', 'order_details.product_id', '=', 'products.id')
+                            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                            ->select(
+                                'products.name as product_name',
+                                DB::raw('SUM(order_details.quantity) as total_sold'),
+                                DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                            )
+                            ->where('orders.status', 4)
+                            ->whereDate('orders.created_at', $date)
+                            ->groupBy('product_name', 'order_details.product_id')
+                            ->orderByDesc('total_sold')
+                            ->limit(10)->get();
+                        // Tỷ lệ đơn hàng đã giao và đã hủy theo ngày
+                        $completedOrder = Order::query()
+                            ->whereDate('created_at', $date)
+                            ->where('status', 4)->count();
+                        $cancelOrder = Order::query()
+                            ->whereDate('created_at', $date)
+                            ->where('status', 6)->count();
+                        break;
+                    case 'month':
+                        // Doanh thu theo tháng
                         $revenue[] = Order::whereYear('created_at', $date->year)
-                            ->whereMonth('created_at', $month)
+                            ->whereMonth('created_at', $date->month)
+                            ->where('payment_status',1)
+                            ->where('status', 4)
                             ->sum('total_money');
-                        $labels[] = Carbon::create($date->year, $month, 1)->translatedFormat('F');
-                    }
-                    // $revenue[]  = Order::whereYear('created_at', $date->year)->sum('total_money');
-                    // $labels[] = $date->translatedFormat('Y');
-                } else {
-                    return response()->json([
-                        'error' => 'Loại bộ lọc không hợp lệ. Giá trị phải là "day", "month", hoặc "year".',
-                    ], 400);
+                        $labels[] = $date->translatedFormat('m/Y');
+                        // Trạng thái theo tháng
+                        $pendingOrder = $this->getOrderStatusCount($date, 1, 'month'); // Trạng thái chờ xác nhận
+                        $orderProcessing = $this->getOrderStatusCount($date, 2, 'month'); // Trạng thái đang xử lý
+                        $cancelConfirm = $this->getOrderStatusCount($date, 5, 'month'); // Trạng thái hủy xác nhận
+                        // Lợi nhuận thuần theo tháng
+                        $netProfit = Order::query()
+                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
+                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
+                                    - SUM(
+                                        CASE 
+                                            WHEN orders.shipping = 1 THEN 0
+                                            WHEN orders.shipping = 2 THEN 30000
+                                            WHEN orders.shipping = 3 THEN 60000
+                                            ELSE 0
+                                        END
+                                    ) AS net_revenue
+                                '))
+                            ->whereYear('orders.created_at', $date->year)
+                            ->whereMonth('orders.created_at', $date->month)
+                            ->where('payment_status',1)
+                            ->where('orders.status', 4)
+                            ->first();
+                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Top 10 sản phẩm bán chạy theo tháng
+                        $bestSellerTop10 = OrderDetail::query()
+                            ->join('products', 'order_details.product_id', '=', 'products.id')
+                            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                            ->select(
+                                'products.name as product_name',
+                                DB::raw('SUM(order_details.quantity) as total_sold'),
+                                DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                            )
+                            ->where('orders.status', 4)
+                            ->whereYear('orders.created_at', $date->year)
+                            ->whereMonth('orders.created_at', $date->month)
+                            ->groupBy('product_name', 'order_details.product_id')
+                            ->orderByDesc('total_sold')
+                            ->limit(10)->get();
+                        // Tỷ lệ đơn hàng đã giao và đã hủy theo tháng
+                        $completedOrder = Order::query()
+                            ->whereYear('created_at', $date->year)
+                            ->whereMonth('created_at', $date->month)
+                            ->where('status', 4)->count();
+                        $cancelOrder = Order::query()
+                            ->whereYear('created_at', $date->year)
+                            ->whereMonth('created_at', $date->month)    
+                            ->where('status', 6)->count();
+                        break;
+                    case 'year':
+                        // Doanh thu theo năm
+                        $revenue[] = Order::whereYear('created_at', $date->year)->where('status', 4)->where('payment_status',1)->sum('total_money');
+                        $labels[] = $date->translatedFormat('Y');
+                        // Trạng thái theo năm
+                        $pendingOrder = $this->getOrderStatusCount($date, 1, 'year'); // Trạng thái chờ xác nhận
+                        $orderProcessing = $this->getOrderStatusCount($date, 2, 'year'); // Trạng thái đang xử lý
+                        $cancelConfirm = $this->getOrderStatusCount($date, 5, 'year'); // Trạng thái hủy xác nhận
+                        // Lợi nhuận thuần theo năm
+                        $netProfit = Order::query()
+                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
+                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
+                                    - SUM(
+                                        CASE 
+                                            WHEN orders.shipping = 1 THEN 0
+                                            WHEN orders.shipping = 2 THEN 30000
+                                            WHEN orders.shipping = 3 THEN 60000
+                                            ELSE 0
+                                        END
+                                    ) AS net_revenue
+                                '))
+                            ->whereYear('orders.created_at', $date->year)
+                            ->where('payment_status',1)
+                            ->where('orders.status', 4)
+                            ->first();
+                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Top 10 sản phẩm bán chạy theo năm
+                        $bestSellerTop10 = OrderDetail::query()
+                            ->join('products', 'order_details.product_id', '=', 'products.id')
+                            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                            ->select(
+                                'products.name as product_name',
+                                DB::raw('SUM(order_details.quantity) as total_sold'),
+                                DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                            )
+                            ->where('orders.status', 4)
+                            ->whereYear('orders.created_at', $date->year)
+                            ->groupBy('product_name', 'order_details.product_id')
+                            ->orderByDesc('total_sold')
+                            ->limit(10)->get();
+                        // Tỷ lệ đơn hàng đã giao và đã hủy theo năm
+                        $completedOrder = Order::query()
+                            ->whereYear('created_at', $date->year)
+                            ->where('status', 4)->count();
+                        $cancelOrder = Order::query()
+                            ->whereYear('created_at', $date->year)
+                            ->where('status', 6)->count();
+                        break;
+
+                    default:
+                        // Có thể thêm xử lý lỗi nếu cần, ví dụ:
+                        return response()->json([
+                            'error' => 'Loại bộ lọc không hợp lệ. Giá trị phải là "day", "month" hoặc "year".'
+                        ], 400);
                 }
+                // Thông báo thành công
+                session()->flash('success', 'Lọc dữ liệu thành công!');
+
+                return response()->json([
+                    'revenue' => $revenue,
+                    'labels' => $labels,
+                    'netProfitRevenue' =>  $netProfitRevenue,
+                    'pendingOrder' => $pendingOrder,
+                    'orderProcessing' => $orderProcessing,
+                    'cancelConfirm' => $cancelConfirm,
+                    'bestSellerTop10' => $bestSellerTop10,
+                    'completedOrder' => $completedOrder,
+                    'cancelOrder' => $cancelOrder
+                ]);
             }
 
+            // Nếu thiếu selectedDate khi filter không phải '14day'
             return response()->json([
-                'revenue' => $revenue,
-                'labels' => $labels,
-            ]);
+                'error' => 'Ngày/Tháng/Năm là bắt buộc cho bộ lọc này.',
+            ], 400);
         } catch (\Exception $e) {
+            session()->flash('error', 'Đã xảy ra lỗi: ' . $e->getMessage());
             return response()->json([
                 'error' => 'Đã xảy ra lỗi: ' . $e->getMessage(),
             ], 500);
         }
     }
+    //Đếm trạng thái 
+    function getOrderStatusCount($date, $status, $filter)
+    {
+        $query = Order::query();
 
+        // Xử lý theo bộ lọc
+        if ($filter === 'day') {
+            $query->whereDate('created_at', $date);
+        } elseif ($filter === 'month') {
+            $query->whereYear('created_at', $date->year)
+                ->whereMonth('created_at', $date->month);
+        } elseif ($filter === 'year') {
+            $query->whereYear('created_at', $date->year);
+        }
 
-
+        // Lọc theo trạng thái và trả về số lượng
+        return $query->where('status', $status)->count();
+    }
+    //Hiển thị ra giao diện mặc định
     public function index(Request $request)
     {
-        $selectedDate = $request->input('date');
-        // dd($selectedDate);
-        $pendingOrder = Order::query()->where('status', 1)->count();
-        // $confirmedOrder = Order::query()->where('status', 2)->count();
-        $shippingOrder = Order::query()->where('status', 3)->count();
-        $completedOrder = Order::query()->where('status', 4)->count();
-        $canceledOrder = Order::query()->where('status', 5)->count();
-
-
+        // Tổng doanh thu đơn hàng 
+        $revenueTotal = Order::select(
+            DB::raw('DATE(created_at) as day'),
+            DB::raw('SUM(total_money) as revenue')
+        )->where('status', 4)->sum('total_money');
+        // dd($revenueTotal);
+        // Lợi nhuận thuần
+        $netProfit = Order::query()
+            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
+            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
+            - SUM(
+                CASE 
+                    WHEN orders.shipping = 1 THEN 0
+                    WHEN orders.shipping = 2 THEN 30000
+                    WHEN orders.shipping = 3 THEN 60000
+                    ELSE 0
+                END
+            ) AS net_revenue
+        '))
+            ->where('orders.status', 4)
+            ->first();
+        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+        // dd($netProfitRevenue);
         //Top 10 sản phẩm bán chạy nhất
         $bestSellerTop10 = OrderDetail::query()
             ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -122,78 +359,60 @@ class StatsController extends Controller
                 DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
             )
             ->where('orders.status', 4)
-            ->groupBy('product_name', 'order_details.product_id')->orderByDesc('total_sold')->limit(10)->get();
-        // Xử lý doanh thu của 7 ngày gần nhất
+            ->groupBy('product_name', 'order_details.product_id')
+            ->orderByDesc('total_sold')
+            ->limit(10)->get();
+        // dd( $bestSellerTop10);
+        // Xử lý doanh thu của 14 ngày gần nhất
         $revenueLast14Days = Order::select(
             DB::raw('DATE(created_at) as day'),
             DB::raw('SUM(total_money) as revenue')
         )
+            ->where('status', 4)
             ->where('created_at', '>=', Carbon::now()->subDays(14))
             ->groupBy('day')
             ->orderBy('day', 'asc')
             ->get();
-        
+
         if ($revenueLast14Days->isNotEmpty()) {
             foreach ($revenueLast14Days as $item) {
                 $revenue[] = $item->revenue;
                 $labels[] = Carbon::parse($item->day)->translatedFormat('d/m/Y');
             }
         } else {
-            $revenue = [0]; 
+            $revenue = [0];
             $labels = ['Không có dữ liệu'];
         }
-        // Tỷ lệ bán chạy
-        $rateProductsSell = OrderDetail::query()
-            ->join('products', 'order_details.product_id', '=', 'products.id')
-            ->join('orders', 'order_details.order_id', '=', 'orders.id')
-            ->select(
-                'products.name as product_name',
-                DB::raw('SUM(order_details.quantity) as total_sold'),
-                DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
-            )
-            ->where('orders.status', 4)
-            ->groupBy('product_name', 'order_details.product_id')
-            ->orderByDesc('total_revenue')
-            ->get();
-        // Phân nhóm sản phẩm bán chạy
+        // Hiển thị số lượng từng trạng thái
+        $ordersCount = Order::query()
+            ->whereIn('status', [1, 2, 5])
+            ->get()
+            ->groupBy('status');
 
-        $bestSelling = $rateProductsSell->filter(function ($product) {
-            return $product->total_sold >= 20; 
-        });
-
-        $averageSelling = $rateProductsSell->filter(function ($product) {
-            return $product->total_sold >= 6 && $product->total_sold < 20; 
-        });
-
-        $lowSelling = $rateProductsSell->filter(function ($product) {
-            return $product->total_sold < 6; 
-        });
-        $totalProducts = $rateProductsSell->count();
-        if ($totalProducts > 0) {
-            $bestSellingPercentage = ($bestSelling->count() / $totalProducts) * 100;
-            $averageSellingPercentage = ($averageSelling->count() / $totalProducts) * 100;
-            $lowSellingPercentage = ($lowSelling->count() / $totalProducts) * 100;
-        } else {
-            $bestSellingPercentage = 0;
-            $averageSellingPercentage = 0;
-            $lowSellingPercentage = 0;
-        }
-        // dd($lowSelling->count());
-
+        $pendingOrder = $ordersCount->get(1, collect())->count();
+        $orderProcessing = $ordersCount->get(2, collect())->count();
+        $cancelConfirm = $ordersCount->get(5, collect())->count();
+        // dd($pendingOrder);
+        // Đếm 2 trạng thái
+        $completedOrder = Order::query()
+            ->where('created_at', '>=', Carbon::now()->subDays(14))
+            ->where('status', 4)->count();
+        $cancelOrder = Order::query()
+            ->where('created_at', '>=', Carbon::now()->subDays(14))
+            ->where('status', 6)->count();
+        // dd($cancelOrder);
         return view('admin.stats', compact(
-            'pendingOrder',
-            'shippingOrder',
-            'completedOrder',
-            'canceledOrder',
-            'bestSellerTop10',
+            'revenueTotal',
             'revenue',
             'labels',
-            'bestSellingPercentage',
-            'averageSellingPercentage',
-            'lowSellingPercentage',
-
+            'pendingOrder',
+            'orderProcessing',
+            'cancelConfirm',
+            'netProfitRevenue',
+            'bestSellerTop10',
+            'completedOrder',
+            'cancelOrder',
             // 'revenueLast7Days'
-
         ));
     }
 }
