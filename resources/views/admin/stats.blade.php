@@ -65,7 +65,7 @@
                         <div class="small-box text-bg-primary text-black">
                             <div class="inner">
                                 <h3 id="netProfit"></h3>
-                                <p class="fw-bold" id="netProfitLabel">Lợi nhuận thuần</p>
+                                <p class="fw-bold" id="netProfitLabel"></p>
                             </div>
                             <svg class="small-box-icon" fill="#1976D2" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
@@ -120,7 +120,7 @@
                         <div class="small-box " style="background-color: #64B5F6;">
                             <div class="inner">
                                 <h3 id="orderProcessing"></h3>
-                                <p class="fw-bold" id="orderProcessingLabel">Đơn hàng đang xử lý</p>
+                                <p class="fw-bold" id="orderProcessingLabel"></p>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="small-box-icon">
                                 <path fill="#74C0FC"
@@ -133,8 +133,8 @@
                     <div class="col-lg-4 col-6">
                         <div class="small-box text-bg-danger">
                             <div class="inner">
-                                <h3 id="cancelConfirmOrder">0</h3>
-                                <p class="fw-bold" id="cancelConfirmOrderLabel">Đơn hàng chờ xác nhận hủy</p>
+                                <h3 id="cancelConfirmOrder"></h3>
+                                <p class="fw-bold" id="cancelConfirmOrderLabel"></p>
                             </div>
                             <!-- Biểu tượng dấu chéo (hủy bỏ) -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="small-box-icon" viewBox="0 0 384 512">
@@ -150,10 +150,10 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0" id="cartTitle">Doanh thu 14 ngày gần nhất </h5>
+                                    <h5 class="card-title mb-0" id="cartTitle"></h5>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="barChart" style=" width: 100%; height: 500px;"></canvas>
+                                    <canvas id="barChart" style=" width: 100%; height: 523px;"></canvas>
                                 </div>
                             </div>
                         </div>
