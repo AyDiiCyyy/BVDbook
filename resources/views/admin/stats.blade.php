@@ -132,9 +132,9 @@
                     {{-- Đơn hàng chờ xác nhận hủy --}}
                     <div class="col-lg-4 col-6">
                         <div class="small-box text-bg-danger">
-                            <div class="inner">
+                            <div class="inner text-black">
                                 <h3 id="cancelConfirmOrder"></h3>
-                                <p class="fw-bold" id="cancelConfirmOrderLabel"></p>
+                                <p class="fw-bold " id="cancelConfirmOrderLabel"></p>
                             </div>
                             <!-- Biểu tượng dấu chéo (hủy bỏ) -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="small-box-icon" viewBox="0 0 384 512">
