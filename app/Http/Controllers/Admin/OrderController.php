@@ -23,13 +23,13 @@ class OrderController extends Controller
                       });
             })
             ->paginate(10);
-    
+
         return view('admin.orders.index', [
             'title' => 'Quản lý đơn hàng',
             'orders' => $orders,
         ]);
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +53,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = Order::with(['OrderDetails.product', 'Voucher'])->findOrFail($id);
-        
+
         return view('admin.orders.show', [
             'order' => $order,
         ]);
@@ -87,33 +87,33 @@ class OrderController extends Controller
             'id' => 'required|exists:orders,id',
             'status' => 'required|integer|min:1|max:6',
         ]);
-    
+
         $order = Order::with(['OrderDetails', 'Voucher'])->find($request->id);
-    
-        if ($order->status == 6) { 
+
+        if ($order->status == 6) {
             return response()->json(['status' => false, 'message' => 'Đơn hàng đã hủy, không thể thay đổi trạng thái.']);
         }
-    
+
         if ($order->status >= $request->status) {
             return response()->json(['status' => false, 'message' => 'Không thể lùi trạng thái đơn hàng.']);
         }
-    
+
         if ($request->status == 6) {
             foreach ($order->OrderDetails as $detail) {
-                $product = $detail->product; 
+                $product = $detail->product;
                 $product->increment('quantity', $detail->quantity);
             }
             if ($order->voucher_id != 0) {
                 $voucher = $order->Voucher;
-    
+
                 if ($voucher) {
                     $voucher->increment('usage_limit');
                     $userVoucher = UserVoucher::where('voucher_id', $voucher->id)
                         ->where('user_id', $order->user_id)
                         ->first();
-    
+
                     if ($userVoucher) {
-                        $userVoucher->active = 1; 
+                        $userVoucher->active = 1;
                         $userVoucher->save();
                     }
                 }
@@ -121,7 +121,7 @@ class OrderController extends Controller
         }
         $order->status = $request->status;
         $order->save();
-    
+
         return response()->json(['status' => true]);
     }
 }
