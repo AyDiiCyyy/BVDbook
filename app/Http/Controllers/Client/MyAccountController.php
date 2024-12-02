@@ -143,10 +143,11 @@ class MyAccountController extends Controller
             return redirect()->route('client.account.orders')->with('error', 'Đơn hàng không có sản phẩm.');
         }
 
-        return view('client.account.order-detail', compact('order'));
+        $orderStatusLabel = $this->getStatusLabel($order->status);
+
+
+        return view('client.account.order-detail', compact('order', 'orderStatusLabel'));
     }
-
-
 
     public function cancelOrder($orderId)
     {
