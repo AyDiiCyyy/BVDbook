@@ -3,6 +3,58 @@
 @section('title', 'Danh Sách Đơn Hàng')
 
 @section('content')
+<style>
+
+/* Sử dụng Flexbox để căn giữa chữ theo chiều ngang và dọc */
+.nav-pills {
+  display: flex;
+  justify-content: space-between; /* Chia đều khoảng cách giữa các tab */
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav-link {
+  font-weight: bold;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  color: #4a90e2; /* Màu chữ xanh dương sáng */
+  flex: 1; /* Mỗi tab chiếm 1 phần không gian */
+  display: flex;
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  text-align: center
+}
+
+.nav-link.active {
+  background-color: #4a90e2; /* Màu nền khi tab đang được chọn */
+  color: white; /* Màu chữ trắng khi tab được chọn */
+  border-color: #4a90e2; /* Đường viền cũng đổi màu như nền */
+}
+
+.nav-link:hover {
+  background-color: #e1f5fe; /* Màu nền khi hover nhẹ */
+  color: #007bb5; /* Màu chữ khi hover */
+  border-color: #007bb5; /* Đổi màu đường viền khi hover */
+}
+
+.nav-pills .nav-link {
+  margin-right: 15px; /* Khoảng cách giữa các tab */
+}
+
+.nav-link span {
+  font-size: 12px;
+  color: #f76b6b; /* Màu đỏ nhạt cho số lượng */
+}
+
+
+
+
+
+
+</style>
     <section class="breadcrumb-area">
         <div class="container">
             <div class="row">
@@ -21,25 +73,13 @@
     <div class="account-area mtb-60px">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="list-group">
-                        <a href="{{ route('my-account') }}" class="list-group-item list-group-item-action">Hồ Sơ</a>
-                        <a href="{{ route('client.account.update-profile') }}" class="list-group-item list-group-item-action">thông tin</a>
-                        <a href="{{ route('client.account.orders') }}" class="list-group-item list-group-item-action">Đơn Hàng</a>
-                        <a href="#" class="list-group-item list-group-item-action">Voucher</a>
-                        <a href="{{ route('client.account.change-password.form') }}"class="list-group-item list-group-item-action">Đổi Mật Khẩu</a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                        <a href="#" class="btn btn-danger mt-3" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Đăng Xuất</a>
-                    </div>
-                </div>
+                @include('client.partials.nav_right_order')
 
                 <!-- Danh Sách Đơn Hàng -->
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Danh Sách Đơn Hàng</h5>
+                            @include('client.partials.nav_order')
                         </div>
                         <div class="card-body">
                             @if($orders->isEmpty())

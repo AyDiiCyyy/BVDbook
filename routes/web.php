@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\MyAccountController;
+use App\Http\Controllers\Client\OrderCController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -121,10 +122,14 @@ Route::get('/contact', [ContactController::class, 'contact'])->name('contact.ind
 
 
 //thanh toán
+Route::middleware('auth')->group(function () {
 Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
 Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
 Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
 Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
+Route::get('check',[CheckoutController::class,'check'])->name('check');
+Route::post('repayment/{id}',[OrderCController::class,'repayment'])->name('repayment');
+});
 //account
 Route::middleware('auth')->group(function () {
     Route::get('account', [MyAccountController::class, 'index'])->name('my-account');
@@ -133,9 +138,22 @@ Route::middleware('auth')->group(function () {
     Route::get('account/change-password', [MyAccountController::class, 'showChangePasswordForm'])->name('client.account.change-password.form');
     Route::post('account/change-password', [MyAccountController::class, 'changePassword'])->name('client.account.change-password');
     Route::put('account/update-password', [MyAccountController::class, 'updatePassword'])->name('client.account.update-password');
-    Route::get('account/orders', [MyAccountController::class, 'showOrders'])->name('client.account.orders');
+    Route::get('account/orders', [OrderCController::class, 'all'])->name('client.account.orders');
     Route::get('account/order/{order}', [MyAccountController::class, 'showOrderDetail'])->name('client.account.order-detail');
     Route::patch('orders/{orderId}/cancel', [MyAccountController::class, 'cancelOrder'])->name('client.orders.cancel');
+
+
+
+
+
+    Route::prefix('account/orders')->as('client.account.orders.')->controller(OrderCController::class)->group(function(){
+        Route::get('waiting','waiting')->name('waiting');
+        Route::get('transport','transport')->name('transport');
+        Route::get('waitCancel','waitCancel')->name('waitCancel');
+        Route::get('complete','complete')->name('complete');
+        Route::get('canceled','canceled')->name('canceled');
+        Route::post('cancel/{id}','cancel')->name('cancel');
+    });
 });
 
 // giỏ hàng

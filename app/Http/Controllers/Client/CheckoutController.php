@@ -9,6 +9,7 @@ use App\Mail\CheckoutEmail;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -21,6 +22,9 @@ class CheckoutController extends Controller
             session()->forget('voucher');
             $user = Auth::user();
             $products = $user->Carts;
+            if ($products->isEmpty()) {
+                return back();
+            }
             $sum = 0;
             foreach ($products as $product) {
                 $sum += $product->products->price * $product->quantity;
@@ -75,6 +79,9 @@ class CheckoutController extends Controller
             if ($check_tk && $voucher->role == 1) {
                 // trường hợp có mã và là mã tạo bên admin
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -85,6 +92,9 @@ class CheckoutController extends Controller
                 // trường hợp có mã và là mã đc hoàn 
                 $check_tk->update(['active' => 1]);
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -96,6 +106,9 @@ class CheckoutController extends Controller
                 // trường hợp k có mã trong kho và mã tạo bên admin
                 $user->user_vouchers()->create(['voucher_id' => $voucher->id, 'active' => 1]);
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -141,6 +154,9 @@ class CheckoutController extends Controller
             if ($check_tk && $voucher->role == 1) {
                 // trường hợp có mã và là mã tạo bên admin
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -151,6 +167,9 @@ class CheckoutController extends Controller
                 // trường hợp có mã và là mã đc hoàn 
                 $check_tk->update(['active' => 1]);
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -162,6 +181,9 @@ class CheckoutController extends Controller
                 // trường hợp k có mã trong kho và mã tạo bên admin
                 $user->user_vouchers()->create(['voucher_id' => $voucher->id, 'active' => 1]);
                 if ($sum == $request->sum) { // so sánh giá tổng hiện tại vs thời điểm vào trang checkout
+                    if (session('voucher') == $voucher) {
+                        return response()->json(['status' => 'voucher da su dung']);
+                    }
                     session()->forget('voucher');
                     session(['voucher' => $voucher]);
                     return response()->json(['status' => 'success', 'voucher' => $voucher, 'sum' => $sum]);
@@ -248,7 +270,7 @@ class CheckoutController extends Controller
                 $cart->delete();
             }
             if ($request->payment == 0) {
-                
+
                 Mail::to($request->email)->send(new CheckoutEmail($order));
                 DB::commit();
                 return response()->json(['status' => 'success', 'message' => 'Đặt hàng thành công']);
@@ -260,7 +282,7 @@ class CheckoutController extends Controller
                 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
                 $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-                $vnp_Returnurl = route('index');
+                $vnp_Returnurl = route('check');
                 $vnp_TmnCode = "MPGWRLQW"; //Mã website tại VNPAY 
                 $vnp_HashSecret = "1V5W6FU2VSYO7UIAQ29WQ3GG6L0R8KMK"; //Chuỗi bí mật
                 $vnp_TxnRef = $order->order_code; //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
@@ -319,7 +341,7 @@ class CheckoutController extends Controller
                 );
                 if (isset($_POST['redirect'])) {
                     // header('Location: ' . $vnp_Url);
-                    return response()->json(['status' => 'url','url'=>$vnp_Url]);
+                    return response()->json(['status' => 'url', 'url' => $vnp_Url]);
                     // die();
                 } else {
                     echo json_encode($returnData);
@@ -336,6 +358,48 @@ class CheckoutController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage(),
             ]);
+        }
+    }
+
+    public function check(Request $request)
+    {
+        $vnp_HashSecret = "1V5W6FU2VSYO7UIAQ29WQ3GG6L0R8KMK"; //Chuỗi bí mật
+        $vnp_SecureHash = $_GET['vnp_SecureHash'];
+        $inputData = array();
+        foreach ($_GET as $key => $value) {
+            if (substr($key, 0, 4) == "vnp_") {
+                $inputData[$key] = $value;
+            }
+        }
+
+        unset($inputData['vnp_SecureHash']);
+        ksort($inputData);
+        $i = 0;
+        $hashData = "";
+        foreach ($inputData as $key => $value) {
+            if ($i == 1) {
+                $hashData = $hashData . '&' . urlencode($key) . "=" . urlencode($value);
+            } else {
+                $hashData = $hashData . urlencode($key) . "=" . urlencode($value);
+                $i = 1;
+            }
+        }
+
+        $secureHash = hash_hmac('sha512', $hashData, $vnp_HashSecret);
+        if ($secureHash == $vnp_SecureHash) {
+            if ($_GET['vnp_ResponseCode'] == '00') {
+                $date = $request->vnp_PayDate;
+                $date = Carbon::createFromFormat('YmdHis', $date)->format('d-m-Y');
+                $order = Order::where('order_code',$request->vnp_TxnRef)->first();
+                $order = $order->update(['payment_status'=>1]);
+                return view('client/page/thankyou', compact('request', 'date'));
+            } else {
+                $date = $request->vnp_PayDate;
+                $date = Carbon::createFromFormat('YmdHis', $date)->format('d-m-Y');
+                return view('client/page/payerror',compact('request','date'));
+            }
+        } else {
+            return view('client/page/error');
         }
     }
 }
