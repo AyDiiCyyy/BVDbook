@@ -1,50 +1,55 @@
-<div class="inner">
+<div class="inner" id="cart-right">
     <div class="head">
-        <span class="title">Cart</span>
+        <span class="title">Giỏ hàng</span>
         <button class="offcanvas-close">×</button>
     </div>
     <div class="body customScroll">
         <ul class="minicart-product-list">
-            <li>
-                <a href="single-product.html" class="image"><img
-                        src="{{ asset('client/assets/images/product-image/mini-cart/1.jpg') }}" alt="Cart product Image"></a>
-                <div class="content">
-                    <a href="single-product.html" class="title">Juicy Couture...</a>
-                    <span class="quantity-price">1 x <span class="amount">$18.86</span></span>
-                    <a href="#" class="remove">×</a>
-                </div>
-            </li>
-            <li>
-                <a href="single-product.html" class="image"><img
-                        src="{{ asset('client/assets/images/product-image/mini-cart/2.jpg') }}" alt="Cart product Image"></a>
-                <div class="content">
-                    <a href="single-product.html" class="title">Water and Wind...</a>
-                    <span class="quantity-price">1 x <span class="amount">$43.28</span></span>
-                    <a href="#" class="remove">×</a>
-                </div>
-            </li>
-            <li>
-                <a href="single-product.html" class="image"><img
-                        src="{{ asset('client/assets/images/product-image/mini-cart/1.jpg') }}" alt="Cart product Image"></a>
-                <div class="content">
-
-                    <a href="single-product.html" class="title">Fila Locker Room...</a>
-                    <span class="quantity-price">1 x <span class="amount">$37.34</span></span>
-                    <a href="#" class="remove">×</a>
-                </div>
-            </li>
+            @if (isset($cartItems) && $cartItems->count() > 0)
+                @foreach ($cartItems as $cartItem)
+                    @if ($cartItem->products)
+                        <!-- Kiểm tra xem product có tồn tại không -->
+                        <li style="display: flex; align-items: center; margin-bottom: 15px;">
+                            <a href="#" class="image" style="flex-shrink: 0;">
+                                <img src="{{ asset($cartItem->products->image) }}" alt="Cart product Image"
+                                    style="width: 120px; height: 150px; object-fit: cover; border-radius: 8px;">
+                            </a>
+                            <div class="content" style="flex: 1; padding-left: 10px;">
+                                <p style="margin: 0; font-size: 14px; word-wrap: break-word; max-width: 200px;">Tên sản
+                                    phẩm: {{ $cartItem->products->name }}</p>
+                                <span class="quantity-price">
+                                    <p style="margin: 5px 0 0;">Số lượng: {{ $cartItem->quantity }}</p>
+                                    Giá sản phẩm: <span
+                                        class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
+                                </span>
+                            </div>
+                        </li>
+                    @else
+                        <li>
+                            <p>Sản phẩm không tồn tại.</p>
+                        </li>
+                    @endif
+                @endforeach
+            @else
+                <p>Giỏ hàng của bạn đang trống.</p>
+            @endif
         </ul>
     </div>
     <div class="shopping-cart-total">
-        <h4>Subtotal : <span>$20.00</span></h4>
-        <h4>Shipping : <span>$7.00</span></h4>
-        <h4>Taxes : <span>$0.00</span></h4>
-        <h4 class="shop-total">Total : <span>$27.00</span></h4>
+        @if (isset($subtotal))
+            <h4>Tổng tiền : <span>{{ number_format($subtotal, 0, '.', '.') }}₫</span></h4>
+        @endif
+        @if (isset($shippingFee))
+            <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span></h4>
+        @endif
+        @if (isset($subtotal))
+            <h4 class="shop-total">Thành tiền : <span>{{ number_format($totalPrice, 0, '.', '.') }}₫</span></h4>
+        @endif
     </div>
     <div class="foot">
         <div class="buttons">
-            <a href="cart.html" class="btn btn-dark btn-hover-primary mb-30px">view cart</a>
-            <a href="checkout.html" class="btn btn-outline-dark current-btn">checkout</a>
+            <a href="{{ route('cart.show') }}" class="btn btn-dark btn-hover-primary mb-30px">Xem giỏ hàng</a>
+            <a href="{{ route('checkout') }}" class="btn btn-outline-dark current-btn">Thanh toán</a>
         </div>
     </div>
 </div>
