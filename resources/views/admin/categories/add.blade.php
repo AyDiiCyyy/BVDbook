@@ -45,6 +45,15 @@
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="status">Trạng thái</label>
+                                    <select name="status" class="form-control">
+                                        <option value="1" {{ old('status', $category->status ?? 1) == 1 ? 'selected' : '' }}>Hoạt động</option>
+                                        <option value="0" {{ old('status', $category->status ?? 0) == 0 ? 'selected' : '' }}>Không hoạt động</option>
+                                    </select>
+                                </div>
+                                
                                 
                                 {{-- <div class="mb-3">
                                     <label class="form-label">Danh mục cha: </label>

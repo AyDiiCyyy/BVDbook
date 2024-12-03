@@ -112,7 +112,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
         });
         Route::resource('comments', CommentController::class);  // Các route cho CRUD bình luận
-        Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore');
+        // Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore'); de khoi phuc cm
     });
 });
 

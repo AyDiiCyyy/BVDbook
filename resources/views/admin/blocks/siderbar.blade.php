@@ -112,15 +112,17 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link"> <i class="nav-icon bi bi-person-circle"></i>
+                    <a href="#" class="nav-link"> 
+                        <i class="nav-icon bi bi-chat-left"></i> 
                         <p>
-                            quản lí bình luận
+                            Quản lí bình luận
                             <i class="nav-arrow bi bi-chevron-right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item"> <a href="{{ route('admin.comments.index') }}" class="nav-link"> <i
-                                    class="nav-icon bi bi-circle"></i>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.comments.index') }}" class="nav-link">
+                                <i class="nav-icon bi bi-circle"></i>
                                 <p>Danh sách bình luận</p>
                             </a>
                         </li>
