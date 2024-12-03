@@ -97,7 +97,7 @@ class OrderCController extends Controller
     public function cancel($id)
     {
         $order = Order::find($id);
-        // $order = $order->update(['status'=>5]);
+        $order = $order->update(['status'=>5]);
         return redirect()->back()->with('status_succeed', 'Huỷ đơn thành công!');
     }
 

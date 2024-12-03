@@ -8,7 +8,6 @@
 <link rel="shortcut icon" type="image/x-icon" href="{{ asset('client/assets/images/favicon/favicon.png') }}" />
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800&amp;display=swap" rel="stylesheet" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 <link rel="stylesheet" href="{{ asset('client/assets/css/vendor/vendor.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/plugins/plugins.min.css') }}">
@@ -19,3 +18,4 @@
         height: 300px;
     }
 </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">

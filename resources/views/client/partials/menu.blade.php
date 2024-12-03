@@ -82,24 +82,3 @@
     </div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function updateCartQuantity() {
-        $.ajax({
-            url: '{{ route('cart.quantity') }}',
-            method: 'GET',
-            success: function(response) {
-                $('.item-quantity-tag').text(response.total_quantity);
-                updateCartQuantity(); // Cập nhật số lượng ngay sau khi thêm
-            },
-            error: function() {
-                console.error('Không thể cập nhật số lượng giỏ hàng');
-            }
-        });
-    }
-
-    // Gọi hàm cập nhật khi cần thiết, ví dụ khi thêm sản phẩm vào giỏ hàng thành công
-    $(document).ready(function() {
-        updateCartQuantity(); // Cập nhật ngay khi load trang
-    });
-</script>

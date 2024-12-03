@@ -12,7 +12,7 @@
 <script>
     @if (session('status_succeed'))
         toastr.success("{{ session('status_succeed') }}", {
-            timeOut: 3000
+            timeOut: 3000,
         });
     @elseif (session('status_failed'))
         toastr.error("{{ session('status_failed') }}", {
