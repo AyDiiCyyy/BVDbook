@@ -17,13 +17,16 @@
                         <p>Sắp Xếp Theo:</p>
                     </div>
                     <div class="shop-select">
-                        <form action="" method="post">
-                            <select>
-                                <option selected value="">--Sắp xếp theo--</option>
-                                <option value="">Mới Nhất</option>
-                                <option value="">A to Z</option>
-                                <option value=""> Z to A</option>
-                                <option value="">In stock</option>
+                        <form action="{{ route('danhmucSanpham', ['slug' => $slug]) }}" method="get">
+                            <select class="form-select" name="sort_by" onchange="this.form.submit()">
+                                <option value="name_asc">Tên sản phẩm: A → Z</option>
+                                <option value="name_desc">Tên sản phẩm: Z → A</option>
+                                <option value="price_asc">Giá từ thấp đến cao</option>
+                                <option value="price_desc">Giá từ cao đến thấp</option>
+                                <option value="created_desc">Mới nhất</option>
+                                <option value="created_asc">Cũ nhất</option>
+                                <option value="discount_desc">Giảm giá nhiều nhất</option>
+                                <option value="popular">Bán chạy nhất</option>
                             </select>
                         </form>
                     </div>
@@ -31,7 +34,6 @@
                 <!-- Right Side End -->
             </div>
             <!-- Shop Top Area End -->
-
             <!-- Shop Bottom Area Start -->
             <div class="shop-bottom-area mt-35">
                 <!-- Shop Tab Content Start -->
@@ -96,7 +98,6 @@
                 <!--  Pagination Area Start -->
                 <div class="d-flex justify-content-center align-items-center p-5">
                     {{ $products->links('pagination::bootstrap-4') }}
-
                 </div>
                 <!--  Pagination Area End -->
             </div>
