@@ -18,7 +18,7 @@
                         </li>
                     </ul>
                     <!-- Header Top Language Currency -->
-                    <div class="header-top-set-lan-curr d-flex justify-content-end">
+                    {{-- <div class="header-top-set-lan-curr d-flex justify-content-end">
                         <div class="header-bottom-set dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
@@ -46,7 +46,7 @@
                                 @endauth
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                     <!-- Header Top Language Currency -->
                 </div>
             </div>
