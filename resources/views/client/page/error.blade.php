@@ -9,6 +9,7 @@
     <source src="{{ asset('music/2.mp3') }}" type="audio/mpeg">
     Trình duyệt của bạn không hỗ trợ thẻ audio.
 </audio>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $("body").click(function() {
         var audioPlayer = document.getElementById('audioPlayer');

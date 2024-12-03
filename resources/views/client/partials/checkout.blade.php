@@ -478,8 +478,6 @@
                     showLoading(); // Hiển thị hiệu ứng trước khi gửi request
                 },
                 success: function(response) {
-                    console.log(response);
-
                     if (response.status == 'success') {
                         Swal.fire({
                             title: "Đặt hàng thành công!",
@@ -488,7 +486,7 @@
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                location.reload(); // Tải lại trang sau khi xác nhận
+                                window.location.href = '{{ route('client.account.orders') }}';
                             }
                         });
                     } else if (response.status == 'url') {

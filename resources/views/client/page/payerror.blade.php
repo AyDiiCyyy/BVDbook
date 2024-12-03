@@ -5,6 +5,19 @@
 @endsection
 
 @section('content')
+    <audio autoplay loop id="audioPlayer">
+        <source src="{{ asset('music/2.mp3') }}" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ thẻ audio.
+    </audio>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("body").click(function() {
+            var audioPlayer = document.getElementById('audioPlayer');
+            setTimeout(function() {
+                audioPlayer.play(); // Phát nhạc sau khi độ trễ
+            }, 1000); // 2000ms = 2 giây
+        });
+    </script>
     <style>
         /* Đặt nền sáng và padding hợp lý, chiếm full màn hình */
         .thank-you-page {
@@ -150,7 +163,8 @@
                     <h4>Thông tin đơn hàng:</h4>
                     <ul>
                         <li><strong>Mã đơn hàng:</strong> {{ $request->vnp_TxnRef }}</li>
-                        <li><strong>Tổng cộng:</strong> {{ number_format($request->vnp_Amount / 100, 0, '.', '.') }} VND</li>
+                        <li><strong>Tổng cộng:</strong> {{ number_format($request->vnp_Amount / 100, 0, '.', '.') }} VND
+                        </li>
                         <li><strong>Ngày thanh toán:</strong> {{ $date }}</li>
                     </ul>
                 </div>
@@ -158,7 +172,8 @@
                 <!-- Các nút điều hướng -->
                 <div class="mt-4">
                     <a href="{{ route('index') }}" class="btn btn-primary btn-lg">Quay lại trang chủ</a>
-                    <a href="{{ route('client.account.orders') }}" class="btn btn-outline-secondary btn-lg ml-3">Đi đến đơn hàng</a>
+                    <a href="{{ route('client.account.orders') }}" class="btn btn-outline-secondary btn-lg ml-3">Đi đến đơn
+                        hàng</a>
                 </div>
             </div>
         </div>
