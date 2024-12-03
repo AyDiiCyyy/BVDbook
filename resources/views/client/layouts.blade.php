@@ -4,7 +4,6 @@
 
 <head>
     @include('client.partials.head')
-   
 </head>
 
 <body class="home-3">
