@@ -153,7 +153,7 @@
                                     <h5 class="card-title mb-0" id="cartTitle"></h5>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="barChart" style=" width: 100%; height: 523px;"></canvas>
+                                    <canvas id="barChart" style=" width: 100%; height: 523px;">Doanh thu 14 ngày gần nhất</canvas>
                                 </div>
                             </div>
                         </div>

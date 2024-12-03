@@ -19,14 +19,14 @@
                     <div class="shop-select">
                         <form action="{{ route('danhmucSanpham', ['slug' => $slug]) }}" method="get">
                             <select class="form-select" name="sort_by" onchange="this.form.submit()">
-                                <option value="name_asc">Tên sản phẩm: A → Z</option>
-                                <option value="name_desc">Tên sản phẩm: Z → A</option>
-                                <option value="price_asc">Giá từ thấp đến cao</option>
-                                <option value="price_desc">Giá từ cao đến thấp</option>
-                                <option value="created_desc">Mới nhất</option>
-                                <option value="created_asc">Cũ nhất</option>
-                                <option value="discount_desc">Giảm giá nhiều nhất</option>
-                                <option value="popular">Bán chạy nhất</option>
+                                <option value="name_asc" @selected($sortBy == 'name_asc')>Tên sản phẩm: A → Z</option>
+                                <option value="name_desc" @selected($sortBy == 'name_desc')>Tên sản phẩm: Z → A</option>
+                                <option value="price_asc" @selected($sortBy == 'price_asc')>Giá từ thấp đến cao</option>
+                                <option value="price_desc" @selected($sortBy == 'price_desc')>Giá từ cao đến thấp</option>
+                                <option value="created_desc" @selected($sortBy == 'created_desc')>Mới nhất</option>
+                                <option value="created_asc" @selected($sortBy == 'created_asc')>Cũ nhất</option>
+                                <option value="discount_desc" @selected($sortBy == 'discount_desc')>Giảm giá nhiều nhất</option>
+                                <option value="popular" @selected($sortBy == 'popular')>Bán chạy nhất</option>
                             </select>
                         </form>
                     </div>
