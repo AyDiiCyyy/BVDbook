@@ -19,6 +19,5 @@
 <style>
     .search-category .nice-select .list {
         height: 300px;
-    }
-    
+    }   
 </style>

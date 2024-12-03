@@ -61,12 +61,15 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
         $categories = $categories->chunk(2);
-        $bestSellers = Product::query()
-            ->where('active', 1) // Chỉ lấy sản phẩm đang hoạt động
-            ->where('quantity', '>', 0) // Chỉ lấy sản phẩm có số lượng lớn hơn 0
-            ->orderBy('order', 'desc') // Sắp xếp theo số lượng đã bán
-            ->limit(10) // Giới hạn số lượng sản phẩm
-            ->get();
+        
+        $bestSellers = Product::select('products.*')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->where('products.active', 1) 
+        ->where('products.quantity', '>', 0) 
+        ->groupBy('products.id') 
+        ->orderByRaw('SUM(order_details.quantity) DESC') 
+        ->limit(10) 
+        ->get();
 
 
         return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
