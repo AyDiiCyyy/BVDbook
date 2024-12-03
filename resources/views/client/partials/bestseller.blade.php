@@ -58,7 +58,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="in-stock">Chỉ còn: <span>{{ $product->quantity }} Sản phẩm</span></div>
+                {{-- <div class="in-stock">Chỉ còn: <span>{{ $product->quantity }} Sản phẩm</span></div> --}}
             </article>
         @endforeach
     </div>
