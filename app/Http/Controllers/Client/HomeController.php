@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
-    const PAGINATION = 2;
+    const PAGINATION = 10;
 
     public function proCate($slug, Request $request)
     {
