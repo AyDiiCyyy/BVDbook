@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +46,14 @@ class HomeController extends Controller
                     ->orderBy('discount_percentage', 'desc');
                     break;
                 case 'popular':
-                    $productsSortBy->orderBy('sold_quantity', 'desc');
+                   $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->select('order_details.product_id',DB::raw('SUM(order_details.quantity) as sold_quantity'),)
+                    ->where('orders.status', 4)
+                    ->groupBy('order_details.product_id')
+                    ->orderByDesc('sold_quantity')
+                    ->pluck('order_de   tails.product_id');
+                    $productsSortBy->whereIn('id', $popular);
                     break;
                 default:
                 $productsSortBy->orderBy('created_at', 'desc');
