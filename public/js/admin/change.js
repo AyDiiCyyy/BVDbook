@@ -16,7 +16,7 @@ $(document).ready(function () {
                 
                 button.attr("data-status", newStatus);
                 var buttonText;
-                console.log(statusType);
+                // console.log(statusType);
                 
                 if(statusType === "active"){
                     if(newStatus == 1){

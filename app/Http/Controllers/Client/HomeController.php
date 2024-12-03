@@ -52,7 +52,7 @@ class HomeController extends Controller
                     ->where('orders.status', 4)
                     ->groupBy('order_details.product_id')
                     ->orderByDesc('sold_quantity')
-                    ->pluck('order_de   tails.product_id');
+                    ->pluck('order_details.product_id');
                     $productsSortBy->whereIn('id', $popular);
                     break;
                 default:
