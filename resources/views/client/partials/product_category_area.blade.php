@@ -45,7 +45,7 @@
                                 <div class="col-xl-3 col-md-4 col-sm-6">
                                     <article class="list-product">
                                         <div class="img-block">
-                                            <a href="single-product.html" class="thumbnail">
+                                            <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                                                 <img class="first-img" src="{{ asset($product->image) }}"
                                                     alt="" />
                                                 <img class="second-img" src="{{ asset($product->image) }}"
@@ -57,21 +57,22 @@
                                             <li class="new">Mới</li>
                                         </ul>
                                         <div class="product-decs">
-                                            <a class="inner-link"
-                                                href="shop-4-column.html"><span>{{ $category->name }}</span></a>
-                                            <h2><a href="single-product.html"
-                                                    class="product-link">{{ $product->name }}</a></h2>
-                                            <div class="pricing-meta">
-                                                <ul>
-                                                    <li class="old-price">{{ $product->price }} VND</li>
-                                                    <li class="current-price">{{ $product->sale }} VND</li>
-                                                    @if ($product->sale)
-                                                        <li class="discount-price">
-                                                            -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
-                                                        </li>
-                                                    @endif
-                                                </ul>
-                                            </div>
+                                            <a class="inner-link" href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+
+                                                <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
+                                                <div class="pricing-meta">
+                                                    <ul>
+                                                        @if($product->sale > 0) 
+                                                            <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                                            <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
+                                                            <li class="discount-price">
+                                                                -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
+                                                            </li>
+                                                        @else
+                                                            <li class="current-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
                                         </div>
                                         <div class="add-to-link">
                                             <ul>

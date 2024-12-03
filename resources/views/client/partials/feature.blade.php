@@ -23,7 +23,7 @@
                     @foreach ($product as $item)
                     <article class="list-product">
                         <div class="img-block">
-                            <a href="{{ route('danhmucSanpham', ['slug'=>$item->slug]) }}" class="thumbnail">
+                            <a href="{{ route('productDetail', ['slug' => $item->slug]) }}" class="thumbnail">
                                 <img class="first-img"
                                     src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
                                     alt="" />
@@ -34,8 +34,27 @@
 
                         </div>
                         <div class="product-decs">
-                            <a class="inner-link" href="shop-4-column.html"><span>{{$item->ProductCategories?->first()?->category->name}}</span></a>
-                            <h2><a href="single-product.html" class="product-link">{{Str::limit($item->name, 15, '...' )}}</a></h2>
+                            <a class="inner-link" href="{{ route('danhmucSanpham',  $item->ProductCategories?->first()?->category->slug) }}"><span>{{ $item->ProductCategories?->first()?->category->name }}</span></a>
+                            <h2><a href="{{ route('productDetail', ['slug' => $item->slug]) }}" class="product-link">{{ Str::limit($item->name, 20, '...') }}</a></h2>
+                            
+                            <ul class="list-unstyled d-flex align-items-center">
+                                <li class="me-3"> 
+                                    <a href="#" class="add-to-cart text-decoration-none fs-3" data-id="{{ $item->id }}">
+                                        <i class="bi bi-cart-plus"></i>
+                                    </a>
+                                </li>
+                                <li class="me-3">
+                                    <a href="wishlist.html" class="text-decoration-none fs-3">
+                                        <i class="ion-android-favorite-outline"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="compare.html" class="text-decoration-none fs-3">
+                                        <i class="ion-ios-shuffle-strong"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                         
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>
                                 <i class="ion-android-star"></i>

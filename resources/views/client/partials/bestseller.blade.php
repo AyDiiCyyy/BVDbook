@@ -25,7 +25,7 @@
                     <li class="new">Mới</li>
                 </ul>
                 <div class="product-decs">
-                    <a class="inner-link" href="{{ route('danhmucSanpham', ['slug' => 'danh-muc-cha']) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                    <a class="inner-link" href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
                     <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
                     <div class="rating-product">
                         <i class="ion-android-star"></i>
@@ -36,10 +36,15 @@
                     </div>
                     <div class="pricing-meta">
                         <ul>
-                            <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
-                            <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
-                            <li class="discount-price">
-                                -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%</li>
+                            @if($product->sale > 0) 
+                                <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
+                                <li class="discount-price">
+                                    -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
+                                </li>
+                            @else
+                                <li class="current-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                            @endif
                         </ul>
                     </div>
                     <div class="add-to-link">
@@ -59,7 +64,6 @@
     </div>
     <!-- Best Sell Slider Carousel End -->
 </div>
-
 <!-- Thêm AJAX để xử lý giỏ hàng -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

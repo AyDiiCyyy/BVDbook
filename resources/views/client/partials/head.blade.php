@@ -19,5 +19,6 @@
     .search-category .nice-select .list {
         height: 300px;
     }
+    
 </style>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">

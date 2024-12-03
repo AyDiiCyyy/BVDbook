@@ -32,7 +32,7 @@
                 <div class="product-wrapper" style="margin-top: 5%">
                     <div class="product-decs">
                         <a class="inner-link"
-                            href="#"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                            href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
                         <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}"
                                 class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
                         <div class="rating-product">
