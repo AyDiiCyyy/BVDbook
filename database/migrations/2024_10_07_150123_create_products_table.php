@@ -30,7 +30,7 @@ return new class extends Migration
             $table->tinyInteger('active')->default(1);
             $table->integer('order')->default(1);
             $table->integer('quantity');
-            $table->timestamps();   
+            $table->timestamps(); 
             $table->softDeletes();
         });
     }
