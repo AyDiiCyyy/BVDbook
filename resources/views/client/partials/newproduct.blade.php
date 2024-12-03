@@ -99,6 +99,7 @@
                 success: function(response) {
                     console.log(response);
                     $('#cart-count').text(response.cart_count);
+                    
                     // Gọi hàm cập nhật giỏ hàng mà không cần reload
                     $(".item-quantity-tag").html(response.total_quantity);
                     $.ajax({
