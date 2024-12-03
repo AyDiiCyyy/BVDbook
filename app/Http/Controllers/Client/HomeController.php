@@ -19,7 +19,6 @@ class HomeController extends Controller
         $category = Category::where('slug', $slug)->firstOrFail();
         $productId = $category->CategoryProducts()->pluck('product_id');
         $productsSortBy = Product::query()->whereIn('id', $productId);
-
         // Áp dụng sắp xếp nếu có
         if ($sortBy) {
             switch ($sortBy) {
