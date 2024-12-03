@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="{{ asset('client/assets/css/plugins/plugins.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/style.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/responsive.min.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 <style>
     .search-category .nice-select .list {
         height: 300px;
