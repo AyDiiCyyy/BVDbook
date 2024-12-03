@@ -98,12 +98,15 @@
                                     <div class="shopping-cart-total me-5">
                                         <!-- Thông tin tổng tiền -->
                                         <h4>Tổng tiền : <span
-                                                id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}₫</span></h4>
-                                        <h4>Phí giao hàng : <span>{{ number_format($shippingFee, 0, '.', '.') }}₫</span>
-                                        </h4>
-                                        <h4 class="shop-total">Thành tiền :
-                                            <span id="totalPrice">{{ number_format($totalPrice, 0, '.', '.') }}₫</span>
-                                        </h4>
+                                                id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}đ</span>
+                                            <h4>
+                                                <h4>Phí giao hàng :
+                                                    <span>{{ number_format($shippingFee, 0, '.', '.') }}</span>
+                                                </h4>
+                                                <h4 class="shop-total">Thành tiền :
+                                                    <span
+                                                        id="totalPrice">{{ number_format($totalPrice, 0, '.', '.') }}₫</span>
+                                                </h4>
                                     </div>
                                 </div>
                             @else
@@ -158,6 +161,7 @@
                 }
 
                 // Gửi AJAX request để cập nhật giỏ hàng
+
                 $.ajax({
                     url: '/cart/update',
                     method: 'POST',
@@ -175,8 +179,8 @@
                             $('.product-subtotal-' + response.cart_id).text(formatCurrency(
                                 response
                                 .cart_item_price));
-                            $('#subtotal').text(response.totalPrice);
-                            $('#totalPrice').text(response.totalPrice);
+                            $('#subtotal').text(formatCurrency(response.totalPrice));
+                            $('#totalPrice').text(formatCurrency(response.totalPrice));
                         } else {
                             Swal.fire({
                                 title: "Thất bại!",
@@ -256,7 +260,7 @@
             // Đóng modal khi hủy bỏ
             $('#cancelDeleteBtn').on('click', function() {
                 $('#confirmDeleteModal').modal('hide');
-            });
+            }).replace('₫', '') + '₫';;
         });
     </script>
 @endsection

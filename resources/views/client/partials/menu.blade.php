@@ -26,18 +26,6 @@
                         </ul>
                     </li>
                     <li class="menu-dropdown">
-                        <a href="#">Pages <i class="ion-ios-arrow-down"></i></a>
-                        <ul class="sub-menu">
-                            <li><a href="about.html">About Page</a></li>
-                            <li><a href="cart.html">Cart Page</a></li>
-                            <li><a href="checkout.html">Checkout Page</a></li>
-                            <li><a href="compare.html">Compare Page</a></li>
-                            <li><a href="#">Login & Regiter Page</a></li>
-                            <li><a href="#">Account Page</a></li>
-                            <li><a href="wishlist.html">Wishlist Page</a></li>
-                        </ul>
-                    </li>
-                    <li class="menu-dropdown">
                         <a href="{{ route('about') }}">Giới Thiệu</a>
 
                     </li>
@@ -91,7 +79,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Đăng Xuất') }}
                                     </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                         @csrf

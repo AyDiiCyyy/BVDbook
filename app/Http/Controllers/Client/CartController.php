@@ -50,13 +50,23 @@ class CartController extends Controller
         if ($cartItem) {
             // Nếu có rồi, cộng thêm số lượng
             $total_cart_item = $cartItem->quantity + $validated['quantity'];
+
+            // Kiểm tra tổng số lượng không vượt quá số lượng trong kho
+            if ($total_cart_item > $product->quantity) {
+                return response()->json(['status' => 'error', 'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho'], 400);
+            }
+
             $cartItem->update([
                 'quantity' => $total_cart_item,
                 'total_price' => $total_cart_item * $product->price,
                 //'updated_at' => Carbon::now(),
             ]);
-            //$cartItem->save();
         } else {
+
+            if ($validated['quantity'] > $product->quantity) {
+                return response()->json(['status' => 'error', 'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho'], 400);
+            }
+
             // Nếu chưa có, tạo mới giỏ hàng
             $cartItem = Cart::create([
                 'user_id' => $user->id,
@@ -66,6 +76,7 @@ class CartController extends Controller
             ]);
         }
 
+        //$totalQuantity = Cart::where('user_id', $user->id)->count();
         $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity');
         $totalPrice = Cart::where('user_id', $user->id)->sum('total_price');
 
@@ -75,6 +86,7 @@ class CartController extends Controller
             'cart_item' => $cartItem,  // In chi tiết của item đã cập nhật
             'total_price' => $totalPrice,  // Trả về tổng giá trị của giỏ hàng
             'total_quantity' => $totalQuantity  // Trả về tổng số lượng giỏ hàng
+
         ]);
     }
 
@@ -102,9 +114,10 @@ class CartController extends Controller
 
         // Tính tổng giá trị
         $totalPrice = $subtotal + $shippingFee;
+        $totalQuantity = $cartItems->count();
 
         // Truyền dữ liệu vào view
-        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'totalPrice', 'messages'));
+        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'totalPrice', 'messages', 'totalQuantity'));
     }
 
     public function updateCart(Request $request)
@@ -135,6 +148,14 @@ class CartController extends Controller
             $cart_item_quantity = $quantity -= 1;
         }
 
+        // Kiểm tra số lượng tồn kho
+        if ($cart_item_quantity > $product->quantity) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho.'
+            ]);
+        }
+
         $cart_item_price = $product->price * $cart_item_quantity;
 
         $cartItem->quantity = $cart_item_quantity;
@@ -148,13 +169,15 @@ class CartController extends Controller
 
         // Tính tổng giá trị giỏ hàng
         $totalPrice = $total_price + $shippingFee;
+        $totalQuantity = Cart::where('user_id', Auth::id())->distinct('product_id')->count();
 
         return response()->json([
             'status' => 'success',
             'cart_id' => $cart_id,
             'cart_item_quantity' => $cart_item_quantity,
             'cart_item_price' => $cart_item_price,
-            'totalPrice' => number_format($totalPrice, 0, '.', '.')
+            'totalPrice' => number_format($totalPrice, 0, '.', '.'),
+            'totalQuantity' => $totalQuantity
         ]);
     }
 
@@ -189,13 +212,16 @@ class CartController extends Controller
 
         // Tính tổng tiền
         $totalPrice = $subtotal + $shippingFee;
+        $totalQuantity = $cartItems->count();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Sản phẩm đã được xóa',
             'subtotal' => $subtotal,
             'totalPrice' => $totalPrice,
-            'cartItems' => $cartItems
+            'cartItems' => $cartItems,
+            'totalQuantity' => $totalQuantity
+
         ]);
     }
 
@@ -237,13 +263,22 @@ class CartController extends Controller
         return $messages;
     }
 
-    public function getCartQuantity()
-    {
-        if (!Auth::check()) {
-            return response()->json(['total_quantity' => 0]);
-        }
+    // public function getCartQuantity()
+    // {
+    //     if (!Auth::check()) {
+    //         return response()->json(['total_quantity' => 0]);
+    //     }
 
-        $totalQuantity = Cart::where('user_id', Auth::id())->sum('quantity');
-        return response()->json(['total_quantity' => $totalQuantity]);
-    }
+    //     // Lấy tất cả các sản phẩm khác nhau trong giỏ hàng của người dùng, không tính số lượng
+    //     $cartItems = Cart::where('user_id', Auth::id())
+    //         ->distinct('product_id')
+    //         ->get();
+
+    //     dd($cartItems);
+
+    //     // Đếm số sản phẩm khác nhau trong giỏ hàng (không dựa trên số lượng)
+    //     $totalQuantity = $cartItems->count();
+
+    //     return response()->json(['total_quantity' => $totalQuantity]);
+    // }
 }

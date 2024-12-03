@@ -78,7 +78,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = Order::with(['OrderDetails.product', 'Voucher'])->findOrFail($id);
-        
+
         return view('admin.orders.show', [
             'order' => $order,
         ]);
@@ -137,7 +137,7 @@ class OrderController extends Controller
         if ($request->status == 6) { // Nếu trạng thái là đã hủy
             // Hoàn lại số lượng sản phẩm
             foreach ($order->OrderDetails as $detail) {
-                $product = $detail->product; 
+                $product = $detail->product;
                 $product->increment('quantity', $detail->quantity);
             }
 
