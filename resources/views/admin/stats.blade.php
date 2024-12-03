@@ -150,10 +150,10 @@
                         <div class="col-md-6">
                             <div class="card">
                                 <div class="card-header">
-                                    <h5 class="card-title mb-0" id="cartTitle"></h5>
+                                    <h5 class="card-title mb-0" id="cartTitle">Doanh thu 14 ngày gần nhất</h5>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="barChart" style=" width: 100%; height: 523px;">Doanh thu 14 ngày gần nhất</canvas>
+                                    <canvas id="barChart" style=" width: 100%; height: 523px;"></canvas>
                                 </div>
                             </div>
                         </div>
