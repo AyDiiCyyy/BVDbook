@@ -9,13 +9,15 @@
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800&amp;display=swap" rel="stylesheet" />
 
-
 <link rel="stylesheet" href="{{ asset('client/assets/css/vendor/vendor.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/plugins/plugins.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/style.min.css') }}">
 <link rel="stylesheet" href="{{ asset('client/assets/css/responsive.min.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
 <style>
     .search-category .nice-select .list {
         height: 300px;
-    }
+    }   
 </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">

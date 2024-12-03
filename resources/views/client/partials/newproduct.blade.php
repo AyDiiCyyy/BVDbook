@@ -31,7 +31,7 @@
                         </ul>
                         <div class="product-decs">
                             <a class="inner-link"
-                                href="shop-4-column.html"><span>{{ $new->ProductCategories?->first()?->category->name }}</span></a>
+                                href="{{ route('danhmucSanpham',  $new->ProductCategories?->first()?->category->slug) }}"><span>{{ $new->ProductCategories?->first()?->category->name }}</span></a>
                             <h2><a href="single-product.html"
                                     class="product-link">{{ Str::limit($new->name, 20, '...') }}</a>
                             </h2>

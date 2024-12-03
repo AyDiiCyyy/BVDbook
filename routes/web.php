@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\StatsController;
+use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Client\CartController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Client\CheckoutController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\MyAccountController;
+use App\Http\Controllers\Client\OrderCController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +32,17 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/', [StatsController::class, 'index'])->name('index');
             Route::post('/revenue', [StatsController::class, 'getRevenue'])->name('getRevenue');
         });
+        // Routes cho quản lý slide
+        Route::prefix('slide')->as('slide.')->group(function (){
+            Route::get('/', [SlideController::class, 'index'])->name('index');
+            Route::get('/create', [SlideController::class, 'create'])->name('create');
+            Route::post('/store', [SlideController::class,'store'])->name('store');
+            Route::get('/edit/{id}', [SlideController::class, 'edit'])->name('edit');
+            Route::put('update/{id}', [SlideController::class, 'update'])->name('update');
+            Route::post('/changeActive', [SlideController::class, 'changeActive'])->name('changeActive');
+            Route::post('/changeOrder', [SlideController::class, 'changeOrder'])->name('changeOrder');
+        });
+
         // Routes cho quản lý danh mục
         Route::prefix('category')->as('category.')->group(function () {
             Route::get('/', [CategoryController::class, 'index'])->name('index');
@@ -81,7 +94,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             'destroy' => 'voucher.destroy',
         ]);
 
-        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
+        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleS:tatus'])->name('voucher.toggleStatus');
 
 
 
@@ -99,7 +112,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
         });
         Route::resource('comments', CommentController::class);  // Các route cho CRUD bình luận
-        Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore');
+        // Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore'); de khoi phuc cm
     });
 });
 
@@ -130,11 +143,14 @@ Route::middleware('auth')->group(function () {
 
 
 //thanh toán
-Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-Route::post('checkvoucher', [CheckoutController::class, 'checkvoucher'])->name('checkvoucher');
-Route::post('usevoucher', [CheckoutController::class, 'usevoucher'])->name('usevoucher');
-Route::post('pay', [CheckoutController::class, 'pay'])->name('pay');
-
+Route::middleware('auth')->group(function () {
+Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
+Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
+Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
+Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
+Route::get('check',[CheckoutController::class,'check'])->name('check');
+Route::post('repayment/{id}',[OrderCController::class,'repayment'])->name('repayment');
+});
 //account
 Route::middleware('auth')->group(function () {
     Route::get('account', [MyAccountController::class, 'index'])->name('my-account');
@@ -143,7 +159,20 @@ Route::middleware('auth')->group(function () {
     Route::get('account/change-password', [MyAccountController::class, 'showChangePasswordForm'])->name('client.account.change-password.form');
     Route::post('account/change-password', [MyAccountController::class, 'changePassword'])->name('client.account.change-password');
     Route::put('account/update-password', [MyAccountController::class, 'updatePassword'])->name('client.account.update-password');
-    Route::get('account/orders', [MyAccountController::class, 'showOrders'])->name('client.account.orders');
+    Route::get('account/orders', [OrderCController::class, 'all'])->name('client.account.orders');
     Route::get('account/order/{order}', [MyAccountController::class, 'showOrderDetail'])->name('client.account.order-detail');
     Route::patch('orders/{orderId}/cancel', [MyAccountController::class, 'cancelOrder'])->name('client.orders.cancel');
+
+
+
+
+
+    Route::prefix('account/orders')->as('client.account.orders.')->controller(OrderCController::class)->group(function(){
+        Route::get('waiting','waiting')->name('waiting');
+        Route::get('transport','transport')->name('transport');
+        Route::get('waitCancel','waitCancel')->name('waitCancel');
+        Route::get('complete','complete')->name('complete');
+        Route::get('canceled','canceled')->name('canceled');
+        Route::post('cancel/{id}','cancel')->name('cancel');
+    });
 });

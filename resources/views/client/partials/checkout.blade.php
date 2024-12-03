@@ -115,7 +115,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        z-index: 9999;
+        z-index: 99999;
     }
 
     .spinner {
@@ -304,11 +304,13 @@
     $(document).ready(function() {
         function showLoading() {
             document.getElementById("loading").style.display = "flex";
+            document.body.style.overflow = "hidden"; // Chặn cuộn chuột
         }
 
         // Ẩn hiệu ứng loading
         function hideLoading() {
             document.getElementById("loading").style.display = "none";
+            document.body.style.overflow = ""; // Mở lại cuộn chuột
         }
 
         function checkVoucher() {
@@ -352,6 +354,13 @@
                                 location.reload(); // Tải lại trang sau khi xác nhận
                             }
                         });
+                    } else if (response.status == 'voucher da su dung') {
+                        Swal.fire({
+                            title: 'Voucher đã được áp dụng',
+                            text: "Vui lòng chọn voucher khác nếu muốn đổi!",
+                            icon: "warning",
+                            confirmButtonText: "OK",
+                        })
                     } else {
 
                         Swal.fire({
@@ -412,6 +421,13 @@
                                 location.reload(); // Tải lại trang sau khi xác nhận
                             }
                         });
+                    } else if (response.status == 'voucher da su dung') {
+                        Swal.fire({
+                            title: 'Voucher đã được áp dụng',
+                            text: "Vui lòng chọn voucher khác nếu muốn đổi!",
+                            icon: "warning",
+                            confirmButtonText: "OK",
+                        })
                     } else {
 
                         Swal.fire({
@@ -462,8 +478,6 @@
                     showLoading(); // Hiển thị hiệu ứng trước khi gửi request
                 },
                 success: function(response) {
-                    console.log(response);
-
                     if (response.status == 'success') {
                         Swal.fire({
                             title: "Đặt hàng thành công!",
@@ -472,7 +486,7 @@
                             confirmButtonText: "OK",
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                location.reload(); // Tải lại trang sau khi xác nhận
+                                window.location.href = '{{ route('client.account.orders') }}';
                             }
                         });
                     } else if (response.status == 'url') {

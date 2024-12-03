@@ -1,59 +1,69 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <!-- Section Title Start -->
+            <!-- Section Title -->
             <div class="section-title">
                 <h2>Bán chạy nhất</h2>
                 <p>Thêm sản phẩm bán chạy nhất vào giỏ hàng của bạn</p>
             </div>
-            <!-- Section Title Start -->
+            <!-- Section Title -->
         </div>
     </div>
     <!-- Best Sell Slider Carousel Start -->
     <div class="best-sell-slider owl-carousel owl-nav-style">
-        <!-- Single Item -->
-        <article class="list-product">
-            <div class="img-block">
-                <a href="{{ route('productDetail', ['slug' => 'sach-tap-to']) }}" class="thumbnail">
-                    <img class="first-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
-                        alt="" />
-                    <img class="second-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
-                        alt="" />
-                </a>
-            </div>
-            <ul class="product-flag">
-                <li class="new">Mới</li>
-            </ul>
-            <div class="product-decs">
-                <a class="inner-link" href="{{ route('danhmucSanpham', ['slug' => 'danh-muc-cha']) }}"><span>Sách Giáo
-                        Khoa</span></a>
-                <h2><a href="#" class="product-link">Tiếng Việt Lớp 1</a>
-                </h2>
-                <div class="pricing-meta">
-                    <ul>
-                        <li class="old-price">100.000 VND</li>
-                        <li class="current-price">50.000 VND</li>
-                        <li class="discount-price">-5%</li>
-                    </ul>
+        @foreach ($bestSellers as $product)
+            <article class="list-product">
+                <div class="img-block">
+                    <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
+                        <img class="first-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                            alt="" />
+                        <img class="second-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                            alt="" />
+                    </a>
                 </div>
-            </div>
-            <div class="add-to-link">
-                <ul>
-                    <li class="cart"><a class="cart-btn add-to-cart" data-id="" href="#">Thêm Vào Giỏ Hàng
-                        </a></li>
-                    <li>
-                        <a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a>
-                    </li>
-                    <li>
-                        <a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a>
-                    </li>
+                <ul class="product-flag">
+                    <li class="new">Mới</li>
                 </ul>
-            </div>
-        </article>
+                <div class="product-decs">
+                    <a class="inner-link" href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                    <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
+                    <div class="rating-product">
+                        <i class="ion-android-star"></i>
+                        <i class="ion-android-star"></i>
+                        <i class="ion-android-star"></i>
+                        <i class="ion-android-star"></i>
+                        <i class="ion-android-star"></i>
+                    </div>
+                    <div class="pricing-meta">
+                        <ul>
+                            @if($product->sale > 0) 
+                                <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
+                                <li class="discount-price">
+                                    -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
+                                </li>
+                            @else
+                                <li class="current-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="add-to-link">
+                        <ul>
+                            <li class="cart">
+                                <a href="#" class="cart-btn add-to-cart" data-id="{{ $product->id }}">Thêm
+                                    vào giỏ hàng</a>
+                            </li>
+                            <li><a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a></li>
+                            <li><a href="compare.html"><i class="ion-ios -shuffle-strong"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                {{-- <div class="in-stock">Chỉ còn: <span>{{ $product->quantity }} Sản phẩm</span></div> --}}
+            </article>
+        @endforeach
     </div>
     <!-- Best Sell Slider Carousel End -->
 </div>
-
 <!-- Thêm AJAX để xử lý giỏ hàng -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -98,7 +108,7 @@
                         }
                     });
 
-                    // Hiển thị thông báo thành công từ response
+                    // Hiển thị thông báo thành công
                     Swal.fire({
                         title: "Thành công!",
                         text: "Sản phẩm đã được thêm vào giỏ hàng!",
@@ -120,6 +130,7 @@
                         });
 
                     } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                        // Hiển thị thông báo lỗi cụ thể từ server (nếu có)
                         Swal.fire({
                             title: "Thất bại!",
                             text: xhr.responseJSON.message, // Lấy message từ server
@@ -145,6 +156,7 @@
                 url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
                 method: "GET",
                 success: function(response) {
+                    console.log(response);
                     $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
                 },
                 error: function() {

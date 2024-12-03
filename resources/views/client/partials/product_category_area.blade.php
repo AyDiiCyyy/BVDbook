@@ -17,13 +17,16 @@
                         <p>Sắp Xếp Theo:</p>
                     </div>
                     <div class="shop-select">
-                        <form action="" method="post">
-                            <select>
-                                <option selected value="">--Sắp xếp theo--</option>
-                                <option value="">Mới Nhất</option>
-                                <option value="">A to Z</option>
-                                <option value=""> Z to A</option>
-                                <option value="">In stock</option>
+                        <form action="{{ route('danhmucSanpham', ['slug' => $slug]) }}" method="get">
+                            <select class="form-select" name="sort_by" onchange="this.form.submit()">
+                                <option value="name_asc" @selected($sortBy == 'name_asc')>Tên sản phẩm: A → Z</option>
+                                <option value="name_desc" @selected($sortBy == 'name_desc')>Tên sản phẩm: Z → A</option>
+                                <option value="price_asc" @selected($sortBy == 'price_asc')>Giá từ thấp đến cao</option>
+                                <option value="price_desc" @selected($sortBy == 'price_desc')>Giá từ cao đến thấp</option>
+                                <option value="created_desc" @selected($sortBy == 'created_desc')>Mới nhất</option>
+                                <option value="created_asc" @selected($sortBy == 'created_asc')>Cũ nhất</option>
+                                <option value="discount_desc" @selected($sortBy == 'discount_desc')>Giảm giá nhiều nhất</option>
+                                <option value="popular" @selected($sortBy == 'popular')>Bán chạy nhất</option>
                             </select>
                         </form>
                     </div>
@@ -31,7 +34,6 @@
                 <!-- Right Side End -->
             </div>
             <!-- Shop Top Area End -->
-
             <!-- Shop Bottom Area Start -->
             <div class="shop-bottom-area mt-35">
                 <!-- Shop Tab Content Start -->
@@ -43,7 +45,7 @@
                                 <div class="col-xl-3 col-md-4 col-sm-6">
                                     <article class="list-product">
                                         <div class="img-block">
-                                            <a href="single-product.html" class="thumbnail">
+                                            <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                                                 <img class="first-img" src="{{ asset($product->image) }}"
                                                     alt="" />
                                                 <img class="second-img" src="{{ asset($product->image) }}"
@@ -55,21 +57,22 @@
                                             <li class="new">Mới</li>
                                         </ul>
                                         <div class="product-decs">
-                                            <a class="inner-link"
-                                                href="shop-4-column.html"><span>{{ $category->name }}</span></a>
-                                            <h2><a href="single-product.html"
-                                                    class="product-link">{{ $product->name }}</a></h2>
-                                            <div class="pricing-meta">
-                                                <ul>
-                                                    <li class="old-price">{{ $product->price }} VND</li>
-                                                    <li class="current-price">{{ $product->sale }} VND</li>
-                                                    @if ($product->sale)
-                                                        <li class="discount-price">
-                                                            -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
-                                                        </li>
-                                                    @endif
-                                                </ul>
-                                            </div>
+                                            <a class="inner-link" href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+
+                                                <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
+                                                <div class="pricing-meta">
+                                                    <ul>
+                                                        @if($product->sale > 0) 
+                                                            <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                                            <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
+                                                            <li class="discount-price">
+                                                                -{{ round((($product->price - $product->sale) / $product->price) * 100) }}%
+                                                            </li>
+                                                        @else
+                                                            <li class="current-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
+                                                        @endif
+                                                    </ul>
+                                                </div>
                                         </div>
                                         <div class="add-to-link">
                                             <ul>
@@ -96,7 +99,6 @@
                 <!--  Pagination Area Start -->
                 <div class="d-flex justify-content-center align-items-center p-5">
                     {{ $products->links('pagination::bootstrap-4') }}
-
                 </div>
                 <!--  Pagination Area End -->
             </div>
