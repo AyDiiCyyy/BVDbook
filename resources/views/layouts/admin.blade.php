@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en"> <!--begin::Head-->
-
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -95,21 +94,21 @@
     </script> <!-- apexcharts -->
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
         integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script> <!-- ChartJS -->
-    <script>
-        // // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
+    
+        {{-- // // NOTICE!! DO NOT USE ANY OF THIS JAVASCRIPT
         // // IT'S ALL JUST JUNK FOR DEMO
-        // // ++++++++++++++++++++++++++++++++++++++++++
+        // // ++++++++++++++++++++++++++++++++++++++++++ --}}
 
-    <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"
+        <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/js/jsvectormap.min.js"
         integrity="sha256-/t1nN2956BT869E6H4V1dnt0X5pAQHPytli+1nTZm2Y=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.5.3/dist/maps/world.js"
         integrity="sha256-XPpPaZlU8S/HWf7FZLAncLg2SAkP8ScUTII89x9D3lY=" crossorigin="anonymous"></script> <!-- jsvectormap -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script> {{-- link ajax --}}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>{{-- link thông báo --}}
-        <script type="module">
-            @if (session('status_succeed'))
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> {{-- link thông báo --}}
+    <script type="module">
+        @if (session('status_succeed'))
             toastr.success('{{ session('status_succeed') }}', {
                 timeOut: 3000
             })

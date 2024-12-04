@@ -12,10 +12,12 @@ class Cart extends Model
     protected $table = 'carts';
     protected $guarded = [];
 
-    public function Products () {
-        return $this->belongsTo(Product::class,'product_id','id');
+    public function products()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
-    public function Users () {
-        return $this->belongsTo(User::class,'user_id','id');
+    public function Users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

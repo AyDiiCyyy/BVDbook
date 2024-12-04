@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('min_order_amount', 10, 2);
             $table->integer('usage_limit');
             $table->string('description',255);
+            $table->tinyInteger('role')->default(1);
             $table->timestamp('start');
             $table->timestamp('end');
             $table->timestamps();
