@@ -42,28 +42,38 @@ class HomeController extends Controller
                     $productsSortBy->orderBy('created_at', 'asc');
                     break;
                 case 'discount_desc':
-                    $productsSortBy ->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
-                    ->orderBy('discount_percentage', 'desc');
+                    $productsSortBy->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
+                        ->orderBy('discount_percentage', 'desc');
                     break;
                 case 'popular':
-                   $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
-                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
-                    ->select('order_details.product_id',DB::raw('SUM(order_details.quantity) as sold_quantity'),)
-                    ->where('orders.status', 4)
-                    ->groupBy('order_details.product_id')
-                    ->orderByDesc('sold_quantity')
-                    ->pluck('order_de   tails.product_id');
-                    $productsSortBy->whereIn('id', $popular);
+                    // Lấy thông tin chi tiết về sản phẩm bán chạy nhất
+                    $popular = OrderDetail::query()
+                        ->join('products', 'order_details.product_id', '=', 'products.id')
+                        ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                        ->select(
+                            'products.name as product_name',
+                            'order_details.product_id',
+                            DB::raw('SUM(order_details.quantity) as sold_quantity'),
+                            DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                        )
+                        ->where('orders.status', 4)
+                        ->groupBy('products.name', 'order_details.product_id')
+                        ->orderByDesc('sold_quantity') // Sắp xếp theo số lượng bán giảm dần
+                        ->pluck('order_details.product_id'); // Trả về danh sách product_id bán chạy nhất
+
+                    // Lọc theo danh mục và độ phổ biến (sản phẩm bán chạy)
+                    $productsSortBy->whereIn('id', $productId)   // Lọc theo danh mục
+                        ->whereIn('id', $popular);    // Lọc theo sản phẩm bán chạy
                     break;
                 default:
-                $productsSortBy->orderBy('created_at', 'desc');
+                    $productsSortBy->orderBy('created_at', 'desc');
                     break;
             }
         }
         $products = $productsSortBy->paginate(self::PAGINATION);
         return view('client.page.productCategory', compact('category', 'products', 'sortBy', 'slug'));
     }
-   
+
     public function index()
     {
         //sản phẩm nổi bật 
