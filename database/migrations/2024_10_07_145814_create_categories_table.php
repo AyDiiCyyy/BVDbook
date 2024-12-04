@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug',255);
             $table->string('name',255);
             $table->string('image')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamps();
             $table->softDeletes();
         });
