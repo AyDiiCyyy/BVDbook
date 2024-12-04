@@ -1,7 +1,7 @@
 @extends('client.layouts')
 
 @section('title')
-    Cart
+    Giỏ Hàng
 @endsection
 
 @section('content')
@@ -11,10 +11,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-hrading">Cart Page</h1>
+                        <h1 class="breadcrumb-hrading">Trang giỏ hàng</h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="index.html">Home</a></li>
-                            <li>Cart</li>
+                            <li><a href="{{ route('index') }}">Trang chủ</a></li>
+                            <li>Giỏ hàng</li>
                         </ul>
                     </div>
                 </div>
@@ -22,179 +22,245 @@
         </div>
     </section>
     <!-- Breadcrumb Area End -->
-    <!-- cart area start -->
+    <!-- Cart area start -->
     <div class="cart-main-area mtb-60px">
         <div class="container">
-            <h3 class="cart-page-title">Your cart items</h3>
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            @if (!empty($messages))
+                @foreach ($messages as $message)
+                    <div class="alert alert-warning">
+                        {{ $message }}
+                    </div>
+                @endforeach
+            @endif
+
+            <div class="row" style="margin-top: -80px">
+                <div class="col-lg-12">
                     <form action="#">
                         <div class="table-content table-responsive cart-table-content">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Image</th>
-                                        <th>Product Name</th>
-                                        <th>Until Price</th>
-                                        <th>Qty</th>
-                                        <th>Subtotal</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img src="assets/images/product-image/mini-cart/1.jpg"
-                                                    alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$60.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton"
-                                                    value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$70.00</td>
-                                        <td class="product-remove">
-                                            <a href="#"><i class="fa fa-pencil-alt"></i></a>
-                                            <a href="#"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img src="assets/images/product-image/mini-cart/2.jpg"
-                                                    alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$50.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton"
-                                                    value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$80.00</td>
-                                        <td class="product-remove">
-                                            <a href="#"><i class="fa fa-pencil-alt"></i></a>
-                                            <a href="#"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="product-thumbnail">
-                                            <a href="#"><img src="assets/images/product-image/mini-cart/3.jpg"
-                                                    alt="" /></a>
-                                        </td>
-                                        <td class="product-name"><a href="#">Product Name</a></td>
-                                        <td class="product-price-cart"><span class="amount">$70.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" type="text" name="qtybutton"
-                                                    value="1" />
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal">$90.00</td>
-                                        <td class="product-remove">
-                                            <a href="#"><i class="fa fa-pencil-alt"></i></a>
-                                            <a href="#"><i class="fa fa-times"></i></a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="cart-shiping-update-wrapper">
-                                    <div class="cart-shiping-update">
-                                        <a href="#">Continue Shopping</a>
+                            @if (isset($cartItems) && $cartItems->count() > 0)
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Hình ảnh</th>
+                                            <th>Tên sản phẩm</th>
+                                            <th>Giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Tùy chỉnh</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($cartItems as $cartItem)
+                                            <tr>
+                                                <td class="product-id">
+                                                    <a>{{ $loop->iteration }}</a>
+                                                </td>
+                                                <td class="product-thumbnail" style="width: 100px;">
+                                                    <a href="#">
+                                                        <img src="{{ asset($cartItem->products->image) }}"
+                                                            alt="{{ $cartItem->products->name }}"
+                                                            style="width: 120px; height: 160px; object-fit: cover; border-radius: 8px;" />
+                                                    </a>
+                                                </td>
+                                                <td class="product-name" style="max-width: 200px; word-wrap: break-word;">
+                                                    <a href="#">{{ $cartItem->products->name }}</a>
+                                                </td>
+                                                <td class="product-price-cart">
+                                                    <span
+                                                        class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
+                                                </td>
+                                                <td class="product-quantity">
+                                                    <div class="input-group quantity-wrapper" style="width: 120px;">
+                                                        <a href="#" class="btn btn-outline-secondary btn-sm minus"
+                                                            data-id="{{ $cartItem->id }}" data-action="minus">−</a>
+                                                        <input type="text"
+                                                            class="form-control text-center cart-quantity cart-quantity-{{ $cartItem->id }}"
+                                                            data-id="{{ $cartItem->id }}" value="{{ $cartItem->quantity }}"
+                                                            min="1">
+                                                        <a href="#" class="btn btn-outline-secondary btn-sm plus"
+                                                            data-id="{{ $cartItem->id }}" data-action="plus">+</a>
+                                                    </div>
+                                                </td>
+                                                <td class="product-subtotal-{{ $cartItem->id }}"
+                                                    data-id="{{ $cartItem->id }}">
+                                                    {{ number_format($cartItem->products->price * $cartItem->quantity, 0, '.', '.') }}₫
+                                                </td>
+                                                <td class="product-remove">
+                                                    <a href="#" class="remove-item" data-id="{{ $cartItem->id }}"><i
+                                                            class="fa fa-times"></i></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <div class="col-lg-12 d-flex justify-content-end ">
+                                    <div class="shopping-cart-total me-5">
+                                        <!-- Thông tin tổng tiền -->
+                                        <h4>Tổng tiền : <span
+                                                id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}đ</span>
+                                            <h4>
+                                                <h4>Phí giao hàng :
+                                                    <span>{{ number_format($shippingFee, 0, '.', '.') }}</span>
+                                                </h4>
+                                                <h4 class="shop-total">Thành tiền :
+                                                    <span
+                                                        id="totalPrice">{{ number_format($totalPrice, 0, '.', '.') }}₫</span>
+                                                </h4>
                                     </div>
-                                    <div class="cart-clear">
-                                        <button>Update Shopping Cart</button>
-                                        <a href="#">Clear Shopping Cart</a>
+                                </div>
+                            @else
+                                <div class="col-lg-12 text-center" style="margin-bottom: 70px">
+                                    <h4>Giỏ hàng của bạn đang trống.</h4>
+                                    <a href="{{ route('index') }}" class="btn btn-dark mt-3">Tiếp tục mua sắm</a>
+                                </div>
+                            @endif
+                        </div>
+                        @if (isset($cartItems) && $cartItems->count() > 0)
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="cart-shiping-update-wrapper">
+                                        <div class="cart-shiping-update">
+                                            <a href="{{ route('index') }}">Tiếp tục mua sắm</a>
+                                        </div>
+                                        <div class="cart-clear">
+                                            <a href="{{ route('checkout') }}">Thanh toán</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
+
                     </form>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6">
-                            <div class="cart-tax">
-                                <div class="title-wrap">
-                                    <h4 class="cart-bottom-title section-bg-gray">Estimate Shipping And Tax</h4>
-                                </div>
-                                <div class="tax-wrapper">
-                                    <p>Enter your destination to get a shipping estimate.</p>
-                                    <div class="tax-select-wrapper">
-                                        <div class="tax-select">
-                                            <label>
-                                                * Country
-                                            </label>
-                                            <select class="email s-email s-wid">
-                                                <option>Bangladesh</option>
-                                                <option>Albania</option>
-                                                <option>Åland Islands</option>
-                                                <option>Afghanistan</option>
-                                                <option>Belgium</option>
-                                            </select>
-                                        </div>
-                                        <div class="tax-select">
-                                            <label>
-                                                * Region / State
-                                            </label>
-                                            <select class="email s-email s-wid">
-                                                <option>Bangladesh</option>
-                                                <option>Albania</option>
-                                                <option>Åland Islands</option>
-                                                <option>Afghanistan</option>
-                                                <option>Belgium</option>
-                                            </select>
-                                        </div>
-                                        <div class="tax-select mb-25px">
-                                            <label>
-                                                * Zip/Postal Code
-                                            </label>
-                                            <input type="text" />
-                                        </div>
-                                        <button class="cart-btn-2" type="submit">Get A Quote</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="discount-code-wrapper">
-                                <div class="title-wrap">
-                                    <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
-                                </div>
-                                <div class="discount-code">
-                                    <p>Enter your coupon code if you have one.</p>
-                                    <form>
-                                        <input type="text" required="" name="name" />
-                                        <button class="cart-btn-2" type="submit">Apply Coupon</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-12">
-                            <div class="grand-totall">
-                                <div class="title-wrap">
-                                    <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
-                                </div>
-                                <h5>Total products <span>$260.00</span></h5>
-                                <div class="total-shipping">
-                                    <h5>Total shipping</h5>
-                                    <ul>
-                                        <li><input type="checkbox" /> Standard <span>$20.00</span></li>
-                                        <li><input type="checkbox" /> Express <span>$30.00</span></li>
-                                    </ul>
-                                </div>
-                                <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
-                                <a href="#">Proceed to Checkout</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- cart area end -->
+    <!-- Cart area end -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            // Hàm định dạng số tiền
+            function formatCurrency(number) {
+                return new Intl.NumberFormat('vi-VN').format(number) + '₫';
+            }
+            // Lắng nghe sự kiện click trên các thẻ <a> với class .minus và .plus
+            $('.minus, .plus').on('click', function(e) {
+                e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ
+
+                var cartId = $(this).data('id'); // Lấy ID của sản phẩm trong giỏ hàng
+                var quantityInput = $(this).siblings('.cart-quantity');
+                var currentQuantity = parseInt(quantityInput.val()); // Lấy giá trị số lượng hiện tại
+                var action = $(this).data('action');
+
+                // Kiểm tra nếu là nút minus và số lượng hiện tại <= 1
+                if (action === 'minus' && currentQuantity <= 1) {
+                    return; // Không làm gì nếu số lượng <= 1
+                }
+
+                // Gửi AJAX request để cập nhật giỏ hàng
+
+                $.ajax({
+                    url: '/cart/update',
+                    method: 'POST',
+                    data: {
+                        cart_item_id: cartId,
+                        quantity: currentQuantity,
+                        action: action,
+                        _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                    },
+                    success: function(response) {
+
+                        if (response.status === 'success') {
+                            $(".cart-quantity-" + response.cart_id).val(response
+                                .cart_item_quantity);
+                            $('.product-subtotal-' + response.cart_id).text(formatCurrency(
+                                response
+                                .cart_item_price));
+                            $('#subtotal').text(formatCurrency(response.totalPrice));
+                            $('#totalPrice').text(formatCurrency(response.totalPrice));
+                        } else {
+                            Swal.fire({
+                                title: "Thất bại!",
+                                text: response.message, // Lấy thông báo lỗi từ server
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    }
+                });
+            });
+
+
+            $('.remove-item').on('click', function(e) {
+                e.preventDefault();
+
+                var cartItemId = $(this).data('id');
+
+                // Hiển thị SweetAlert để xác nhận xóa
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+                    text: "Sản phẩm sẽ bị xóa khỏi giỏ hàng.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    cancelButtonText: 'Hủy',
+                    confirmButtonText: 'Xóa'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/cart/remove',
+                            method: 'POST',
+                            data: {
+                                cart_item_id: cartItemId,
+                                _token: $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                if (response.status === 'success') {
+                                    // Xóa sản phẩm khỏi bảng
+                                    $('tr').has('.remove-item[data-id="' + cartItemId +
+                                        '"]').remove();
+
+                                    // Cập nhật tổng tiền từ dữ liệu trả về
+                                    $('#subtotal').text(formatCurrency(response
+                                        .subtotal));
+                                    $('#totalPrice').text(formatCurrency(response
+                                        .totalPrice));
+
+                                    Swal.fire({
+                                        title: "Thành công!",
+                                        text: "Xóa sản phẩm thành công",
+                                        icon: "success",
+                                        confirmButtonText: "OK",
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: "Thất bại!",
+                                        text: response
+                                            .message, // Lấy thông báo lỗi từ server
+                                        icon: "error",
+                                        confirmButtonText: "OK",
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+            // Hàm định dạng tiền tệ
+            function formatCurrency(amount) {
+                return amount.toLocaleString('vi-VN', {
+                    style: 'currency',
+                    currency: 'VND'
+                });
+            }
+            // Đóng modal khi hủy bỏ
+            $('#cancelDeleteBtn').on('click', function() {
+                $('#confirmDeleteModal').modal('hide');
+            }).replace('₫', '') + '₫';;
+        });
+    </script>
 @endsection

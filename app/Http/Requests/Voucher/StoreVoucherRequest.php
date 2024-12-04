@@ -24,7 +24,7 @@ class StoreVoucherRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'sku' => 'required|unique:vouchers',
-            'discount_amount' => 'required|numeric|min:1000|max:99999999',
+            'discount_amount' => 'required|numeric|min:1000|max:99999999|lt:min_order_amount',
             'min_order_amount' => 'required|numeric|min:1000|max:99999999',
             'usage_limit' => 'required|integer|min:1|max:2000000000',
             'description' => 'required|string|max:255',
@@ -47,6 +47,7 @@ class StoreVoucherRequest extends FormRequest
             "discount_amount.numeric" => "Số tiền giảm phải là số",
             "discount_amount.min" => "Số tiền giảm phải lớn hơn 1000",
             "discount_amount.max" => "Số tiền giảm phải nhỏ hơn 99,000,000",
+            'discount_amount.lt' => 'Số tiền giảm phải nhỏ hơn số tiền tối thiểu.',
             "min_order_amount.required" => "Số tiền tối thiểu bắt buộc nhập",
             "min_order_amount.numeric" => "Số tiền tối thiểu phải là số",
             "min_order_amount.min" => "Số tiền tối thiểu phải lớn hơn 1000",

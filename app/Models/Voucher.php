@@ -23,7 +23,9 @@ class Voucher extends Model
         'description',
         'start',
         'end',
-        'status'
+        'status',
+        'role'
+
     ];
 
     public function UserVouchers (){

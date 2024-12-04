@@ -46,24 +46,14 @@ class HomeController extends Controller
                         ->orderBy('discount_percentage', 'desc');
                     break;
                 case 'popular':
-                    // Lấy thông tin chi tiết về sản phẩm bán chạy nhất
-                    $popular = OrderDetail::query()
-                        ->join('products', 'order_details.product_id', '=', 'products.id')
-                        ->join('orders', 'order_details.order_id', '=', 'orders.id')
-                        ->select(
-                            'products.name as product_name',
-                            'order_details.product_id',
-                            DB::raw('SUM(order_details.quantity) as sold_quantity'),
-                            DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
-                        )
-                        ->where('orders.status', 4)
-                        ->groupBy('products.name', 'order_details.product_id')
-                        ->orderByDesc('sold_quantity') // Sắp xếp theo số lượng bán giảm dần
-                        ->pluck('order_details.product_id'); // Trả về danh sách product_id bán chạy nhất
-
-                    // Lọc theo danh mục và độ phổ biến (sản phẩm bán chạy)
-                    $productsSortBy->whereIn('id', $productId)   // Lọc theo danh mục
-                        ->whereIn('id', $popular);    // Lọc theo sản phẩm bán chạy
+                   $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->select('order_details.product_id',DB::raw('SUM(order_details.quantity) as sold_quantity'),)
+                    ->where('orders.status', 4)
+                    ->groupBy('order_details.product_id')
+                    ->orderByDesc('sold_quantity')
+                    ->pluck('order_details.product_id');
+                    $productsSortBy->whereIn('id', $popular);
                     break;
                 default:
                     $productsSortBy->orderBy('created_at', 'desc');
@@ -77,21 +67,35 @@ class HomeController extends Controller
     public function index()
     {
         //sản phẩm nổi bật 
-        $product_noibat = Product::query()->where('best', 1)->orderBy('order')->limit(10)->get();
+        $product_noibat = Product::query()
+            ->where('best', 1)
+            ->where('active', 1)
+            ->where('quantity', '>', 0)
+            ->orderBy('order')
+            ->limit(10)
+            ->get();
         $product2 = $product_noibat->chunk(2);
 
-        //sản phẩm có giảm giá cao nhất 
+        // Sản phẩm có giảm giá cao nhất
         $product_sale = Product::query()
-            ->select('*', DB::raw('((price-sale)/price*100) as discount'))
+            ->select('*', DB::raw('((price - sale) / price * 100) as discount'))
             ->where('sale', '!=', null)
+            ->where('active', 1)
+            ->where('quantity', '>', 0)
             ->orderBy('discount', 'desc')
-            ->limit(5)->get();
+            ->limit(5)
+            ->get();
 
-        //sản phẩm mới nhất
-        $product_new = Product::query()->orderBy('id', 'desc')->limit(20)->get();
+        // Sản phẩm mới nhất
+        $product_new = Product::query()
+            ->where('active', 1)
+            ->where('quantity', '>', 0)
+            ->orderBy('id', 'desc')
+            ->limit(20)
+            ->get();
         $product_new = $product_new->chunk(2);
 
-        //danh mục phổ biến 
+        //danh mục phổ biến
         $categories = Category::query()
             ->select('categories.*', DB::raw('COUNT(category_products.product_id) as product_count'))
             ->leftJoin('category_products', 'categories.id', '=', 'category_products.category_id')
@@ -100,9 +104,18 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
         $categories = $categories->chunk(2);
+        
+        $bestSellers = Product::select('products.*')
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->where('products.active', 1) 
+        ->where('products.quantity', '>', 0) 
+        ->groupBy('products.id') 
+        ->orderByRaw('SUM(order_details.quantity) DESC') 
+        ->limit(10) 
+        ->get();
 
 
-        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories'));
+        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
     }
 
     public function  getProductDetail($slug)

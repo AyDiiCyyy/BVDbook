@@ -18,14 +18,14 @@
                         </li>
                     </ul>
                     <!-- Header Top Language Currency -->
-                    <div class="header-top-set-lan-curr d-flex justify-content-end">
+                    {{-- <div class="header-top-set-lan-curr d-flex justify-content-end">
                         <div class="header-bottom-set dropdown">
                             <button
                                 class="dropdown-toggle header-action-btn hover-style-default color-black border-color-black"
                                 data-bs-toggle="dropdown"> Settings <i class="ion-ios-arrow-down"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">My account</a></li>
-                                <li><a class="dropdown-item" href="#">Checkout</a></li>
+                                <li><a class="dropdown-item" href="{{ route('my-account') }}">Tài Khoản</a></li>
+                                <li><a class="dropdown-item" href="#">Thanh toán</a></li>
 
                                 @guest
                                     <!-- Hiển thị Login khi chưa đăng nhập -->
@@ -46,7 +46,7 @@
                                 @endauth
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                     <!-- Header Top Language Currency -->
                 </div>
             </div>
