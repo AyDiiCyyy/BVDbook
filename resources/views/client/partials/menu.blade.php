@@ -37,7 +37,7 @@
                 <div class="header_account_list me-2">
                 </div>
                 <!-- Search start -->
-                <div class="header_account_list search_list" style="height: auto">
+                <div class="header_account_list search_list" style="height: auto">  
                     <a href="javascript:void(0)"><i class="ion-ios-search-strong"></i></a>
                     <div class="dropdown_search">
                         <form action="#">

@@ -23,7 +23,7 @@ class StoreSlideRequest extends FormRequest
     {
         return [
             'name' => 'required|min:1|max:255', 
-            "image" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:3048",
+            "image" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:4048",
             "order" => "required|integer|min:1|max:1000",
 
         ];
