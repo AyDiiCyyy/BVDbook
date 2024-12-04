@@ -468,6 +468,7 @@
                                 console.log(response);
                                 $('#cart-right').html(
                                     response); // Cập nhật phần tử giỏ hàng
+                                updateCartRight();
                             },
                             error: function() {
                                 Swal.fire({
@@ -547,6 +548,7 @@
                                 console.log(response);
                                 $('#cart-right').html(
                                     response); // Cập nhật phần tử giỏ hàng
+                                updateCartRight();
                             },
                             error: function() {
                                 Swal.fire({
@@ -605,7 +607,13 @@
                     url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
                     method: "GET",
                     success: function(response) {
-                        $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                        console.log(response);
+                        $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
+                        $('#cart-count').text(response
+                            .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                        $(".item-quantity-tag").text(response
+                            .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+
                     },
                     error: function() {
                         Swal.fire({
