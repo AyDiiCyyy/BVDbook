@@ -101,7 +101,7 @@
                                                 id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}đ</span>
                                             <h4>
                                                 <h4>Phí giao hàng :
-                                                    <span>{{ number_format($shippingFee, 0, '.', '.') }}</span>
+                                                    <span>{{ number_format($shippingFee, 0, '.', '.') }}đ</span>
                                                 </h4>
                                                 <h4 class="shop-total">Thành tiền :
                                                     <span
@@ -142,10 +142,6 @@
     <script>
         $(document).ready(function() {
 
-            // Hàm định dạng số tiền
-            function formatCurrency(number) {
-                return new Intl.NumberFormat('vi-VN').format(number) + '₫';
-            }
             // Lắng nghe sự kiện click trên các thẻ <a> với class .minus và .plus
             $('.minus, .plus').on('click', function(e) {
                 e.preventDefault(); // Ngăn chặn hành động mặc định của thẻ
@@ -181,6 +177,8 @@
                                 .cart_item_price));
                             $('#subtotal').text(formatCurrency(response.totalPrice));
                             $('#totalPrice').text(formatCurrency(response.totalPrice));
+
+                            updateCartRight();
                         } else {
                             Swal.fire({
                                 title: "Thất bại!",
@@ -230,6 +228,8 @@
                                     $('#totalPrice').text(formatCurrency(response
                                         .totalPrice));
 
+                                    updateCartRight();
+
                                     Swal.fire({
                                         title: "Thành công!",
                                         text: "Xóa sản phẩm thành công",
@@ -252,15 +252,38 @@
             });
             // Hàm định dạng tiền tệ
             function formatCurrency(amount) {
-                return amount.toLocaleString('vi-VN', {
-                    style: 'currency',
-                    currency: 'VND'
-                });
+                return amount.toLocaleString('vi-VN') + '₫';
             }
             // Đóng modal khi hủy bỏ
             $('#cancelDeleteBtn').on('click', function() {
                 $('#confirmDeleteModal').modal('hide');
-            }).replace('₫', '') + '₫';;
+            }).replace('₫', '') + '₫';
+
+            // Hàm cập nhật giỏ hàng ở phần cartright
+            function updateCartRight() {
+                $.ajax({
+                    url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
+                    method: "GET",
+                    success: function(response) {
+                        console.log(response);
+                        $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
+                        $('#cart-count').text(response
+                        .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                        $(".item-quantity-tag").text(response
+                        .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: "Không thể tải giỏ hàng, vui lòng thử lại!",
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    }
+                });
+            }
+
         });
     </script>
 @endsection
