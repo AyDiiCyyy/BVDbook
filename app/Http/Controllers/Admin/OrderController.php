@@ -108,7 +108,7 @@ class OrderController extends Controller
         //
     }
 
-    public function changeActive(Request $request)
+   public function changeActive(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:orders,id',
@@ -131,6 +131,12 @@ class OrderController extends Controller
             if ($order->payment == 0 && $order->payment_status == 0) {
                 // Cập nhật trạng thái thanh toán thành đã thanh toán
                 $order->payment_status = 1; // 1: Đã thanh toán
+            }
+
+            // Cập nhật cột active của chi tiết đơn hàng thành 0
+            foreach ($order->OrderDetails as $detail) {
+                $detail->active = 0; // Giả sử bạn có cột active trong bảng OrderDetails
+                $detail->save();
             }
         }
 
@@ -189,7 +195,7 @@ class OrderController extends Controller
                 UserVoucher::create([
                     'voucher_id' => $voucher->id,
                     'user_id' => $order->user_id,
-                    'active' => 0, // Chỉ cho phép người dùng này sử dụng
+                    'active' => 0 // Chỉ cho phép người dùng này sử dụng
                 ]);
 
                 // Gửi email hoàn tiền
