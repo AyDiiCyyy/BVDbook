@@ -155,108 +155,107 @@
             <div class="description-review-wrapper">
                 <div class="description-review-topbar nav">
                     <a data-bs-toggle="tab" href="#des-details1">Mô tả sản phẩm</a>
-                    <a class="active" data-bs-toggle="tab" href="#des-details2">Chi tiết thêm sản phẩm</a>
-                    <a data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm ({{ count($getListComments) }})</a>
+                    @if ($orderDetail->active == 0)
+                        <a data-bs-toggle="tab" href="#des-details2">Chi tiết thêm sản phẩm</a>
+                        <a class="active" data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm
+                            <span id="review-count">({{ count($getListComments) }})</span></a>
+                    @else
+                        <a class="active" data-bs-toggle="tab" href="#des-details2">Chi tiết thêm sản phẩm</a>
+                        <a data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm <span id="review-count">({{ count($getListComments) }})</span></a>
+                    @endif
                 </div>
                 <div class="tab-content description-review-bottom">
-                    <div id="des-details2" class="tab-pane active">
-                        <div class="product-anotherinfo-wrapper">
-                            <ul>
-                                <li><span>Trọng Lượng </span>{{ $productDetail->weight }} g</li>
-                                <li><span>Số trang</span>{{ $productDetail->page }}</li>
-                                <li><span>Năm xuất bản </span>{{ $productDetail->released }}</li>
-                                <li><span>Tác giả</span> {{ $productDetail->author }}</li>
-                                <li><span>Nhà xuất bản</span> {{ $productDetail->publisher }}</li>
-                            </ul>
-                        </div>
+                    @if ($orderDetail->active == 0)
+                        <div id="des-details2" class="tab-pane">
+                        @else
+                            <div id="des-details2" class="tab-pane active">
+                    @endif
+                    <div class="product-anotherinfo-wrapper">
+                        <ul>
+                            <li><span>Trọng Lượng </span>{{ $productDetail->weight }} g</li>
+                            <li><span>Số trang</span>{{ $productDetail->page }}</li>
+                            <li><span>Năm xuất bản </span>{{ $productDetail->released }}</li>
+                            <li><span>Tác giả</span> {{ $productDetail->author }}</li>
+                            <li><span>Nhà xuất bản</span> {{ $productDetail->publisher }}</li>
+                        </ul>
                     </div>
-                    <div id="des-details1" class="tab-pane">
-                        <div class="product-description-wrapper">
-                            <p>
-                                {{ $productDetail->long_description }}
-                            </p>
-                        </div>
+                </div>
+                <div id="des-details1" class="tab-pane">
+                    <div class="product-description-wrapper">
+                        <p>
+                            {{ $productDetail->long_description }}
+                        </p>
                     </div>
-                    <div id="des-details3" class="tab-pane">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <div class="review-wrapper">
-                                    @foreach ($getListComments as $comment)
-                                        <div class="single-review">
-                                            <div class="review-img">
-                                                <img class="rounded-circle" src="{{ $comment->user->avatar ?? '' }} "
-                                                    alt="" width="100" height="100" />
-                                            </div>
-                                            <div class="review-content">
-                                                <div class="review-top-wrap">
-                                                    <div class="review-left">
-                                                        <div class="review-name">
-                                                            <h4> {{ $comment->user->name }}</h4>
-                                                        </div>
-
-                                                        <div class="rating-product">
-                                                            <small>{{ $comment->created_at }}</small>
-                                                            {{-- <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i>
-                                                        <i class="ion-android-star"></i> --}}
-                                                        </div>
-                                                    </div>
+                </div>
+                {{-- comment --}}
+                @if ($orderDetail->active == 0)
+                    <div id="des-details3" class="tab-pane active">
+                    @else
+                        <div id="des-details3" class="tab-pane ">
+                @endif
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="review-wrapper">
+                            @foreach ($getListComments as $comment)
+                                <div class="single-review">
+                                    <div class="review-img">
+                                        <img class="rounded-circle"
+                                            src="{{ $comment->user->avatar ?? asset('assets/img/user2-160x160.jpg') }} "
+                                            alt="" width="100" height="100" />
+                                    </div>
+                                    <div class="review-content">
+                                        <div class="review-top-wrap">
+                                            <div class="review-left">
+                                                <div class="review-name">
+                                                    <h4> {{ $comment->user->name }}</h4>
                                                 </div>
-                                                <div class="review-bottom">
-                                                    <p>
 
-                                                        {{ $comment->content }}
-                                                    </p>
+                                                <div class="rating-product">
+                                                    <small>{{ $comment->created_at }}</small>
+
                                                 </div>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="col-lg-5">
-                                {{-- <div class="ratting-form-wrapper pl-50">
-                                    <h3>Đánh giá sản phẩm </h3>
-                                    <div class="ratting-form">
-                                        <form action="#">
-                                            <div class="star-box">
+                                        <div class="review-bottom">
+                                            <p>
 
-                                                <div class="rating-product">
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                    <i class="ion-android-star"></i>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="rating-form-style mb-10">
-                                                        <input placeholder="Name" type="text" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="rating-form-style mb-10">
-                                                        <input placeholder="Email" type="email" />
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="rating-form-style form-submit">
-                                                        <textarea name="Your Review" placeholder="Message"></textarea>
-                                                        <input type="submit" value="Submit" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                                {{ $comment->content }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div> --}}
-                            </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="ratting-form-wrapper pl-50">
+                            @if ($orderDetail->active == 0 && $order->status == 4 && $order->payment_status == 1)
+                                <!-- Kiểm tra các điều kiện -->
+                                <h3>Đánh giá sản phẩm </h3>
+                                <div class="ratting-form mt-4">
+                                    <form action="{{ route('client.product.comment', $productDetail->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="rating-form-style form-submit">
+                                                    <textarea name="content" placeholder="Nhập bình luận của bạn" required></textarea>
+                                                    <button class="btn btn-success" type="submit">Gửi bình luận</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            @else
+                                <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện trải nghiệm mua hàng.</p>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
     <!-- product details description area end -->
     <!-- Recent Add Product Area Start -->
@@ -627,6 +626,96 @@
             }
 
         });
+        // comment
+// comment
+$(document).ready(function() {
+    // Xử lý sự kiện gửi bình luận
+    $('form').on('submit', function(e) {
+        e.preventDefault(); // Ngăn chặn hành động mặc định của form
+
+        // Lấy dữ liệu từ form
+        let formData = $(this).serialize(); // Lấy tất cả dữ liệu từ form
+
+        // Gửi yêu cầu AJAX để gửi bình luận
+        $.ajax({
+            url: $(this).attr('action'), // URL từ thuộc tính action của form
+            method: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    // Tạo HTML cho bình luận mới
+                    let newComment = `
+                        <div class="single-review">
+                            <div class="review-img">
+                                <img class="rounded-circle" src="${response.user.avatar || '{{ asset('assets/img/user2-160x160.jpg') }}'}" alt="" width="100" height="100" />
+                            </div>
+                            <div class="review-content">
+                                <div class="review-top-wrap">
+                                    <div class="review-left">
+                                        <div class="review-name">
+                                            <h4>${response.user.name}</h4>
+                                        </div>
+                                        <div class="rating-product">
+                                            <small>${new Date(response.comment.created_at).toLocaleString()}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="review-bottom">
+                                    <p>${response.comment.content}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Thêm bình luận mới vào danh sách bình luận
+                    $('.review-wrapper').prepend(newComment);
+
+                    // Ẩn form bình luận
+                    $('.ratting-form-wrapper').hide();
+
+                    // Xóa nội dung trong textarea
+                    $('textarea[name="content"]').val('');
+
+                    // Cập nhật số lượng bình luận
+                    updateReviewCount();
+                } else {
+                    Swal.fire({
+                        title: "Thất bại!",
+                        text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
+                        icon: "error",
+                        confirmButtonText: "OK",
+                    });
+                }
+            },
+            error: function(xhr) {
+                // Xử lý lỗi
+                Swal.fire({
+                    title: "Thất bại!",
+                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+        });
+    });
+
+    // Hàm cập nhật số lượng bình luận
+    function updateReviewCount() {
+        const productId = "{{ $productDetail->id }}"; // Lấy ID sản phẩm từ Blade
+        $.ajax({
+            url: `/products/${productId}/reviews/count`, // Đường dẫn tới route
+            method: 'GET',
+            success: function(response) {
+                // Cập nhật số lượng bình luận
+                $('#review-count').text(`(${response.count})`);
+            },
+            error: function() {
+                console.error('Error updating review count');
+            }
+        });
+    }
+});
+
     </script>
 @endsection
 

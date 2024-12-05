@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <!-- Section Title -->
             <div class="section-title">
-                <h2>Bán chạy nhất</h2>
+                <h2>Bán chạy nhất </h2>
                 <p>Thêm sản phẩm bán chạy nhất vào giỏ hàng của bạn</p>
             </div>
             <!-- Section Title -->

@@ -61,6 +61,10 @@
                                                         <th>Số lượng</th>
                                                         <th>Đơn giá</th>
                                                         <th>Thành tiền</th>
+                                                        @if (  $order->status == 4 && $order->payment_status ==1)
+                                                             <th>Hành động</th>
+                                                        @endif
+                                                       
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -81,6 +85,13 @@
                                                             <td>{{ number_format($detail->unit_price, 0, ',', '.') }} đ
                                                             </td>
                                                             <td>{{ number_format($amount, 0, ',', '.') }} đ</td>
+                                                          <td>
+                                                            @if (  $order->status == 4 && $order->payment_status ==1 && $detail->active ==0)
+                                                            <a href="{{ route('productDetail', ['slug' => $detail->product->slug]) }}" class="btn btn-warning btn-sm">Đánh giá </a>
+                                                            @elseif ($order->status == 4 && $order->payment_status ==1 && $detail->active ==1)
+                                                            <p>Bạn đã đánh giá sản phẩm này </p>
+                                                        @endif
+                                                          </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
