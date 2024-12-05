@@ -115,8 +115,8 @@
                                     href="{{ route('admin.product.show', $product->id) }}">{{ $product->name }}</a></td>
                             <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow"
                                     width="100" height="80"></td>
-                            <td>{{ $product->price }}</td>
-                            <td>{{ $product->sale }}</td>
+                            <td>{{ number_format($product->price, 0, '.', '.') }}₫</td>
+                            <td>{{ number_format($product->sale, 0, '.', '.') }}₫</td>
                             <td>
                                 <ul class="list-unstyled" style="margin: 0">
                                     @foreach ($product->ProductCategories as $item)

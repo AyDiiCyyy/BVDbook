@@ -95,7 +95,7 @@
                         </div>
                     </form>
                 </div> --}}
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-2">
                         <a href="{{ route('admin.slide.create') }}"><button class="btn btn-success">Thêm mới</button></a>
                     </div>
