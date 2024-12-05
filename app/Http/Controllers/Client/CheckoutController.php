@@ -206,6 +206,9 @@ class CheckoutController extends Controller
             $user = Auth::user();
             $sum = 0;
             $products = $user->Carts;
+            if ($products->isEmpty()) {
+                return response()->json(['status' => 'error', 'message' => 'Đã xảy ra lỗi trong quá trình mua hàng']);
+            }
             foreach ($products as $product) {
                 $sum += $product->products->price * $product->quantity;
             }  // tính giá tổng của giỏ hàng hiện tại
