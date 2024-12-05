@@ -3,6 +3,18 @@
 @endsection
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        .product-name {
+            word-wrap: break-word;
+            /* Tự động ngắt từ để xuống dòng */
+            word-break: break-word;
+            /* Ngắt dòng nếu từ quá dài */
+            white-space: normal;
+            /* Cho phép xuống dòng bình thường */
+            max-width: 200px;
+            /* Chiều rộng tối đa (tùy chỉnh theo giao diện) */
+        }
+    </style>
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -73,7 +85,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-2">
                         <a href="{{ route('admin.product.create') }}"><button class="btn btn-success">Thêm mới</button></a>
                     </div>
@@ -99,12 +111,14 @@
                     @foreach ($products as $key => $product)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow" width="100" height="80"></td>
+                            <td class="product-name"><a class="text-decoration-none text-dark"
+                                    href="{{ route('admin.product.show', $product->id) }}">{{ $product->name }}</a></td>
+                            <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow"
+                                    width="100" height="80"></td>
                             <td>{{ $product->price }}</td>
                             <td>{{ $product->sale }}</td>
                             <td>
-                                <ul class="list-unstyled">
+                                <ul class="list-unstyled" style="margin: 0">
                                     @foreach ($product->ProductCategories as $item)
                                         <li>{{ $item->category->name }}</li>
                                     @endforeach
@@ -131,8 +145,8 @@
                                 </button>
                             </td>
 
-                            <td>
-                                <input type="number" min="1" name="order" class="form-control changeOrder"
+                            <td class="text-center align-middle">
+                                <input type="number" min="1" name="order" class="form-control changeOrder mx-auto"
                                     style="width: 67px" data-id="{{ $product->id }}"
                                     data-url="{{ route('admin.product.changeOrder') }}" value="{{ $product->order }}">
                             </td>
@@ -140,10 +154,9 @@
 
                             <td class="text-center align-middle">
                                 <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
-                                <a href="{{ route('admin.product.show', $product->id) }}" class="btn btn-dark">Chi tiết</a>
-                                
+
                             </td>
-                            
+
 
                         </tr>
                     @endforeach

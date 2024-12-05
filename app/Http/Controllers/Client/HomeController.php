@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,8 +115,8 @@ class HomeController extends Controller
         ->limit(10) 
         ->get();
 
-
-        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
+        $slide = Slide::query()->where('active', 1)->orderBy('order')->get();
+        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers', 'slide'));
     }
 
     public function  getProductDetail($slug)
