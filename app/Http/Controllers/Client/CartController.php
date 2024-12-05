@@ -228,10 +228,17 @@ class CartController extends Controller
     public function getCart()
     {
         $cartItems = Cart::where('user_id', Auth::id())->with('products')->get();
+        $totalQuantity = $cartItems->sum(function ($cartItem) {
+            return $cartItem->quantity; // Lấy số lượng của từng sản phẩm trong giỏ hàng
+        });
         $messages = $this->checkCartStatus();
+        $cart_html = view('client.partials.cartright', compact('cartItems', 'messages'))->render();
 
         // Trả về view giỏ hàng dưới dạng HTML
-        return view('client.partials.cartright', compact('cartItems', 'messages'))->render();
+        return response()->json([
+            'cart_html' => $cart_html,
+            'total_quantity' => $totalQuantity,
+        ]);
     }
 
     public function checkCartStatus()
