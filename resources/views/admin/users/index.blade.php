@@ -10,6 +10,12 @@
         border-radius: 50%;
         object-fit: cover;
     }
+    .status-select {
+        width: 70%;
+        min-width: 120px; /* Đặt kích thước tối thiểu */
+        padding: 0.25rem 0.5rem; /* Thu nhỏ padding */
+        font-size: 0.875rem; /* Thu nhỏ font */
+    }
 </style>
 @endsection
 @section('content')
@@ -42,7 +48,7 @@
                         <button class="btn btn-success">Thêm mới</button>
                     </a> --}}
                 </div>
-                <div class="col-10 d-flex justify-content-end align-items-center">
+                <div class="col-10 d-flex justify-content-end align-items-center mb-4">
                     <div class="form-group d-flex search-form">
                         <form action="{{ route('admin.user.index') }}" method="GET" class="row w-100">
                             <div class="col-7">
@@ -58,9 +64,10 @@
 
        
 
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-striped table-responsive">
+                <thead class="text-center align-middle">
                     <tr>
+                        <th scope="col">STT</th>
                         <th scope="col">Tên người dùng</th>
                         <th scope="col">Email</th>
                         <th scope="col">Số điện thoại</th>
@@ -69,10 +76,11 @@
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Hành động</th>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $user)
+                </thead >
+                <tbody class="text-center align-middle">
+                    @foreach ($users as $key => $user)
                         <tr>
+                            <td>{{ $key + 1 }}</td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->phone }}</td>
@@ -88,15 +96,14 @@
                                 @endif
                             </td>
                             <td>{{ $user->role == 1 ? 'Người dùng' : 'Admin' }}</td>
-                            <td>
-                                <select class="form-control status-select" data-id="{{ $user->id }}">
+                            <td class="text-center align-middle" style="width: 16%">
+                                <select class="form-select form-select-sm status-select mx-auto"  data-id="{{ $user->id }}">
                                     <option value="1" {{ $user->active == 1 ? 'selected' : '' }}>Kích hoạt</option>
                                     <option value="2" {{ $user->active == 2 ? 'selected' : '' }}>Tài khoản bị khóa</option>
-                                    <option value="0" {{ $user->active == 0 ? 'selected' : '' }}>Chưa kích hoạt</option>
                                 </select>
                             </td>
                             <td class="alg">
-                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-primary w-50">Sửa</a>
+                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-primary ">Sửa</a>
                             </td>
                         </tr>
                     @endforeach
