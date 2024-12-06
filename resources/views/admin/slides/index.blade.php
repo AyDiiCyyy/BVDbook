@@ -107,6 +107,7 @@
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Tên</th>
+                        <th scope="col" style="width:20%">Đường dẫn</th>
                         <th scope="col">Ảnh</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Thứ tự</th>
@@ -118,6 +119,7 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $slide->name }}</td>
+                            <td>{{ $slide->slug }}</td>
                             <td><img src="{{ asset($slide->image) }}" alt="Slide Image" class="slide-image">
                             </td>
                             <td>
