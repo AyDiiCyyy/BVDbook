@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StatsController extends Controller
-{   
-     public function getRevenue(Request $request)
+{
+    public function getRevenue(Request $request)
     {
         $filter = $request->input('filter');
         $selectedDate = $request->input('date');
@@ -35,7 +35,7 @@ class StatsController extends Controller
                 )
                     ->where('status', 4)
                     ->where('created_at', '>=', Carbon::now()->subDays(14))
-                    ->where('payment_status',1)
+                    ->where('payment_status', 1)
                     ->groupBy('day')
                     ->orderBy('day', 'asc')
                     ->get();
@@ -55,23 +55,8 @@ class StatsController extends Controller
                     ->whereIn('status', [1, 2, 5])
                     ->get()
                     ->groupBy('status');
-                // Lợi nhuận thuần 14 ngày
-                $netProfit = Order::query()
-                    ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
-                    ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
-                    - SUM(
-                        CASE 
-                            WHEN orders.shipping = 1 THEN 0
-                            WHEN orders.shipping = 2 THEN 30000
-                            WHEN orders.shipping = 3 THEN 60000
-                            ELSE 0
-                        END
-                    ) AS net_revenue
-                '))->where('orders.created_at', '>=', Carbon::now()->subDays(14))
-                    ->where('payment_status',1)
-                    ->where('orders.status', 4)
-                    ->first();
-                $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                // Người dùng đăng ký 14 ngày
+                $registerUser = User::where('users.created_at', '>=', Carbon::now()->subDays(14))->count();
                 // Top 10 sản phẩm bán chạy 14 ngày
                 $bestSellerTop10 = OrderDetail::query()
                     ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -97,7 +82,7 @@ class StatsController extends Controller
                 return response()->json([
                     'revenue' => $revenue,
                     'labels' => $labels,
-                    'netProfitRevenue' => $netProfitRevenue,
+                    'registerUser' => $registerUser,
                     'pendingOrder' => $ordersCount->get(1, collect())->count(),
                     'orderProcessing' => $ordersCount->get(2, collect())->count(),
                     'cancelConfirm' => $ordersCount->get(5, collect())->count(),
@@ -119,32 +104,16 @@ class StatsController extends Controller
                     case 'day':
                         // Doanh thu theo ngày 
                         $revenue[] = Order::whereDate('created_at', $date)
-                        ->where('status', 4)
-                        ->where('payment_status',1)
-                        ->sum('total_money');
+                            ->where('status', 4)
+                            ->where('payment_status', 1)
+                            ->sum('total_money');
                         $labels[] = $date->translatedFormat('d/m/Y');
                         // Trạng thái theo ngày
                         $pendingOrder = $this->getOrderStatusCount($date, 1, 'day'); // Trạng thái chờ xác nhận
                         $orderProcessing = $this->getOrderStatusCount($date, 2, 'day'); // Trạng thái đang xử lý
                         $cancelConfirm = $this->getOrderStatusCount($date, 5, 'day'); // Trạng thái hủy xác nhận
-                        // Lợi nhuận thuần theo ngày
-                        $netProfit = Order::query()
-                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
-                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
-                                    - SUM(
-                                        CASE 
-                                            WHEN orders.shipping = 1 THEN 0
-                                            WHEN orders.shipping = 2 THEN 30000
-                                            WHEN orders.shipping = 3 THEN 60000
-                                            ELSE 0
-                                        END
-                                    ) AS net_revenue
-                                '))
-                            ->whereDate('orders.created_at', $date)
-                            ->where('orders.status', 4)
-                            ->where('payment_status',1)
-                            ->first();
-                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Người dùng đăng ký theo ngày
+                        $registerUser = User::whereDate('created_at', $date)->count();
                         // Top 10 sản phẩm bán chạy theo ngày
                         $bestSellerTop10 = OrderDetail::query()
                             ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -171,7 +140,7 @@ class StatsController extends Controller
                         // Doanh thu theo tháng
                         $revenue[] = Order::whereYear('created_at', $date->year)
                             ->whereMonth('created_at', $date->month)
-                            ->where('payment_status',1)
+                            ->where('payment_status', 1)
                             ->where('status', 4)
                             ->sum('total_money');
                         $labels[] = $date->translatedFormat('m/Y');
@@ -179,25 +148,9 @@ class StatsController extends Controller
                         $pendingOrder = $this->getOrderStatusCount($date, 1, 'month'); // Trạng thái chờ xác nhận
                         $orderProcessing = $this->getOrderStatusCount($date, 2, 'month'); // Trạng thái đang xử lý
                         $cancelConfirm = $this->getOrderStatusCount($date, 5, 'month'); // Trạng thái hủy xác nhận
-                        // Lợi nhuận thuần theo tháng
-                        $netProfit = Order::query()
-                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
-                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
-                                    - SUM(
-                                        CASE 
-                                            WHEN orders.shipping = 1 THEN 0
-                                            WHEN orders.shipping = 2 THEN 30000
-                                            WHEN orders.shipping = 3 THEN 60000
-                                            ELSE 0
-                                        END
-                                    ) AS net_revenue
-                                '))
-                            ->whereYear('orders.created_at', $date->year)
-                            ->whereMonth('orders.created_at', $date->month)
-                            ->where('payment_status',1)
-                            ->where('orders.status', 4)
-                            ->first();
-                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Người dùng đăng ký theo tháng
+                        $registerUser = User::whereYear('created_at', $date->year)
+                            ->whereMonth('created_at', $date->month)->count();
                         // Top 10 sản phẩm bán chạy theo tháng
                         $bestSellerTop10 = OrderDetail::query()
                             ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -220,35 +173,19 @@ class StatsController extends Controller
                             ->where('status', 4)->count();
                         $cancelOrder = Order::query()
                             ->whereYear('created_at', $date->year)
-                            ->whereMonth('created_at', $date->month)    
+                            ->whereMonth('created_at', $date->month)
                             ->where('status', 6)->count();
                         break;
                     case 'year':
                         // Doanh thu theo năm
-                        $revenue[] = Order::whereYear('created_at', $date->year)->where('status', 4)->where('payment_status',1)->sum('total_money');
+                        $revenue[] = Order::whereYear('created_at', $date->year)->where('status', 4)->where('payment_status', 1)->sum('total_money');
                         $labels[] = $date->translatedFormat('Y');
                         // Trạng thái theo năm
                         $pendingOrder = $this->getOrderStatusCount($date, 1, 'year'); // Trạng thái chờ xác nhận
                         $orderProcessing = $this->getOrderStatusCount($date, 2, 'year'); // Trạng thái đang xử lý
                         $cancelConfirm = $this->getOrderStatusCount($date, 5, 'year'); // Trạng thái hủy xác nhận
-                        // Lợi nhuận thuần theo năm
-                        $netProfit = Order::query()
-                            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
-                            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
-                                    - SUM(
-                                        CASE 
-                                            WHEN orders.shipping = 1 THEN 0
-                                            WHEN orders.shipping = 2 THEN 30000
-                                            WHEN orders.shipping = 3 THEN 60000
-                                            ELSE 0
-                                        END
-                                    ) AS net_revenue
-                                '))
-                            ->whereYear('orders.created_at', $date->year)
-                            ->where('payment_status',1)
-                            ->where('orders.status', 4)
-                            ->first();
-                        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+                        // Người dùng đăng ký theo năm
+                        $registerUser = User::whereYear('created_at', $date->year)->count();
                         // Top 10 sản phẩm bán chạy theo năm
                         $bestSellerTop10 = OrderDetail::query()
                             ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -284,7 +221,7 @@ class StatsController extends Controller
                 return response()->json([
                     'revenue' => $revenue,
                     'labels' => $labels,
-                    'netProfitRevenue' =>  $netProfitRevenue,
+                    'registerUser' =>  $registerUser,
                     'pendingOrder' => $pendingOrder,
                     'orderProcessing' => $orderProcessing,
                     'cancelConfirm' => $cancelConfirm,
@@ -332,22 +269,8 @@ class StatsController extends Controller
             DB::raw('SUM(total_money) as revenue')
         )->where('status', 4)->sum('total_money');
         // dd($revenueTotal);
-        // Lợi nhuận thuần
-        $netProfit = Order::query()
-            ->join('vouchers', 'orders.voucher_id', '=', 'vouchers.id')
-            ->select(DB::raw('SUM(orders.total_money) - SUM(vouchers.discount_amount) 
-            - SUM(
-                CASE 
-                    WHEN orders.shipping = 1 THEN 0
-                    WHEN orders.shipping = 2 THEN 30000
-                    WHEN orders.shipping = 3 THEN 60000
-                    ELSE 0
-                END
-            ) AS net_revenue
-        '))
-            ->where('orders.status', 4)
-            ->first();
-        $netProfitRevenue = $netProfit ? number_format($netProfit->net_revenue, 0, '.', '.') : 0;
+        // Người dùng đăng kí
+        $registerUser = User::count();
         // dd($netProfitRevenue);
         //Top 10 sản phẩm bán chạy nhất
         $bestSellerTop10 = OrderDetail::query()
@@ -408,7 +331,7 @@ class StatsController extends Controller
             'pendingOrder',
             'orderProcessing',
             'cancelConfirm',
-            'netProfitRevenue',
+            'registerUser',
             'bestSellerTop10',
             'completedOrder',
             'cancelOrder',

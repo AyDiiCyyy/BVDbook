@@ -44,8 +44,8 @@ class HomeController extends Controller
                     $productsSortBy->orderBy('created_at', 'asc');
                     break;
                 case 'discount_desc':
-                    $productsSortBy ->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
-                    ->orderBy('discount_percentage', 'desc');
+                    $productsSortBy->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
+                        ->orderBy('discount_percentage', 'desc');
                     break;
                 case 'popular':
                    $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
@@ -58,14 +58,14 @@ class HomeController extends Controller
                     $productsSortBy->whereIn('id', $popular);
                     break;
                 default:
-                $productsSortBy->orderBy('created_at', 'desc');
+                    $productsSortBy->orderBy('created_at', 'desc');
                     break;
             }
         }
         $products = $productsSortBy->paginate(self::PAGINATION);
         return view('client.page.productCategory', compact('category', 'products', 'sortBy', 'slug'));
     }
-   
+
     public function index()
     {
         //sản phẩm nổi bật 
