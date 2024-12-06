@@ -155,7 +155,7 @@
             <div class="description-review-wrapper">
                 <div class="description-review-topbar nav">
                     <a data-bs-toggle="tab" href="#des-details1">Mô tả sản phẩm</a>
-                    @if ($orderDetail->active == 0)
+                    @if ($orderDetail)
                         <a data-bs-toggle="tab" href="#des-details2">Chi tiết thêm sản phẩm</a>
                         <a class="active" data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm
                             <span id="review-count">({{ count($getListComments) }})</span></a>
@@ -165,7 +165,7 @@
                     @endif
                 </div>
                 <div class="tab-content description-review-bottom">
-                    @if ($orderDetail->active == 0)
+                    @if ($orderDetail)
                         <div id="des-details2" class="tab-pane">
                         @else
                             <div id="des-details2" class="tab-pane active">
@@ -188,14 +188,14 @@
                     </div>
                 </div>
                 {{-- comment --}}
-                @if ($orderDetail->active == 0)
+                @if ($orderDetail)
                     <div id="des-details3" class="tab-pane active">
                     @else
                         <div id="des-details3" class="tab-pane ">
                 @endif
                 <div class="row">
                     <div class="col-lg-7">
-                        <div class="review-wrapper">
+                        <div class="review-wrapper" id="review-wrapper" >
                             @foreach ($getListComments as $comment)
                                 <div class="single-review">
                                     <div class="review-img">
@@ -229,18 +229,19 @@
                     </div>
                     <div class="col-lg-5">
                         <div class="ratting-form-wrapper pl-50">
-                            @if ($orderDetail->active == 0 && $order->status == 4 && $order->payment_status == 1)
-                                <!-- Kiểm tra các điều kiện -->
+                          
+                            @if ($orderDetail )
+                                
                                 <h3>Đánh giá sản phẩm </h3>
                                 <div class="ratting-form mt-4">
-                                    <form action="{{ route('client.product.comment', $productDetail->id) }}"
-                                        method="POST">
+                                    <form id="comment-form" action="{{ route('client.product.comment', $productDetail->id) }}" method="POST">
                                         @csrf
+                                        <input type="hidden" name="oder_detail_id" value="{{$orderDetail->id}}">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="rating-form-style form-submit">
                                                     <textarea name="content" placeholder="Nhập bình luận của bạn" required></textarea>
-                                                    <button class="btn btn-success" type="submit">Gửi bình luận</button>
+                                                    <button type="submit" class="btn btn-success">Gửi bình luận</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -618,96 +619,86 @@
             }
 
         });
-        // comment
-// comment
+//comment
 $(document).ready(function() {
-    // Xử lý sự kiện gửi bình luận
-    $('form').on('submit', function(e) {
+    // Xử lý sự kiện submit của form bình luận
+    $('#comment-form').on('submit', function(e) {
         e.preventDefault(); // Ngăn chặn hành động mặc định của form
 
-        // Lấy dữ liệu từ form
-        let formData = $(this).serialize(); // Lấy tất cả dữ liệu từ form
-
-        // Gửi yêu cầu AJAX để gửi bình luận
+        // Gửi yêu cầu AJAX để thêm bình luận
         $.ajax({
-            url: $(this).attr('action'), // URL từ thuộc tính action của form
-            method: 'POST',
-            data: formData,
+            url: $(this).attr('action'), // Lấy URL từ thuộc tính action của form
+            method: "POST",
+            data: $(this).serialize(), // Lấy dữ liệu từ form
             success: function(response) {
-                if (response.success) {
-                    // Tạo HTML cho bình luận mới
-                    let newComment = `
-                        <div class="single-review">
-                            <div class="review-img">
-                                <img class="rounded-circle" src="${response.user.avatar || '{{ asset('assets/img/user2-160x160.jpg') }}'}" alt="" width="100" height="100" />
-                            </div>
-                            <div class="review-content">
-                                <div class="review-top-wrap">
-                                    <div class="review-left">
-                                        <div class="review-name">
-                                            <h4>${response.user.name}</h4>
-                                        </div>
-                                        <div class="rating-product">
-                                            <small>${new Date(response.comment.created_at).toLocaleString()}</small>
-                                        </div>
+                // Lấy thông tin người dùng từ session
+                const userName = response.user_name; // Tên người dùng
+                const userAvatar = response.user_avatar; // Avatar người dùng
+                const createdAt = response.created_at; // Thời gian tạo bình luận
+
+                // Thêm bình luận mới vào danh sách bình luận
+                $('#review-wrapper').prepend(`
+                    <div class="single-review">
+                        <div class="review-img">
+                            <img class="rounded-circle" src="${userAvatar}" alt="" width="100" height="100" />
+                        </div>
+                        <div class="review-content">
+                            <div class="review-top-wrap">
+                                <div class="review-left">
+                                    <div class="review-name">
+                                        <h4>${userName}</h4>
+                                    </div>
+                                    <div class="rating-product">
+                                        <small>${createdAt}</small>
                                     </div>
                                 </div>
-                                <div class="review-bottom">
-                                    <p>${response.comment.content}</p>
-                                </div>
+                            </div>
+                            <div class="review-bottom">
+                                <p>${response.content}</p>
                             </div>
                         </div>
-                    `;
+                    </div>
+                `);
 
-                    // Thêm bình luận mới vào danh sách bình luận
-                    $('.review-wrapper').prepend(newComment);
+                // Cập nhật số lượng bình luận
+                $('#review-count').text(`(${response.count})`);
 
-                    // Ẩn form bình luận
-                    $('.ratting-form-wrapper').hide();
+                // Hiển thị thông báo thành công
+                Swal.fire({
+                    title: "Thành công!",
+                    text: "Bình luận của bạn đã được gửi thành công.",
+                    icon: "success",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    // Ẩn tiêu đề và form bình luận, thay thế bằng thông báo
+                    $('#comment-form').parent().html(`
+                        <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện trải nghiệm mua hàng.</p>
+                    `);
+                    // Ẩn tiêu đề "Đánh giá sản phẩm"
+                    $('h3:contains("Đánh giá sản phẩm")').hide();
+                });
 
-                    // Xóa nội dung trong textarea
-                    $('textarea[name="content"]').val('');
-
-                    // Cập nhật số lượng bình luận
-                    updateReviewCount();
-                } else {
-                    Swal.fire({
-                        title: "Thất bại!",
-                        text: response.message || "Có lỗi xảy ra, vui lòng thử lại!",
-                        icon: "error",
-                        confirmButtonText: "OK",
-                    });
-                }
+                // Reset form
+                $('#comment-form')[0].reset();
             },
             error: function(xhr) {
                 // Xử lý lỗi
+                let errorMessage = "Có lỗi xảy ra, vui lòng thử lại sau!";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                // Hiển thị thông báo thất bại
                 Swal.fire({
                     title: "Thất bại!",
-                    text: "Có lỗi xảy ra, vui lòng thử lại!",
+                    text: errorMessage,
                     icon: "error",
                     confirmButtonText: "OK",
                 });
             }
         });
     });
-
-    // Hàm cập nhật số lượng bình luận
-    function updateReviewCount() {
-        const productId = "{{ $productDetail->id }}"; // Lấy ID sản phẩm từ Blade
-        $.ajax({
-            url: `/products/${productId}/reviews/count`, // Đường dẫn tới route
-            method: 'GET',
-            success: function(response) {
-                // Cập nhật số lượng bình luận
-                $('#review-count').text(`(${response.count})`);
-            },
-            error: function() {
-                console.error('Error updating review count');
-            }
-        });
-    }
 });
-
     </script>
 @endsection
 
