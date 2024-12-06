@@ -84,7 +84,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giá sản phẩm</label>
                                             <input type="number" class="form-control" name="price"
-                                                value="{{ old('price', number_format($product->price, 0, '.', '.')) }}">
+                                                value="{{ old('price', number_format($product->price, 0, '', '')) }}">
                                             @error('price')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -94,7 +94,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giảm giá</label>
                                             <input type="number" class="form-control" name="sale"
-                                                value="{{ old('sale', number_format($product->sale, 0, '.', '.')) }}">
+                                                value="{{ old('sale', number_format($product->sale, 0, '', '')) }}">
                                             @error('sale')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}

@@ -39,7 +39,7 @@
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Cập Nhật Thông Tin</h5>
+                            <h5>Cập Nhật Thông Tin </h5>
                         </div>
                         <div class="card-body">
                             @if(session('success'))
