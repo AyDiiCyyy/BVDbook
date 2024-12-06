@@ -86,33 +86,28 @@
                         class="bi bi-fullscreen-exit" style="display: none;"></i> </a> </li>
             <!--end::Fullscreen Toggle--> <!--begin::User Menu Dropdown-->
             <li class="nav-item dropdown user-menu"> <a href="#" class="nav-link dropdown-toggle"
-                    data-bs-toggle="dropdown"> <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
-                        class="user-image rounded-circle shadow" alt="User Image"> <span
-                        class="d-none d-md-inline">Alexander Pierce</span> </a>
+                    data-bs-toggle="dropdown"> <img
+                        src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/img/user2-160x160.jpg') }}"
+                        alt="{{ Auth::user()->name }}" class="user-image rounded-circle shadow" alt="User Image">
+                    <span class="d-none d-md-inline">{{ Auth::user()->name }}</span> </a>
                 <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end"> <!--begin::User Image-->
-                    <li class="user-header text-bg-primary"> <img src="{{ asset('assets/img/user2-160x160.jpg') }}"
-                            class="rounded-circle shadow" alt="User Image">
+                    <li class="user-header text-bg-primary"> <img
+                            src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : asset('assets/img/user2-160x160.jpg') }}"
+                            alt="{{ Auth::user()->name }}" class="rounded-circle shadow" alt="User Image">
                         <p>
-                            Alexander Pierce - Web Developer
-                            <small>Member since Nov. 2023</small>
+                            {{ Auth::user()->name }}
+                            <small>Là thành viên kể từ {{ Auth::user()->created_at }}</small>
                         </p>
                     </li> <!--end::User Image--> <!--begin::Menu Body-->
-                    <li class="user-body"> <!--begin::Row-->
-                        <div class="row">
-                            <div class="col-4 text-center"> <a href="#">Followers</a> </div>
-                            <div class="col-4 text-center"> <a href="#">Sales</a> </div>
-                            <div class="col-4 text-center"> <a href="#">Friends</a> </div>
-                        </div> <!--end::Row-->
-                    </li> <!--end::Menu Body--> <!--begin::Menu Footer-->
                     <li class="user-footer d-flex justify-content-center align-items-center">
 
-                         <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <a href="{{ route('index') }}" class="btn btn-default btn-flat">Trang chủ</a>
 
                         <div class="ms-3">
                             <a class="btn btn-default btn-flat float-end" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+                                {{ __('Đăng xuất') }}
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
