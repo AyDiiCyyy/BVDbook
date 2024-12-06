@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-xl-6 col-lg-6 col-md-12">
                     <div class="product-details-content">
-                        <h2>{{ $productDetail->name }}</h2>
+                        <h2 style="line-height: 30px">{{ $productDetail->name }}</h2>
                         <p class="reference">Thuộc danh mục: <span>{{ implode(',', $categoriesOfProduct) }}</span></p>
                         <div class="pro-details-rating-wrap">
                             <div class="rating-product">
@@ -71,7 +71,7 @@
                                     <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
                                         {{ number_format($productDetail->sale, 0, '.', '.') }}₫
                                     </li>
-                                    <li class="discount-price">
+                                    <li class="discount-price" style="margin: 22px 3px">
                                         -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
                                     </li>
                                 @else
