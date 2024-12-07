@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <!-- Section Title -->
             <div class="section-title">
-                <h2>Bán chạy nhất</h2>
+                <h2>Bán chạy nhất </h2>
                 <p>Thêm sản phẩm bán chạy nhất vào giỏ hàng của bạn</p>
             </div>
             <!-- Section Title -->
@@ -17,16 +17,18 @@
                     <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                         <img class="first-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
                             alt="" />
-                        <img class="second-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
-                            alt="" />
+                        <img class="second-img"
+                            src="{{ asset('client/assets/images/product-image/organic/test.webp') }}" alt="" />
                     </a>
                 </div>
                 <ul class="product-flag">
                     <li class="new">Mới</li>
                 </ul>
                 <div class="product-decs">
-                    <a class="inner-link" href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
-                    <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
+                    <a class="inner-link"
+                        href="{{ route('danhmucSanpham', $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                    <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}"
+                            class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
                     <div class="rating-product">
                         <i class="ion-android-star"></i>
                         <i class="ion-android-star"></i>
@@ -36,7 +38,7 @@
                     </div>
                     <div class="pricing-meta">
                         <ul>
-                            @if($product->sale > 0) 
+                            @if ($product->sale > 0)
                                 <li class="old-price">{{ number_format($product->price, 0, '.', '.') }}₫</li>
                                 <li class="current-price">{{ number_format($product->sale, 0, '.', '.') }}₫</li>
                                 <li class="discount-price">
@@ -97,6 +99,7 @@
                             console.log(response);
                             $('#cart-right').html(
                                 response); // Cập nhật phần tử giỏ hàng
+                            updateCartRight();
                         },
                         error: function() {
                             Swal.fire({
@@ -157,7 +160,12 @@
                 method: "GET",
                 success: function(response) {
                     console.log(response);
-                    $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                    $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
+                    $('#cart-count').text(response
+                        .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                    $(".item-quantity-tag").text(response
+                        .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+
                 },
                 error: function() {
                     Swal.fire({

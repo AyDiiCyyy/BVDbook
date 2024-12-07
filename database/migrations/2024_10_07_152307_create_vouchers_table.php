@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('min_order_amount', 10, 2);
             $table->integer('usage_limit');
             $table->string('description',255);
+            $table->enum('status', ['active', 'expired'])->default('active');
+            $table->boolean('is_manually_updated')->default(false);
             $table->tinyInteger('role')->default(1);
             $table->timestamp('start');
             $table->timestamp('end');

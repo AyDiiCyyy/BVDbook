@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -114,8 +116,8 @@ class HomeController extends Controller
         ->limit(10) 
         ->get();
 
-
-        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
+        $slide = Slide::query()->where('active', 1)->orderBy('order')->get();
+        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers', 'slide'));
     }
 
     public function  getProductDetail($slug)
@@ -139,9 +141,83 @@ class HomeController extends Controller
             $query->where('category_id', $productDetail->ProductCategories?->first()?->category_id);
         })->where('id', '<>', $productDetail->id)->get();
         // dd($getProductsByCategory);
+
+// Comment
+
         $getListComments = Comment::where('product_id', $productDetail->id)->with('user')->get();
         // dd($getListComments);
+// Lấy thông tin đơn hàng của người dùng (giả sử bạn có một cách để xác định người dùng hiện tại)
+$order = Order::where('user_id', auth()->id()) // Lấy đơn hàng của người dùng hiện tại
+->where('status', 4) // Đơn hàng đã giao
+->where('payment_status', 1) // Đã thanh toán
+->first(); // Lấy đơn hàng đầu tiên thỏa mãn điều kiện
 
-        return view('client.partials.productdetail', compact('productDetail', 'galleriesOfProduct', 'categoriesOfProduct', 'relatedProducts', 'getProductsByCategory', 'getListComments'));
+// Lấy thông tin chi tiết đơn hàng liên quan đến sản phẩm
+$orderDetail = null;
+if ($order) {
+$orderDetail = OrderDetail::where('order_id', $order->id)
+                ->where('product_id', $productDetail->id)
+                ->first(); // Lấy chi tiết đơn hàng cho sản phẩm
+}
+
+return view('client.partials.productdetail', compact('productDetail', 'galleriesOfProduct', 'categoriesOfProduct', 'relatedProducts', 'getProductsByCategory', 'getListComments', 'orderDetail', 'order'));
     }
+    public function comment(Request $request, $productId)
+    {
+        
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+    
+        
+        $product = Product::findOrFail($productId);
+    
+        
+        $order = Order::where('user_id', auth()->id())
+                      ->where('status', 4) 
+                      ->where('payment_status', 1) 
+                      ->first();
+    
+        if ($order) {
+            $orderDetail = OrderDetail::where('order_id', $order->id)
+                                      ->where('product_id', $product->id)
+                                      ->first();
+    
+            
+            if ($orderDetail && $orderDetail->active == 0) {
+                // Tạo bình luận
+                $comment = Comment::create([
+                    'product_id' => $product->id,
+                    'user_id' => auth()->id(),
+                    'content' => $request->content,
+                ]);
+    
+                
+                $orderDetail->active = 1; 
+                $orderDetail->save();
+    
+               
+                return response()->json([
+                    'success' => true,
+                    'comment' => $comment,
+                    'user' => $comment->user,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bạn đã bình luận cho sản phẩm này rồi.',
+                ], 400); // Trả về mã lỗi 400
+            }
+        }
+    
+        return response()->json([
+            'success' => false,
+            'message' => 'Không tìm thấy đơn hàng phù hợp.',
+        ], 400); // Trả về mã lỗi 400
+    }
+    public function getReviewCount($id)
+{
+    $count = Comment::where('product_id', $id)->count();
+    return response()->json(['count' => $count]);
+}
 }

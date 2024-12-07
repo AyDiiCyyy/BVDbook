@@ -42,7 +42,7 @@
                     <div id="profile" class="collapse show">
                         <div class="card mb-4">
                             <div class="card-header">
-                                <h5>Thông Tin Hồ Sơ</h5>
+                                <h5>Thông Tin Hồ Sơ </h5>
                             </div>
                             <div class="card-body">
                                 <div class="row">

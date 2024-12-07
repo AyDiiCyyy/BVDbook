@@ -60,9 +60,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="breadcrumb-content">
-                        <h1 class="breadcrumb-heading">Danh Sách Đơn Hàng</h1>
+                        <h1 class="breadcrumb-heading">Danh Sách Đơn Hàng </h1>
                         <ul class="breadcrumb-links">
-                            <li><a href="#">Trang Chủ</a></li>
+                            <li><a href="#">Trang Chủ </a></li>
                             <li>Đơn Hàng</li>
                         </ul>
                     </div>
@@ -76,6 +76,7 @@
                 @include('client.partials.nav_right_order')
 
                 <!-- Danh Sách Đơn Hàng -->
+               
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
@@ -89,7 +90,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Mã Đơn Hàng</th>
+                                            <th>Mã Đơn Hàng aaa</th>
                                             <th>Ngày Mua</th>
                                             <th>Tổng Tiền</th>
                                             <th>Trạng Thái</th>
@@ -100,7 +101,7 @@
                                         @foreach($orders as $order)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $order->order_code  }}</td>
+                                                <td>{{ $order->order_code}}</td>
                                                 <td>{{ $order->created_at->format('d-m-Y') }}</td>
                                                 <td>{{ number_format($order->total_money, 0, ',', '.') }} VND</td>
                                                 <td>
@@ -109,7 +110,7 @@
                                                     </span>
                                                 </td>                                                
                                                 <td>
-                                                    <a href="{{ route('client.account.order-detail', $order->id) }}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
+                                                  <a href="{{ route('client.account.order-detail', $order->id) }}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
                                                 </td>
                                             </tr>
                                         @endforeach

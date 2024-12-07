@@ -3,6 +3,17 @@
 @endsection
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <style>
+        textarea.auto-resize {
+            resize: none;
+            /* Vô hiệu hóa khả năng thay đổi kích thước thủ công */
+            transition: height 0.2s ease;
+            /* Hiệu ứng mượt khi thay đổi chiều cao */
+            overflow: hidden;
+            /* Ẩn thanh cuộn dọc */
+        }
+    </style>
+
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/10.23.0/css/jquery.fileupload.css" rel="stylesheet" /> --}}
 @endsection
 @section('content')
@@ -43,7 +54,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="slug"
-                                                value="{{ old('name', $product->name)  }}" onkeyup="ChangeToSlug()">
+                                                value="{{ old('name', $product->name) }}" onkeyup="ChangeToSlug()">
                                             @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -53,7 +64,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Slug</label>
                                             <input type="text" class="form-control" name="slug" id="convert_slug"
-                                                value="{{old('slug', $product->slug)  }}">
+                                                value="{{ old('slug', $product->slug) }}">
                                             @error('slug')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -63,7 +74,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mã sản phẩm</label>
                                             <input type="text" class="form-control" name="sku"
-                                                value="{{ old('sku',$product->sku)  }}">
+                                                value="{{ old('sku', $product->sku) }}">
                                             @error('sku')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -73,7 +84,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giá sản phẩm</label>
                                             <input type="number" class="form-control" name="price"
-                                                value="{{ old('price',$product->price  ) }}">
+                                                value="{{ old('price', number_format($product->price, 0, '', '')) }}">
                                             @error('price')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -83,7 +94,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Giảm giá</label>
                                             <input type="number" class="form-control" name="sale"
-                                                value="{{old('sale', $product->sale )  }}">
+                                                value="{{ old('sale', number_format($product->sale, 0, '', '')) }}">
                                             @error('sale')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -93,11 +104,11 @@
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả ngắn</label>
                                             <input type="text" class="form-control" name="short_description"
-                                                value="{{ old('short_description', $product->short_description)  }}">
+                                                value="{{ old('short_description', $product->short_description) }}">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ old('long_description',$product->long_description )  }}</textarea>
+                                            <textarea class="form-control auto-resize" name="long_description" rows="1" style="overflow:hidden;">{{ old('long_description', $product->long_description) }}</textarea>
                                         </div>
 
 
@@ -146,14 +157,14 @@
                                             <label class="form-label">Danh mục</label>
                                             <select class="form-control" name="categories[]" id="categories" multiple>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}"  @selected(in_array($category->id, old('categories', $selectedCategories)))>
+                                                    <option value="{{ $category->id }}" @selected(in_array($category->id, old('categories', $selectedCategories)))>
                                                         {{ $category->name }}
                                                     </option>
                                                     @if (count($category->childrenRecursive) > 0)
                                                         @include('admin.components.child-category', [
                                                             'children' => $category->childrenRecursive,
                                                             'depth' => 1,
-                                                            'cateData' => $selectedCategories
+                                                            'cateData' => $selectedCategories,
                                                         ])
                                                     @endif
                                                 @endforeach
@@ -167,7 +178,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Tác giả</label>
                                             <input type="text" class="form-control" name="author"
-                                                value="{{old('author', $product->author  ) }}">
+                                                value="{{ old('author', $product->author) }}">
                                             @error('author')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -177,7 +188,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Nhà xuất bản</label>
                                             <input type="text" class="form-control" name="publisher"
-                                                value="{{ old('publisher', $product->publisher )  }}">
+                                                value="{{ old('publisher', $product->publisher) }}">
                                             @error('publisher')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -187,7 +198,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Năm xuất bản</label>
                                             <input type="number" class="form-control" name="released"
-                                                value="{{ old('released', $product->released)  }}">
+                                                value="{{ old('released', $product->released) }}">
                                             @error('released')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -197,7 +208,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Cân nặng</label>
                                             <input type="number" class="form-control" name="weight"
-                                                value="{{old('weight', $product->weight ) }}">
+                                                value="{{ old('weight', $product->weight) }}">
                                             @error('weight')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -207,7 +218,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số trang</label>
                                             <input type="number" class="form-control" name="page"
-                                                value="{{old('page', $product->page)  }}">
+                                                value="{{ old('page', $product->page) }}">
                                             @error('page')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -217,7 +228,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity"
-                                                value="{{ old('quantity', $product->quantity)  }}">
+                                                value="{{ old('quantity', $product->quantity) }}">
                                             @error('quantity')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -227,7 +238,7 @@
                                         <div class="mb-3">
                                             <label class="form-label">Số thứ tự</label>
                                             <input type="number" class="form-control" name="order"
-                                                value="{{old('order', $product->order)  }}" min="1">
+                                                value="{{ old('order', $product->order) }}" min="1">
                                             @error('order')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
@@ -237,7 +248,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="fileupload">Ảnh liên quan</label>
                                             <input type="file" class="form-control" id="fileupload"
-                                                name="product_image[]"id="fileupload" multiple >
+                                                name="product_image[]"id="fileupload" multiple>
                                             @foreach ($product->galleries as $product_image)
                                                 <img class="mx-2 " src="{{ $product_image->image }}" alt=""
                                                     width="100">
@@ -315,4 +326,24 @@
             document.getElementById('convert_slug').value = slug;
         }
     </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const textareas = document.querySelectorAll('.auto-resize');
+
+        textareas.forEach(textarea => {
+            // Hàm tự động thay đổi chiều cao
+            const autoResize = () => {
+                textarea.style.height = 'auto'; // Đặt chiều cao về auto trước
+                textarea.style.height = textarea.scrollHeight + 'px'; // Thay đổi chiều cao theo nội dung
+            };
+
+            // Gọi hàm khi nội dung thay đổi
+            textarea.addEventListener('input', autoResize);
+
+            // Gọi hàm một lần khi tải trang nếu có nội dung sẵn
+            autoResize();
+        });
+    });
+</script>
 @endsection
