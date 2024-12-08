@@ -125,8 +125,9 @@ Route::get('/about', function () {
 })->name('about');
 //Sản phẩm chi tiết
 Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
+Route::post('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
 Route::post('product/comment/{productId}', [HomeController::class, 'comment'])->name('client.product.comment');
-Route::get('/products/{id}/reviews/count', [HomeController::class, 'getReviewCount']);
+// Route::get('/products/{id}/reviews/count', [HomeController::class, 'getReviewCount']);
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 

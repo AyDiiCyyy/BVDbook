@@ -85,14 +85,28 @@
                                                             <td>{{ number_format($detail->unit_price, 0, ',', '.') }} đ
                                                             </td>
                                                             <td>{{ number_format($amount, 0, ',', '.') }} đ</td>
-                                                            <td>
-                                                                @if ($order->status == 4 && $order->payment_status == 1 && $detail->active == 0)
-                                                                    <a href="{{ route('productDetail', ['slug' => $detail->product->slug]) }}"
-                                                                        class="btn btn-warning btn-sm">Đánh giá </a>
-                                                                @elseif ($order->status == 4 && $order->payment_status == 1 && $detail->active == 1)
+                                                            @if ($order->status == 4 && $order->payment_status == 1 && $detail->active == 0)
+                                                                <td>
+
+                                                                    <form 
+                                                                   
+                                                                        action="{{ route('productDetail', ['slug' => $detail->product->slug]) }}"
+                                                                        method="post">
+                                                                        @csrf
+                                                                        <input type="hidden" name="oder_detail_id"
+                                                                            value="{{ $detail->id }}">
+                                                                        <button type="submit"
+                                                                            class="btn btn-warning btn-sm">Đánh giá
+                                                                        </button>
+
+                                                                    </form>
+                                                                </td>
+                                                            @elseif ($order->status == 4 && $order->payment_status == 1 && $detail->active == 1)
+                                                                <td>
                                                                     <p>Bạn đã đánh giá sản phẩm này </p>
-                                                                @endif
-                                                            </td>
+
+                                                                </td>
+                                                            @endif
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
