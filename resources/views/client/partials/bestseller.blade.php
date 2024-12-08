@@ -15,10 +15,10 @@
             <article class="list-product">
                 <div class="img-block">
                     <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
-                        <img class="first-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                        <img class="first-img" src="{{ asset($product->image) }}"
                             alt="" />
                         <img class="second-img"
-                            src="{{ asset('client/assets/images/product-image/organic/test.webp') }}" alt="" />
+                            src="{{ asset($product->image) }}" alt="" />
                     </a>
                 </div>
                 <ul class="product-flag">

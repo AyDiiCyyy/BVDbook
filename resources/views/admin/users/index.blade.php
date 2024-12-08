@@ -74,7 +74,7 @@
                         <th scope="col" class="avatar-column"> Ảnh đại diện</th>
                         <th scope="col">Vai trò</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Hành động</th>
+                        
                     </tr>
                 </thead >
                 <tbody class="text-center align-middle">
@@ -102,9 +102,7 @@
                                     <option value="2" {{ $user->active == 2 ? 'selected' : '' }}>Tài khoản bị khóa</option>
                                 </select>
                             </td>
-                            <td class="alg">
-                                <a href="{{ route('admin.user.edit', $user->id) }}" class="btn btn-primary ">Sửa</a>
-                            </td>
+                          
                         </tr>
                     @endforeach
                 </tbody>

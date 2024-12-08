@@ -21,7 +21,7 @@ class HomeController extends Controller
         $sortBy = $request->query('sort_by');
         $category = Category::where('slug', $slug)->firstOrFail();
         $productId = $category->CategoryProducts()->pluck('product_id');
-        $productsSortBy = Product::query()->whereIn('id', $productId);
+        $productsSortBy = Product::query()->whereIn('id', $productId)->where('active',1);
         // Áp dụng sắp xếp nếu có
         if ($sortBy) {
             switch ($sortBy) {

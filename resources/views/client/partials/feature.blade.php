@@ -25,10 +25,10 @@
                         <div class="img-block">
                             <a href="{{ route('productDetail', ['slug' => $item->slug]) }}" class="thumbnail">
                                 <img class="first-img"
-                                    src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                    src="{{ asset($item->image) }}"
                                     alt="" />
                                 <img class="second-img"
-                                    src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                    src="{{ asset($item->image) }}"
                                     alt="" />
                             </a>
 
@@ -37,7 +37,7 @@
                             <a class="inner-link" href="{{ route('danhmucSanpham',  $item->ProductCategories?->first()?->category->slug) }}"><span>{{ $item->ProductCategories?->first()?->category->name }}</span></a>
                             <h2><a href="{{ route('productDetail', ['slug' => $item->slug]) }}" class="product-link">{{ Str::limit($item->name, 20, '...') }}</a></h2>
                             
-                            <ul class="list-unstyled d-flex align-items-center">
+                            {{-- <ul class="list-unstyled d-flex align-items-center">
                                 <li class="me-3"> 
                                     <a href="#" class="add-to-cart text-decoration-none fs-3" data-id="{{ $item->id }}">
                                         <i class="bi bi-cart-plus"></i>
@@ -53,7 +53,7 @@
                                         <i class="ion-ios-shuffle-strong"></i>
                                     </a>
                                 </li>
-                            </ul>
+                            </ul> --}}
                          
                             <div class="rating-product">
                                 <i class="ion-android-star"></i>

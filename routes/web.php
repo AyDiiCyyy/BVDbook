@@ -53,6 +53,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
             Route::put('/{id}/update', [CategoryController::class, 'update'])->name('update');
             Route::delete('/{id}/destroy', [CategoryController::class, 'destroy'])->name('destroy');
+            Route::post('/changeActive', [CategoryController::class,'changeActive'])->name('changeActive');
         });
 
         // Routes cho quản lý sản phẩm

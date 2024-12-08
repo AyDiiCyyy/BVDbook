@@ -18,10 +18,10 @@
                     <div class="img-block">
                         <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                             <img class="first-img"
-                                src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                src="{{ asset($product->image) }}"
                                 alt="" />
                             <img class="second-img"
-                                src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                src="{{ asset($product->image) }}"
                                 alt="" />
                         </a>
                     </div>
