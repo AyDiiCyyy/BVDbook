@@ -40,7 +40,7 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
-                        <thead>
+                        <thead class="text-center align-middle">
                             <tr>
                                 <th scope="col">Tên danh mục</th>
                                 <th scope="col">Ảnh</th>
@@ -49,7 +49,7 @@
                                 <th scope="col">Hành động</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center align-middle">
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->name }}</td>

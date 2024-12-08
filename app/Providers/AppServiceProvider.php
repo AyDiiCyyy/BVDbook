@@ -26,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $category = Category::query()->orderBy('id','desc')->get();
+        $category = Category::query()
+        ->where('status',1)
+        ->orderBy('id','desc')->get();
         View::share('categoryAll', $category);
         Paginator::useBootstrapFive();
 

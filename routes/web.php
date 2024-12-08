@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\MyAccountController;
 use App\Http\Controllers\Client\OrderCController;
+use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -94,7 +95,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             'destroy' => 'voucher.destroy',
         ]);
 
-        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleS:tatus'])->name('voucher.toggleStatus');
+        Route::patch('/voucher/{id}/toggle-status', [VoucherController::class, 'toggleStatus'])->name('voucher.toggleStatus');
 
 
 
@@ -151,6 +152,10 @@ Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevou
 Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
 Route::get('check',[CheckoutController::class,'check'])->name('check');
 Route::post('repayment/{id}',[OrderCController::class,'repayment'])->name('repayment');
+Route::get('account/voucher',[ClientVoucherController::class,'index'])->name('voucher');
+Route::get('account/myvoucher',[ClientVoucherController::class,'list'])->name('myvoucher');
+Route::post('save_input',[ClientVoucherController::class,'save_input'])->name('save_input');
+Route::post('save',[ClientVoucherController::class,'save'])->name('save');
 });
 //account
 Route::middleware('auth')->group(function () {
