@@ -65,15 +65,12 @@
                                     <td>{{ $category->slug }}</td>
                                     <td>
                                         <button
-                                            class="btn btn-sm 
-                                    @if ($category->status == 1) btn-success @else btn-danger @endif 
-                                    toggle-status"
-                                            data-id="{{ $category->id }}">
-                                            @if ($category->status == 1)
-                                                Hoạt động
-                                            @else
-                                                Không hoạt động
-                                            @endif
+                                            class="toggle-active-btn btn btn-xs btn-success {{ $category->status == 1 ? 'btn-success' : 'btn-danger' }} text-white "
+                                            data-id="{{ $category->id }}" data-status="{{ $category->status }} "
+                                            data-url="{{ route('admin.category.changeActive') }}">
+        
+                                            {{ $category->status == 1 ? 'Hiển thị' : 'Ẩn' }}
+        
                                         </button>
                                     </td>
                                     <td class="text-center">
@@ -91,4 +88,6 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/admin/change.js') }}"></script>
 @endsection
