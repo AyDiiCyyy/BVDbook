@@ -40,7 +40,7 @@
                 </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover">
-                        <thead>
+                        <thead class="text-center align-middle">
                             <tr>
                                 <th scope="col">Tên danh mục</th>
                                 <th scope="col">Ảnh</th>
@@ -49,7 +49,7 @@
                                 <th scope="col">Hành động</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="text-center align-middle">
                             @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->name }}</td>
@@ -65,15 +65,12 @@
                                     <td>{{ $category->slug }}</td>
                                     <td>
                                         <button
-                                            class="btn btn-sm 
-                                    @if ($category->status == 1) btn-success @else btn-danger @endif 
-                                    toggle-status"
-                                            data-id="{{ $category->id }}">
-                                            @if ($category->status == 1)
-                                                Hoạt động
-                                            @else
-                                                Không hoạt động
-                                            @endif
+                                            class="toggle-active-btn btn btn-xs btn-success {{ $category->status == 1 ? 'btn-success' : 'btn-danger' }} text-white "
+                                            data-id="{{ $category->id }}" data-status="{{ $category->status }} "
+                                            data-url="{{ route('admin.category.changeActive') }}">
+        
+                                            {{ $category->status == 1 ? 'Hiển thị' : 'Ẩn' }}
+        
                                         </button>
                                     </td>
                                     <td class="text-center">
@@ -91,4 +88,6 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/admin/change.js') }}"></script>
 @endsection

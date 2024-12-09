@@ -2,6 +2,29 @@
 @section('title')
 @endsection
 @section('css')
+<style>
+    .slide-image {
+        width: 180px; /* Larger width for prominence */
+        height: 120px; /* Larger height for prominence */
+        object-fit: cover; /* Maintain aspect ratio and fill the space */
+        border-radius: 10px; /* Rounded corners for a modern look */
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow for emphasis */
+        border: 2px solid #007bff; /* Add a border to draw attention */
+        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth effects on hover */
+    }
+
+    .slide-image:hover {
+        transform: scale(1.1); /* More prominent zoom effect */
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+        border-color: #28a745; /* Change border color to highlight on hover */
+    }
+
+    td img {
+        display: block;
+        margin: 0 auto; /* Center the image in the table cell */
+    }
+</style>
+
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -44,7 +67,7 @@
                                     <option value="hot" @selected($request->active == 'hot')>Sản phẩm nổi bật</option>
                                     <option value="no_hot" @selected($request->active == 'no_hot')>Sản phẩm không nổi bật</option>
                                     <option value="active" @selected($request->active == 'active')>Sản phẩm hiển thị</option>
-                                    <option value="no_active" @selected($request->active == 'no_active')>Sản phẩm không hiển thị</option>
+<option value="no_active" @selected($request->active == 'no_active')>Sản phẩm không hiển thị</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
@@ -72,9 +95,9 @@
                         </div>
                     </form>
                 </div> --}}
-                <div class="row">
+                <div class="row mb-4">
                     <div class="col-2">
-                        <a href="{{ route('admin.product.create') }}"><button class="btn btn-success">Thêm mới</button></a>
+                        <a href="{{ route('admin.slide.create') }}"><button class="btn btn-success">Thêm mới</button></a>
                     </div>
                 </div>
 
@@ -84,6 +107,7 @@
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Tên</th>
+                        <th scope="col" style="width:20%">Đường dẫn</th>
                         <th scope="col">Ảnh</th>
                         <th scope="col">Trạng thái</th>
                         <th scope="col">Thứ tự</th>
@@ -91,34 +115,36 @@
                     </tr>
                 </thead>
                 <tbody class="text-center align-middle">
-                    @foreach ($products as $key => $product)
+                    @foreach ($slides as $key => $slide)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $product->name }}</td>
-                            <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow" width="100" height="80"></td>
+                            <td>{{ $slide->name }}</td>
+                            <td>{{ $slide->slug }}</td>
+                            <td><img src="{{ asset($slide->image) }}" alt="Slide Image" class="slide-image">
+                            </td>
                             <td>
                                 <button
-                                    class="toggle-active-btn btn btn-xs btn-success {{ $product->active == 1 ? 'btn-success' : 'btn-danger' }} text-white "
-                                    data-id="{{ $product->id }}" data-status="{{ $product->active }} "
-                                    data-url="{{ route('admin.product.changeActive') }}">
+                                    class="toggle-active-btn btn btn-xs btn-success {{ $slide->active == 1 ? 'btn-success' : 'btn-danger' }} text-white "
+                                    data-id="{{ $slide->id }}" data-status="{{ $slide->active }} "
+                                    data-url="{{ route('admin.slide.changeActive') }}">
 
-                                    {{ $product->active == 1 ? 'Hiển thị' : 'Ẩn' }}
+                                    {{ $slide->active == 1 ? 'Hiển thị' : 'Ẩn' }}
 
                                 </button>
                             </td>
 
-                            <td>
-                                <input type="number" min="1" name="order" class="form-control changeOrder"
-                                    style="width: 67px" data-id="{{ $product->id }}"
-                                    data-url="{{ route('admin.product.changeOrder') }}" value="{{ $product->order }}">
+                            <td class="text-center align-middle">
+                                <input type="number" min="1" name="order" class="form-control changeOrder mx-auto text-center"
+                                    style="width: 70px" data-id="{{ $slide->id }}"
+                                    data-url="{{ route('admin.slide.changeOrder') }}" value="{{ $slide->order }}">
                             </td>
 
 
                             <td class="text-center align-middle">
-                                <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-primary">Sửa</a>
-                                
+                                <a href="{{ route('admin.slide.edit', $slide->id) }}" class="btn btn-primary">Sửa</a>
+
                             </td>
-                            
+
 
                         </tr>
                     @endforeach
@@ -126,8 +152,8 @@
                 </tbody>
             </table>
             <div class="d-flex justify-content-center align-items-center p-5">
-                {{ $products->links('pagination::bootstrap-4') }}</div>
-        </div>
+                {{ $slides->links('pagination::bootstrap-4') }}</div>
+            </div>
         </div> <!--end::Container-->
         </div> <!--end::App Content-->
     </main>

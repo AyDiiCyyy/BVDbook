@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('author',255);
             $table->string('publisher',255);
             $table->integer('released');
-            $table->string('weight',255);
+            $table->integer('weight');
             $table->integer('page');
             $table->tinyInteger('best')->default(0);
             $table->tinyInteger('active')->default(1);

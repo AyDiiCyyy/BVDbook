@@ -27,7 +27,7 @@
                         <a href="{{ route('my-account') }}" class="list-group-item list-group-item-action">Hồ Sơ</a>
                         <a href="{{ route('client.account.update-profile') }}" class="list-group-item list-group-item-action">Thông Tin</a>
                         <a href="{{ route('client.account.orders') }}" class="list-group-item list-group-item-action">Đơn Hàng</a>
-                        <a href="#" class="list-group-item list-group-item-action">Voucher</a>
+                        <a href="{{ route('voucher') }}" class="list-group-item list-group-item-action">Voucher</a>
                         <a href="{{ route('client.account.change-password.form') }}"class="list-group-item list-group-item-action">Đổi Mật Khẩu</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
@@ -39,7 +39,7 @@
                 <div class="col-md-9">
                     <div class="card">
                         <div class="card-header">
-                            <h5>Cập Nhật Thông Tin</h5>
+                            <h5>Cập Nhật Thông Tin </h5>
                         </div>
                         <div class="card-body">
                             @if(session('success'))

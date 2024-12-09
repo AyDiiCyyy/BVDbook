@@ -185,6 +185,13 @@
                                                             @csrf
                                                             <button type="submit" class="btn btn-danger btn-sm">Hủy Đơn</button>
                                                         </form>
+                                                        @elseif($order->status == 4 && $order->payment_status ==1)
+                                                        <a href="{{ route('client.account.order-detail', $order->id) }}" class="btn btn-warning btn-sm">Đánh giá</a>
+
+                                                        @else
+                                                        <a href="{{ route('client.account.order-detail', $order->id) }}" class="btn btn-info btn-sm">Xem Chi Tiết</a>
+                                                            
+                                                        
                                                         @endif
                                                     </div>
                                                 </td>

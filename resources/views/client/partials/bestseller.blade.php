@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <!-- Section Title -->
             <div class="section-title">
-                <h2>Bán chạy nhất</h2>
+                <h2>Bán chạy nhất </h2>
                 <p>Thêm sản phẩm bán chạy nhất vào giỏ hàng của bạn</p>
             </div>
             <!-- Section Title -->
@@ -15,10 +15,10 @@
             <article class="list-product">
                 <div class="img-block">
                     <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
-                        <img class="first-img" src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                        <img class="first-img" src="{{ asset($product->image) }}"
                             alt="" />
                         <img class="second-img"
-                            src="{{ asset('client/assets/images/product-image/organic/test.webp') }}" alt="" />
+                            src="{{ asset($product->image) }}" alt="" />
                     </a>
                 </div>
                 <ul class="product-flag">

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Comment;
+use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +21,7 @@ class HomeController extends Controller
         $sortBy = $request->query('sort_by');
         $category = Category::where('slug', $slug)->firstOrFail();
         $productId = $category->CategoryProducts()->pluck('product_id');
-        $productsSortBy = Product::query()->whereIn('id', $productId);
+        $productsSortBy = Product::query()->whereIn('id', $productId)->where('active',1);
         // Áp dụng sắp xếp nếu có
         if ($sortBy) {
             switch ($sortBy) {
@@ -42,28 +44,28 @@ class HomeController extends Controller
                     $productsSortBy->orderBy('created_at', 'asc');
                     break;
                 case 'discount_desc':
-                    $productsSortBy ->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
-                    ->orderBy('discount_percentage', 'desc');
+                    $productsSortBy->selectRaw('*, (price - sale) / price * 100 as discount_percentage')
+                        ->orderBy('discount_percentage', 'desc');
                     break;
                 case 'popular':
-                   $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
-                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
-                    ->select('order_details.product_id',DB::raw('SUM(order_details.quantity) as sold_quantity'),)
-                    ->where('orders.status', 4)
-                    ->groupBy('order_details.product_id')
-                    ->orderByDesc('sold_quantity')
-                    ->pluck('order_details.product_id');
+                    $popular = OrderDetail::query()->join('products', 'order_details.product_id', '=', 'products.id')
+                        ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                        ->select('order_details.product_id', DB::raw('SUM(order_details.quantity) as sold_quantity'),)
+                        ->where('orders.status', 4)
+                        ->groupBy('order_details.product_id')
+                        ->orderByDesc('sold_quantity')
+                        ->pluck('order_details.product_id');
                     $productsSortBy->whereIn('id', $popular);
                     break;
                 default:
-                $productsSortBy->orderBy('created_at', 'desc');
+                    $productsSortBy->orderBy('created_at', 'desc');
                     break;
             }
         }
         $products = $productsSortBy->paginate(self::PAGINATION);
         return view('client.page.productCategory', compact('category', 'products', 'sortBy', 'slug'));
     }
-   
+
     public function index()
     {
         //sản phẩm nổi bật 
@@ -104,22 +106,23 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
         $categories = $categories->chunk(2);
-        
+
         $bestSellers = Product::select('products.*')
-        ->join('order_details', 'products.id', '=', 'order_details.product_id')
-        ->where('products.active', 1) 
-        ->where('products.quantity', '>', 0) 
-        ->groupBy('products.id') 
-        ->orderByRaw('SUM(order_details.quantity) DESC') 
-        ->limit(10) 
-        ->get();
+            ->join('order_details', 'products.id', '=', 'order_details.product_id')
+            ->where('products.active', 1)
+            ->where('products.quantity', '>', 0)
+            ->groupBy('products.id')
+            ->orderByRaw('SUM(order_details.quantity) DESC')
+            ->limit(10)
+            ->get();
 
-
-        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
+        $slide = Slide::query()->where('active', 1)->orderBy('order')->get();
+        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers', 'slide'));
     }
 
-    public function  getProductDetail($slug)
+    public function  getProductDetail(Request $request, $slug)
     {
+
         // whereHas là lọc các bản ghi của model chính dựa trên điều kiện của mối quan hệ
         // whereHas ('Định nghĩa trong model = Eloquent', callback $query thay cho đối tương Eloquent   )
         // dd($slug);
@@ -139,9 +142,55 @@ class HomeController extends Controller
             $query->where('category_id', $productDetail->ProductCategories?->first()?->category_id);
         })->where('id', '<>', $productDetail->id)->get();
         // dd($getProductsByCategory);
-        $getListComments = Comment::where('product_id', $productDetail->id)->with('user')->get();
-        // dd($getListComments);
 
-        return view('client.partials.productdetail', compact('productDetail', 'galleriesOfProduct', 'categoriesOfProduct', 'relatedProducts', 'getProductsByCategory', 'getListComments'));
+        // Comment
+
+        $getListComments = Comment::where('product_id', $productDetail->id)
+        ->with('user')
+        ->orderBy('id', 'desc')
+        ->get();
+      
+        $orderDetail = OrderDetail::where('id', $request->oder_detail_id)
+            ->where('active', 0)
+            ->first(); 
+
+        return view('client.partials.productdetail', compact('productDetail', 'galleriesOfProduct', 'categoriesOfProduct', 'relatedProducts', 'getProductsByCategory', 'getListComments', 'orderDetail'));
     }
+    public function comment(Request $request, $productId)
+{
+    $request->validate([
+        'content' => 'required|string|max:1000',
+    ]);
+
+    $orderDetail = OrderDetail::findOrFail($request->oder_detail_id);
+    $product = Product::findOrFail($productId);
+
+    if ($orderDetail && $orderDetail->active == 0 && $orderDetail->product_id == $productId) {
+        $comment = Comment::create([
+            'product_id' => $product->id,
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        $orderDetail->active = 1;
+        $orderDetail->save();
+
+        $commentCount = Comment::where('product_id', $productId);
+        $commentCount = Comment::where('product_id', $productId)->count();
+
+        
+        $user = auth()->user();
+
+        return response()->json([
+            'content' => $comment->content,
+            'user_name' => $user->name,
+            'user_avatar' => $user->avatar ?? asset('assets/img/user2-160x160.jpg'), 
+            'created_at' => $comment->created_at->format('Y/m/d H:i:s'), 
+            'count' => $commentCount,
+        ]);
+    }
+
+    return response()->json(['message' => 'Có lỗi xảy ra.'], 400);
+}
+  
 }

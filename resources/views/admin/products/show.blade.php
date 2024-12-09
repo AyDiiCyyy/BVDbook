@@ -55,8 +55,8 @@
                     <div class="col-md-6">
                         <div class="card m-3">
                             <div class="card-body">
-                                <div class="row">
-                                    <h5 class="card-title text-center fw-bold text-uppercase">Thông tin sản phẩm</h5>
+                                <div class="row mb-3">
+                                    <h5 class="text-center fw-bold text-uppercase">Thông tin sản phẩm</h5>
                                 </div>
                                
                                 <div class="row mb-3">

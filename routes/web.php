@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\MyAccountController;
 use App\Http\Controllers\Client\OrderCController;
+use App\Http\Controllers\Client\VoucherController as ClientVoucherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,7 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/{id}/edit', [CategoryController::class, 'edit'])->name('edit');
             Route::put('/{id}/update', [CategoryController::class, 'update'])->name('update');
             Route::delete('/{id}/destroy', [CategoryController::class, 'destroy'])->name('destroy');
+            Route::post('/changeActive', [CategoryController::class,'changeActive'])->name('changeActive');
         });
 
         // Routes cho quản lý sản phẩm
@@ -124,7 +126,9 @@ Route::get('/about', function () {
 })->name('about');
 //Sản phẩm chi tiết
 Route::get('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
-
+Route::post('/sanpham/{slug}', [HomeController::class, 'getProductDetail'])->name('productDetail');
+Route::post('product/comment/{productId}', [HomeController::class, 'comment'])->name('client.product.comment');
+// Route::get('/products/{id}/reviews/count', [HomeController::class, 'getReviewCount']);
 // Route cho trang liên hệ, sử dụng ContactController
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact.index');
 
@@ -144,12 +148,17 @@ Route::middleware('auth')->group(function () {
 
 //thanh toán
 Route::middleware('auth')->group(function () {
-    Route::get('checkout', [CheckoutController::class, 'checkout'])->name('checkout');
-    Route::post('checkvoucher', [CheckoutController::class, 'checkvoucher'])->name('checkvoucher');
-    Route::post('usevoucher', [CheckoutController::class, 'usevoucher'])->name('usevoucher');
-    Route::post('pay', [CheckoutController::class, 'pay'])->name('pay');
-    Route::get('check', [CheckoutController::class, 'check'])->name('check');
-    Route::post('repayment/{id}', [OrderCController::class, 'repayment'])->name('repayment');
+  Route::get('checkout',[CheckoutController::class,'checkout'])->name('checkout');
+  Route::post('checkvoucher',[CheckoutController::class,'checkvoucher'])->name('checkvoucher');
+  Route::post('usevoucher',[CheckoutController::class,'usevoucher'])->name('usevoucher');
+  Route::post('pay',[CheckoutController::class,'pay'])->name('pay');
+  Route::get('check',[CheckoutController::class,'check'])->name('check');
+  Route::post('repayment/{id}',[OrderCController::class,'repayment'])->name('repayment');
+  Route::get('account/voucher',[ClientVoucherController::class,'index'])->name('voucher');
+  Route::get('account/myvoucher',[ClientVoucherController::class,'list'])->name('myvoucher');
+  Route::post('save_input',[ClientVoucherController::class,'save_input'])->name('save_input');
+  Route::post('save',[ClientVoucherController::class,'save'])->name('save');
+
 });
 //account
 Route::middleware('auth')->group(function () {

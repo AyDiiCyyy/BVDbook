@@ -192,5 +192,14 @@ class CategoryController extends Controller
             $child->delete();
         }
     }
+
+    public function changeActive(Request $request)
+    {
+        $item = Category::find($request->id);
+        $item->status = $item->status == 1 ? 0 : 1;
+        $item->save();
+        $item['active'] = $item->status;
+        return $item;           
+    }
     
 }
