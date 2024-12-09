@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Breadcrumb Area start -->
-    <section class="breadcrumb-area" style="margin-top: -30px">
+    <section class="breadcrumb-area" style="margin-top: -30px; padding: 110px 0;" >
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

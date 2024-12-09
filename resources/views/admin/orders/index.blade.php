@@ -138,7 +138,7 @@ button[type="submit"] {
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td>{{ $order->user->name }}</td>
+                            <td>{{ $order->name }}</td>
                             <td class="text-uppercase ">{{ $order->order_code }}</td>
                             <td>{{ $order->payment == 0 ? 'Ship COD' : 'Thanh toán online' }}</td> 
                             <td id="payment-status-{{ $order->id }}">{{ $order->payment_status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</td> 

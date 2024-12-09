@@ -74,6 +74,7 @@ class HomeController extends Controller
             ->where('active', 1)
             ->where('quantity', '>', 0)
             ->orderBy('order')
+            ->orderBy('id','desc')
             ->limit(10)
             ->get();
         $product2 = $product_noibat->chunk(2);
