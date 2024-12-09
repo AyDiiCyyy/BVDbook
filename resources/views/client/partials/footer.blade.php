@@ -4,8 +4,9 @@
             <!-- footer single wedget -->
             <div class="col-md-6 col-lg-4">
                 <!-- footer logo -->
-                <div class="footer-logo">
-                    <a href="index.html"><img src="{{ asset('client/assets/images/logo/footer-logo.png') }}" alt="" /></a>
+                <div class="footer-logo text-center" style="margin-right: 20%">
+                    <h2><b>BVDbook</b></h2>
+                    {{-- <a href="index.html"><img src="{{ asset('client/assets/images/logo/footer-logo.png') }}" alt="" /></a> --}}
                 </div>
                 <!-- footer logo -->
                 <div class="about-footer">
@@ -81,7 +82,7 @@
                     <div id="mc_embed_signup" class="subscribe-form">
                         <form id="mc-embedded-subscribe-form" class="validate" novalidate="" target="_blank"
                             name="mc-embedded-subscribe-form" method="post"
-                            action="http://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef">
+                            action="">
                             <div id="mc_embed_signup_scroll" class="mc-form">
                                 <input class="email" type="email" required=""
                                     placeholder="Nhập mail của bạn tại đây..." name="EMAIL" value="" />
@@ -91,7 +92,7 @@
                                         name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef" />
                                 </div>
                                 <div class="clear">
-                                    <input id="mc-embedded-subscribe" class="button" type="submit"
+                                    <input id="mc-embedded-subscribe" class="button" type="button"
                                         name="subscribe" value="Sign Up" />
                                 </div>
                             </div>
@@ -112,7 +113,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-lg-5 text-center text-md-start order-2 order-md-1 mt-4 mt-md-0">
-                <p class="copy-text">Copyright © <a href="https://hasthemes.com/"> BVDBook</a>. All Rights
+                <p class="copy-text">Copyright © <a href="{{ route('index') }}"> BVDBook</a>. All Rights
                     Reserved</p>
             </div>
             <div class="col-md-6 col-lg-7 text-center text-md-end order-1 order-md-2">

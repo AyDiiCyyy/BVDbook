@@ -301,22 +301,22 @@
                             </div>
                             <div class="pricing-meta">
                                 <ul>
-                                    @if ($productDetail->sale)
+                                    @if ($related->sale)
                                         <li class="old-price">
                                             <small>
-                                                {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                                {{ number_format($related->price, 0, '.', '.') }}₫
                                             </small>
 
                                         </li>
                                         <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($related->sale, 0, '.', '.') }}₫
                                         </li>
                                         <li class="discount-price">
-                                            -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                            -{{ number_format((($related->price - $related->sale) / $related->price) * 100, 0) }}%
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                            {{ number_format($related->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>
@@ -383,22 +383,22 @@
                             </div>
                             <div class="pricing-meta">
                                 <ul>
-                                    @if ($productDetail->sale)
+                                    @if ($product->sale)
                                         <li class="old-price">
                                             <small>
-                                                {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                                {{ number_format($product->price, 0, '.', '.') }}₫
                                             </small>
 
                                         </li>
                                         <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($product->sale, 0, '.', '.') }}₫
                                         </li>
                                         <li class="discount-price">
-                                            -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                            -{{ number_format((($product->price - $product->sale) / $product->price) * 100, 0) }}%
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                            {{ number_format($product->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>
