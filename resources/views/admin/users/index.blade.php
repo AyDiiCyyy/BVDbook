@@ -83,7 +83,12 @@
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
-                            <td>{{ $user->phone }}</td>
+                            @if ($user->phone == null)
+                                <td>Tài khoản này chưa cập nhật số điện thoại</td>
+                            @else
+                            <td>{{ $user->phone }}</td>       
+                            @endif
+                         
                             <td>
                                 @if ($user->avatar)
                                 {{-- lấy ảnh từ storage --}}
@@ -95,13 +100,21 @@
                                     <img src="{{ asset('assets/img/user2-160x160.jpg') }}" alt="User  Image" class="avatar-circle">
                                 @endif
                             </td>
+                           
                             <td>{{ $user->role == 1 ? 'Người dùng' : 'Admin' }}</td>
+                            @if ($user->role == 0)
                             <td class="text-center align-middle" style="width: 16%">
+                            Admin không thể thay đổi trạng thái !
+                            </td>
+                            @else
+                                  <td class="text-center align-middle" style="width: 16%">
                                 <select class="form-select form-select-sm status-select mx-auto"  data-id="{{ $user->id }}">
-                                    <option value="1" {{ $user->active == 1 ? 'selected' : '' }}>Kích hoạt</option>
+                                    <option value="1" {{ $user->active == 1 ? 'selected' : '' }}>Hoạt động</option>
                                     <option value="2" {{ $user->active == 2 ? 'selected' : '' }}>Tài khoản bị khóa</option>
                                 </select>
                             </td>
+                            @endif
+                          
                           
                         </tr>
                     @endforeach
