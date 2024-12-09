@@ -17,6 +17,13 @@ class VoucherController extends Controller
         $status = $request->input('status', 'all');
         $search = $request->input('search', null);
 
+        // Ngày hiện tại
+        $currentDate = now()->startOfDay();;
+
+        // Cập nhật trạng thái tự động
+        Voucher::where('end', '<', $currentDate)
+            ->update(['status' => 'expired']);
+
         $query = Voucher::query();
 
         if ($search) {
@@ -33,39 +40,7 @@ class VoucherController extends Controller
             $query->where('status', 'expired');
         }
 
-
         $data['vouchers'] = $query->orderByDesc('id')->paginate(10);
-
-
-        $currentDate = now();
-
-        foreach ($data['vouchers'] as $voucher) {
-            // Nếu voucher đã bị thay đổi thủ công, không cập nhật trạng thái tự động
-            if ($voucher->is_manually_updated) {
-                continue; // Bỏ qua voucher đã thay đổi thủ công
-            }
-
-            $endDate = Carbon::parse($voucher->end);
-
-            if ($endDate->endOfDay()->lessThan($currentDate)) {
-                // Nếu ngày kết thúc đã qua và voucher chưa thay đổi trạng thái, cập nhật thành 'expired'
-                if ($voucher->status !== 'expired') {
-                    $voucher->status = 'expired';
-                    $voucher->save();
-                }
-                $voucher->isExpired = true;
-                $voucher->isUpcoming = false;
-            } else {
-                // Nếu ngày kết thúc chưa qua, cập nhật trạng thái thành 'active'
-                if ($voucher->status !== 'active') {
-                    $voucher->status = 'active';
-                    $voucher->save();
-                }
-                $voucher->isExpired = false;
-                $voucher->isUpcoming = false;
-            }
-        }
-
         $data['status'] = $status;
         $data['search'] = $search;
 
@@ -97,33 +72,35 @@ class VoucherController extends Controller
     {
         try {
             $voucher = Voucher::withTrashed()->findOrFail($id);
+
+            // Cập nhật ngày kết thúc trước
+            $voucher->end = $request->input('end');
+            $voucher->save();
+            
+            $endDate = Carbon::parse($voucher->end);
+            $currentDate = now()->startOfDay();;
+
+            // Kiểm tra nếu người dùng chọn trạng thái "active", và ngày kết thúc đã qua
+            if ($request->status === 'active' && $endDate->lessThan($currentDate)) {
+                return redirect()->back()
+                    ->withErrors(['error' => 'Ngày kết thúc đã qua. Vui lòng cập nhật ngày kết thúc để bật lại trạng thái hoạt động.'])
+                    ->withInput();
+            }
+            // Trạng thái "active" có thể được bật lại nếu ngày kết thúc là hôm nay hoặc trong tương lai
+            if ($request->status === 'active' && $voucher->status === 'expired' && $endDate->isToday() || $endDate->greaterThan($currentDate)) {
+                $voucher->status = 'active'; // Đặt lại trạng thái thành 'active' nếu ngày kết thúc là hôm nay hoặc trong tương lai
+            }
+            // Nếu trạng thái là "expired", và ngày kết thúc đã qua thì có thể chuyển thành "expired"
+            if ($request->status === 'expired' && $voucher->status === 'active' && $endDate->lessThan($currentDate)) {
+                $voucher->status = 'expired'; // Nếu voucher hết hạn, thay đổi trạng thái thành 'expired'
+            }
+
             $voucher->update($request->validated());
+            $voucher->save();
+
             return redirect()->route('admin.voucher.index')->with('success', 'Cập nhật voucher thành công.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Có lỗi xảy ra: ' . $e->getMessage()])->withInput();
-        }
-    }
-
-
-    public function toggleStatus(Request $request, $id)
-    {
-        try {
-            $voucher = Voucher::findOrFail($id);
-
-            // Đổi trạng thái giữa 'active' và 'expired'
-            $voucher->status = $voucher->status === 'active' ? 'expired' : 'active';
-            $voucher->is_manually_updated = true; // Đánh dấu voucher đã được thay đổi thủ công
-            $voucher->save();
-
-            return response()->json([
-                'success' => true,
-                'newStatus' => $voucher->status === 'active' ? 'Còn hiệu lực' : 'Hết hiệu lực'
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
-            ], 500);
         }
     }
 }
