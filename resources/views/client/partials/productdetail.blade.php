@@ -23,131 +23,119 @@
     </section>
     <!-- Breadcrumb Area End -->
     <!-- Shop details Area start -->
-    <section class="product-details-area mtb-60px" style="margin-top: -50px">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="product-details-img product-details-tab">
-                        <div class="zoompro-wrap zoompro-2">
-                            <div class="zoompro-border zoompro-span">
-                                <img class="zoompro" src="{{ asset($productDetail->image) }}" alt="" />
-                            </div>
-                        </div>
-                        <div id="gallery" class="product-dec-slider-2">
-                            <a class="active">
-                                <img src="{{ asset($productDetail->image) }}" alt="" />
+ <!-- Shop details Area start -->
+ <section class="product-details-area mtb-60px" style="margin-top: -50px">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="product-details-img product-details-tab">
+                    <div class="product-image" style="width:690px; height: 690px;">
+                        <img id="main-image" src="{{ asset($productDetail->image) }}" alt="" style="width: 100%; height: auto;" />
+                    </div>
+                    <div id="gallery" class="product-dec-slider-2">
+                        <a class="active" href="javascript:void(0);" data-image="{{ asset($productDetail->image) }}">
+                            <img src="{{ asset($productDetail->image) }}" alt="" style="width: 100px; height: auto;" />
+                        </a>
+                        @foreach ($galleriesOfProduct as $gallery)
+                            <a href="javascript:void(0);" data-image="{{ asset($gallery) }}">
+                                <img src="{{ asset($gallery) }}" alt="" style="width: 100px; height: auto;" />
                             </a>
-                            @foreach ($galleriesOfProduct as $gallery)
-                                <a>
-                                    <img src="{{ asset($gallery) }}" alt="" />
-                                </a>
-                            @endforeach
-                        </div>
+                        @endforeach
                     </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-12">
-                    <div class="product-details-content">
-                        <h2 style="line-height: 30px">{{ $productDetail->name }}</h2>
-                        <p class="reference">Thuộc danh mục: <span>{{ implode(',', $categoriesOfProduct) }}</span></p>
-                        <div class="pro-details-rating-wrap">
-                            <div class="rating-product">
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                                <i class="ion-android-star"></i>
-                            </div>
-                            {{-- <span class="read-review"><a class="reviews" href="#">Read reviews (1)</a></span> --}}
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-12">
+                <div class="product-details-content">
+                    <h2 style="line-height: 30px">{{ $productDetail->name }}</h2>
+                    <p class="reference">Thuộc danh mục: <span>{{ implode(',', $categoriesOfProduct) }}</span></p>
+                    <div class="pro-details-rating-wrap">
+                        <div class="rating-product">
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
+                            <i class="ion-android-star"></i>
                         </div>
-                        <div class="pricing-meta">
-                            <ul>
-                                @if ($productDetail->sale)
-                                    <li class="old-price">
-                                        <small>
-                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
-                                        </small>
-
-                                    </li>
-                                    <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                        {{ number_format($productDetail->sale, 0, '.', '.') }}₫
-                                    </li>
-                                    <li class="discount-price" style="margin: 22px 3px">
-                                        -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
-                                    </li>
-                                @else
-                                    <li class="old-price not-cut ">
+                    </div>
+                    <div class="pricing-meta">
+                        <ul>
+                            @if ($productDetail->sale)
+                                <li class="old-price">
+                                    <small>
                                         {{ number_format($productDetail->price, 0, '.', '.') }}₫
-                                    </li>
-                                @endif
-                            </ul>
+                                    </small>
+                                </li>
+                                <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
+                                    {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                </li>
+                                <li class="discount-price" style="margin: 22px 3px">
+                                    -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                </li>
+                            @else
+                                <li class="old-price not-cut ">
+                                    {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                    <p>{{ $productDetail->short_description }}</p>
+                    <div class="pro-details-quality mt-0px">
+                        <div class="cart-plus-minus">
+                            <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                         </div>
-                        <p>{{ $productDetail->short_description }}</p>
-                        {{-- <div class="pro-details-list">
-                            <ul>
-                                <li>- 0.5 mm Dail</li>
-                                <li>- Inspired vector icons</li>
-                                <li>- Very modern style</li>
-                            </ul>
-                        </div> --}}
-                        <div class="pro-details-quality mt-0px">
-                            <div class="cart-plus-minus">
-                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
-                            </div>
-                            <div class="pro-details-cart btn-hover">
-                                <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
-                                    Thêm Giỏ Hàng</a>
-                            </div>
+                        <div class="pro-details-cart btn-hover">
+                            <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
+                                Thêm Giỏ Hàng</a>
                         </div>
-                        <div class="pro-details-wish-com">
-                            <div class="pro-details-wishlist">
-                                <a href="#"><i class="ion-android-favorite-outline"></i>Thêm vào danh sách yêu
-                                    thích</a>
-                            </div>
-                            <div class="pro-details-compare">
-                                <a href="#"><i class="ion-ios-shuffle-strong"></i>Thêm vào so sánh sản phẩm</a>
-                            </div>
+                    </div>
+                    <div class="pro-details-wish-com">
+                        <div class="pro-details-wishlist">
+                            <a href="#"><i class="ion-android-favorite-outline"></i>Thêm vào danh sách yêu thích</a>
                         </div>
-                        <div class="pro-details-social-info">
-                            <span>Chia sẻ</span>
-                            <div class="social-info">
-                                <ul>
-                                    <li>
-                                        <a href="#"><i class="ion-social-facebook"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="ion-social-twitter"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="ion-social-google"></i></a>
-                                    </li>
-                                    <li>
-                                        <a href="#"><i class="ion-social-instagram"></i></a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="pro-details-compare">
+                            <a href="#"><i class="ion-ios-shuffle-strong"></i>Thêm vào so sánh sản phẩm</a>
                         </div>
-                        <div class="pro-details-policy">
+                    </div>
+                    <div class="pro-details-social-info">
+                        <span>Chia sẻ</span>
+                        <div class="social-info">
                             <ul>
                                 <li>
-                                    <img src="{{ asset('client/assets/images/icons/policy.png') }}" alt="" />
-                                    <span>Chính sách bảo mật (Đảm bảo quyền riêng tư cho người dùng và khách hàng khi sử
-                                        dụng trang web)</span>
+                                    <a href="#"><i class="ion-social-facebook"></i></a>
                                 </li>
                                 <li>
-                                    <img src="{{ asset('client/assets/images/icons/policy-2.png') }}" alt="" />
-                                    <span>Chính sách giao hàng (Miễn phí giao hàng khi đặt 3-5 sản phẩm) </span>
+                                    <a href="#"><i class="ion-social-twitter"></i></a>
                                 </li>
-                                <li><img src="{{ asset('client/assets/images/icons/policy-3.png') }}" alt="" />
-                                    <span>Chính sách đổi trả (Đổi trả 1 đổi 1 trong vòng 15 ngày)
-                                    </span>
+                                <li>
+                                    <a href="#"><i class="ion-social-google"></i></a>
+                                </li>
+                                <li>
+                                    <a href="#"><i class="ion-social-instagram"></i></a>
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="pro-details-policy">
+                        <ul>
+                            <li>
+                                <img src="{{ asset('client/assets/images/icons/policy.png') }}" alt="" />
+                                <span>Chính sách bảo mật (Đảm bảo quyền riêng tư cho người dùng và khách hàng khi sử dụng trang web)</span>
+                            </li>
+                            <li>
+                                <img src="{{ asset('client/assets/images/icons/policy-2.png') }}" alt="" />
+                                <span>Chính sách giao hàng (Miễn phí giao hàng khi đặt 3-5 sản phẩm) </span>
+                            </li>
+                            <li><img src="{{ asset('client/assets/images/icons/policy-3.png') }}" alt="" />
+                                <span>Chính sách đổi trả (Đổi trả 1 đổi 1 trong vòng 15 ngày)</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+<!-- Shop details Area End -->
     <!-- Shop details Area End -->
     <!-- product details description area start -->
     <div class="description-review-area mb-60px">
@@ -707,6 +695,15 @@ $(document).ready(function() {
         });
     });
 });
+$(document).ready(function() {
+            // Thay đổi ảnh lớn khi nhấp vào ảnh nhỏ
+            $('#gallery a').on('click', function() {
+                var newImage = $(this).data('image');
+                $('#main-image').attr('src', newImage);
+                $('#gallery a').removeClass('active');
+                $(this).addClass('active');
+            });
+        });
     </script>
 @endsection
 
