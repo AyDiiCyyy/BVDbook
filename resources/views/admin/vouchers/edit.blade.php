@@ -33,8 +33,8 @@
                                     <!-- Tên Voucher -->
                                     <div class="mb-3">
                                         <label class="form-label">Tên Voucher</label>
-                                        <input type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                                            value="{{ old('name', $voucher->name) }}">
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                            name="name" value="{{ old('name', $voucher->name) }}">
                                         @error('name')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -43,8 +43,8 @@
                                     <!-- SKU -->
                                     <div class="mb-3">
                                         <label class="form-label">Mã Voucher</label>
-                                        <input type="text" class="form-control @error('sku') is-invalid @enderror" name="sku"
-                                            value="{{ old('sku', $voucher->sku) }}">
+                                        <input type="text" class="form-control @error('sku') is-invalid @enderror"
+                                            name="sku" value="{{ old('sku', $voucher->sku) }}">
                                         @error('sku')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -53,7 +53,9 @@
                                     <!-- Giảm giá (Discount Amount) -->
                                     <div class="mb-3">
                                         <label class="form-label">Số tiền giảm</label>
-                                        <input type="number" class="form-control @error('discount_amount') is-invalid @enderror" name="discount_amount"
+                                        <input type="number"
+                                            class="form-control @error('discount_amount') is-invalid @enderror"
+                                            name="discount_amount"
                                             value="{{ old('discount_amount', $voucher->discount_amount) }}">
                                         @error('discount_amount')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -63,8 +65,9 @@
                                     <!-- Số lượng giới hạn (Usage Limit) -->
                                     <div class="mb-3">
                                         <label class="form-label">Giới hạn sử dụng</label>
-                                        <input type="number" class="form-control @error('usage_limit') is-invalid @enderror" name="usage_limit"
-                                            value="{{ old('usage_limit', $voucher->usage_limit) }}">
+                                        <input type="number"
+                                            class="form-control @error('usage_limit') is-invalid @enderror"
+                                            name="usage_limit" value="{{ old('usage_limit', $voucher->usage_limit) }}">
                                         @error('usage_limit')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -73,7 +76,9 @@
                                     <!-- Đơn Hàng tối thiểu (Min Order Amount) -->
                                     <div class="mb-3">
                                         <label class="form-label">Đơn Hàng tối thiểu</label>
-                                        <input type="number" class="form-control @error('min_order_amount') is-invalid @enderror" name="min_order_amount"
+                                        <input type="number"
+                                            class="form-control @error('min_order_amount') is-invalid @enderror"
+                                            name="min_order_amount"
                                             value="{{ old('min_order_amount', $voucher->min_order_amount) }}">
                                         @error('min_order_amount')
                                             <div class="invalid-feedback">{{ $message }}</div>
@@ -99,7 +104,8 @@
                                 <!-- Ngày bắt đầu (Start Date) -->
                                 <div class="mb-3">
                                     <label class="form-label">Ngày bắt đầu</label>
-                                    <input type="date" class="form-control @error('start') is-invalid @enderror" name="start"
+                                    <input type="date" class="form-control @error('start') is-invalid @enderror"
+                                        name="start"
                                         value="{{ old('start', $voucher->start ? \Carbon\Carbon::parse($voucher->start)->format('Y-m-d') : '') }}">
                                     @error('start')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -109,11 +115,20 @@
                                 <!-- Ngày kết thúc (End Date) -->
                                 <div class="mb-3">
                                     <label class="form-label">Ngày kết thúc</label>
-                                    <input type="date" class="form-control @error('end') is-invalid @enderror" name="end"
+                                    <input type="date" class="form-control @error('end') is-invalid @enderror"
+                                        name="end"
                                         value="{{ old('end', $voucher->end ? \Carbon\Carbon::parse($voucher->end)->format('Y-m-d') : '') }}">
                                     @error('end')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
+                                    
+                                </div>
+                                <div class="form-group">
+                                    <label for="status">Trạng thái</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="active" {{ old('status', $voucher->status) === 'active' ? 'selected' : '' }}>Hoạt động</option>
+                                        <option value="expired" {{ old('status', $voucher->status) === 'expired' ? 'selected' : '' }}>Không hoạt động</option>
+                                    </select>
                                 </div>
 
                                 <!-- Submit Button -->
@@ -131,5 +146,4 @@
 @endsection
 
 @section('js')
-
 @endsection
