@@ -8,6 +8,7 @@ use App\Models\Comment;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Slide;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,7 +21,7 @@ class HomeController extends Controller
         $sortBy = $request->query('sort_by');
         $category = Category::where('slug', $slug)->firstOrFail();
         $productId = $category->CategoryProducts()->pluck('product_id');
-        $productsSortBy = Product::query()->whereIn('id', $productId);
+        $productsSortBy = Product::query()->whereIn('id', $productId)->where('active',1);
         // Áp dụng sắp xếp nếu có
         if ($sortBy) {
             switch ($sortBy) {
@@ -115,8 +116,8 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
 
-
-        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers'));
+        $slide = Slide::query()->where('active', 1)->orderBy('order')->get();
+        return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers', 'slide'));
     }
 
     public function  getProductDetail(Request $request, $slug)

@@ -28,7 +28,7 @@
                             class="list-group-item list-group-item-action">Thông Tin</a>
                         <a href="{{ route('client.account.orders') }}" class="list-group-item list-group-item-action">Đơn
                             Hàng</a>
-                        <a href="#" class="list-group-item list-group-item-action">Voucher</a>
+                        <a href="{{ route('voucher') }}" class="list-group-item list-group-item-action">Voucher</a>
                         <a href="{{ route('client.account.change-password.form') }}"
                             class="list-group-item list-group-item-action">Đổi Mật Khẩu</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -53,21 +53,21 @@
                                             <h6 class="fw-bold">Thông tin sản phẩm</h6>
                                         </div>
                                         <div class="card-body">
-                                            <table class="table table-bordered table-striped">
-                                                <thead class="table-light">
+                                            <table class="table table-bordered table-striped table-responsive">
+                                                <thead class="table-light text-center align-middle">
                                                     <tr>
-                                                        <th>Ảnh sản phẩm</th>
-                                                        <th>Tên sản phẩm</th>
-                                                        <th>Số lượng</th>
-                                                        <th>Đơn giá</th>
-                                                        <th>Thành tiền</th>
+                                                        <th style="width: 15%;">Ảnh sản phẩm</th>
+                                                        <th style="width: 30%;">Tên sản phẩm</th>
+                                                        <th style="width: 10%;">Số lượng</th>
+                                                        <th style="width: 20%;">Đơn giá</th>
+                                                        <th style="width: 20%;">Thành tiền</th>
                                                         @if ($order->status == 4 && $order->payment_status == 1)
-                                                            <th>Hành động</th>
+                                                            <th style="width: 15%;">Hành động</th>
                                                         @endif
 
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody class="text-center align-middle">
                                                     @php
                                                         $totalAmount = 0;
                                                     @endphp
@@ -179,8 +179,36 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Trạng thái đơn hàng:</td>
-                                                        <td><strong class="text-success">{{ $orderStatusLabel }}</strong>
-                                                        </td>
+                                                        @switch($order->status)
+                                                            @case(1)
+                                                                <td><strong class="text-warning">Chờ xác nhận</strong></td>
+                                                            @break
+
+                                                            @case(2)
+                                                                <td><strong class="text-info">Đang xử lý</strong></td>
+                                                            @break
+
+                                                            @case(3)
+                                                                <td><strong class="text-primary">Đang giao hàng</strong></td>
+                                                            @break
+
+                                                            @case(4)
+                                                                <td><strong class="text-success">Đã giao hàng</strong></td>
+                                                            @break
+
+                                                            @case(5)
+                                                                <td><strong class="text-secondary">Chờ xác nhận huỷ đơn</strong>
+                                                                </td>
+                                                            @break
+
+                                                            @case(6)
+                                                                <td><strong class="text-danger">Đã huỷ</strong></td>
+                                                            @break
+
+                                                            @default
+                                                                <td><strong class="text-muted">Không xác định</strong></td>
+                                                        @endswitch
+                                                        
                                                     </tr>
                                                 </tbody>
                                             </table>

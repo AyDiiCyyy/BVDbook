@@ -31,7 +31,7 @@ class CategoryRequest extends FormRequest
                 Rule::unique('categories', 'slug')->whereNull('deleted_at'),
             ],
             'parent_id' => 'nullable|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5048',
         ];
     }
 

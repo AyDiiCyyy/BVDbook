@@ -33,6 +33,15 @@
                                     </div>
 
                                     <div class="mb-3">
+                                        <label class="form-label">Đường dẫn danh mục: </label>
+                                        <input type="text" class="form-control" name="slug"
+                                            value="{{ old('slug', $slide->slug) }}">
+                                        @error('slug')
+                                            <div class="text-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="mb-3">
                                         <label class="form-label">Ảnh slide: </label>
                                         <input type="file" class="form-control" name="image">
                                         <img src="{{ asset($slide->image) }}" alt="Ảnh slide" class="img-thumbnail rounded shadow" style="width: 800px; height: auto; object-fit: cover;">

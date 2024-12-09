@@ -18,10 +18,10 @@
                     <div class="img-block">
                         <a href="{{ route('productDetail', ['slug' => $product->slug]) }}" class="thumbnail">
                             <img class="first-img"
-                                src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                src="{{ asset($product->image) }}"
                                 alt="" />
                             <img class="second-img"
-                                src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                src="{{ asset($product->image) }}"
                                 alt="" />
                         </a>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="product-wrapper" style="margin-top: 5%">
                     <div class="product-decs">
                         <a class="inner-link"
-                            href="{{ route('danhmucSanpham',  $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
+                            href="{{ route('danhmucSanpham', $product->ProductCategories?->first()?->category->slug) }}"><span>{{ $product->ProductCategories?->first()?->category->name }}</span></a>
                         <h2><a href="{{ route('productDetail', ['slug' => $product->slug]) }}"
                                 class="product-link">{{ Str::limit($product->name, 20, '...') }}</a></h2>
                         <div class="rating-product">
@@ -102,6 +102,7 @@
                             console.log(response);
                             $('#cart-right').html(
                                 response); // Cập nhật phần tử giỏ hàng
+                            updateCartRight();
                         },
                         error: function() {
                             Swal.fire({
@@ -161,7 +162,13 @@
                 url: "{{ route('cart.get') }}", // Route trả về HTML của giỏ hàng
                 method: "GET",
                 success: function(response) {
-                    $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                    console.log(response);
+                    $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
+                    $('#cart-count').text(response
+                        .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                    $(".item-quantity-tag").text(response
+                        .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+
                 },
                 error: function() {
                     Swal.fire({

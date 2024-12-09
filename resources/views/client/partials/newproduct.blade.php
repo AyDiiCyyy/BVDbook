@@ -19,10 +19,10 @@
                         <div class="img-block">
                             <a href="{{ route('productDetail', ['slug' => $new->slug]) }}" class="thumbnail">
                                 <img class="first-img"
-                                    src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                    src="{{ asset($new->image) }}"
                                     alt="" />
                                 <img class="second-img"
-                                    src="{{ asset('client/assets/images/product-image/organic/test.webp') }}"
+                                    src="{{ asset($new->image) }}"
                                     alt="" />
                             </a>
                         </div>
@@ -31,7 +31,7 @@
                         </ul>
                         <div class="product-decs">
                             <a class="inner-link"
-                                href="{{ route('danhmucSanpham',  $new->ProductCategories?->first()?->category->slug) }}"><span>{{ $new->ProductCategories?->first()?->category->name }}</span></a>
+                                href="{{ route('danhmucSanpham', $new->ProductCategories?->first()?->category->slug) }}"><span>{{ $new->ProductCategories?->first()?->category->name }}</span></a>
                             <h2><a href="single-product.html"
                                     class="product-link">{{ Str::limit($new->name, 20, '...') }}</a>
                             </h2>
@@ -99,7 +99,7 @@
                 success: function(response) {
                     console.log(response);
                     $('#cart-count').text(response.cart_count);
-                    
+
                     // Gọi hàm cập nhật giỏ hàng mà không cần reload
                     $(".item-quantity-tag").html(response.total_quantity);
                     $.ajax({
@@ -119,7 +119,7 @@
                             });
                         }
                     });
-
+                    updateCartRight();
                     // Hiển thị thông báo thành công
                     Swal.fire({
                         title: "Thành công!",
@@ -169,7 +169,12 @@
                 method: "GET",
                 success: function(response) {
                     console.log(response);
-                    $('#cart-right').html(response); // Cập nhật phần tử giỏ hàng
+                    $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
+                    $('#cart-count').text(response
+                        .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                    $(".item-quantity-tag").text(response
+                        .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+
                 },
                 error: function() {
                     Swal.fire({

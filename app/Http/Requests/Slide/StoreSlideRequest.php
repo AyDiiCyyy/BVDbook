@@ -23,6 +23,7 @@ class StoreSlideRequest extends FormRequest
     {
         return [
             'name' => 'required|min:1|max:255', 
+            'slug' => 'required|min:1|max:255', 
             "image" => "nullable|file|mimes:jpeg,jpg,png,svg,webp|max:4048",
             "order" => "required|integer|min:1|max:1000",
 
@@ -35,6 +36,10 @@ class StoreSlideRequest extends FormRequest
             "name.required" => "Tên slide bắt buộc nhập",
             "name.min" => "Tên slide phải lớn hơn 1 kí tự",
             "name.max" => "Tên slide phải nhỏ hơn 255 kí tự",
+
+            "slug.required" => "Đường dẫn slide bắt buộc nhập",
+            "slug.min" => "Đường dẫn slide phải lớn hơn 1 kí tự",
+            "slug.max" => "Đường dẫn slide phải nhỏ hơn 255 kí tự",
 
             "image.file" => "Ảnh silde không đúng định dạng",
             "image.mimes" =>"Ảnh silde không đúng định dạng jpeg,jpg,png,svg,webp",

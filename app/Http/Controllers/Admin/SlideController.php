@@ -28,6 +28,7 @@ class SlideController extends Controller
     public function store(StoreSlideRequest $request){
         $data = [
             'name' => $request->name,
+            'slug' => $request->slug,
             'order'=> $request->order,
             'active'=> $request->active ?? 0
         ];
@@ -45,8 +46,10 @@ class SlideController extends Controller
         $slide = Slide::find($id);
         $data = [
             'name' => $request->name,
+            'slug' => $request->slug,
             'order' => $request->order,
             'active' => $request->active ?? 0
+
         ];
         $data['image'] = StorageImageTrait::storageTraitUpload($request, 'image', 'slides')['path'] ?? $slide->image;
         if ($request->hasFile('image')) {
