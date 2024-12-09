@@ -74,6 +74,7 @@ class HomeController extends Controller
             ->where('active', 1)
             ->where('quantity', '>', 0)
             ->orderBy('order')
+            ->orderBy('id','desc')
             ->limit(10)
             ->get();
         $product2 = $product_noibat->chunk(2);
@@ -107,14 +108,17 @@ class HomeController extends Controller
             ->get();
         $categories = $categories->chunk(2);
 
-        $bestSellers = Product::select('products.*')
-            ->join('order_details', 'products.id', '=', 'order_details.product_id')
-            ->where('products.active', 1)
-            ->where('products.quantity', '>', 0)
-            ->groupBy('products.id')
-            ->orderByRaw('SUM(order_details.quantity) DESC')
-            ->limit(10)
-            ->get();
+        $bestSellers = Product::select('products.*', DB::raw('SUM(order_details.quantity) as total_sold'))
+        ->join('order_details', 'products.id', '=', 'order_details.product_id')
+        ->join('orders', 'order_details.order_id', '=', 'orders.id')
+        ->where('products.active', 1) 
+        ->where('products.quantity', '>', 0) 
+        ->where('orders.payment_status', 1) 
+        ->where('orders.status', 4) 
+        ->groupBy('products.id')
+        ->orderBy('total_sold', 'DESC') 
+        ->limit(10) 
+        ->get();
 
         $slide = Slide::query()->where('active', 1)->orderBy('order')->get();
         return view('client.page.index', compact('product2', 'product_sale', 'product_new', 'categories', 'bestSellers', 'slide'));
@@ -136,11 +140,11 @@ class HomeController extends Controller
         })->pluck('name')->toArray();
         // implode biến mảng thành chuỗi
         // Sản phẩm liên quan
-        $relatedProducts = Product::query()->where('id', '<>', $productDetail->id)->get();
+        $relatedProducts = Product::query()->where('id', '<>', $productDetail->id)->where('released',$productDetail->released)->where('active',1)->limit(10)->get();
         // Sản phẩm cùng danh mục
         $getProductsByCategory = Product::query()->whereHas('ProductCategories', function ($query) use ($productDetail) {
             $query->where('category_id', $productDetail->ProductCategories?->first()?->category_id);
-        })->where('id', '<>', $productDetail->id)->get();
+        })->where('id', '<>', $productDetail->id)->where('active',1)->limit(10)->get();
         // dd($getProductsByCategory);
 
         // Comment

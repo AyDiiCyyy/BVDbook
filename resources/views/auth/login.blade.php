@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <section class="breadcrumb-area" style="margin-top: -30px">
+    <section class="breadcrumb-area" style="margin-top: -30px; padding: 110px 0;">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -31,13 +31,13 @@
                                 <h4>Đăng nhập</h4>
                             </a>
                         </div>
-                        @if ($errors->any())
+                        {{-- @if ($errors->any())
                             <div class="alert alert-danger">
                                 @foreach ($errors->all() as $error)
                                     <p>{{ $error }}</p>
                                 @endforeach
                             </div>
-                        @endif
+                        @endif --}}
 
                         <div class="tab-content">
                             <div id="lg1" class="tab-pane active">
@@ -69,12 +69,12 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-check mb-3">
+                                            {{-- <div class="form-check mb-3">
                                                 <input type="checkbox" id="remember" name="remember"
                                                     {{ old('remember') ? 'checked' : '' }}>
                                                 <label class="form-check-label"
                                                     for="remember">{{ __('Ghi nhớ đăng nhập') }}</label>
-                                            </div>
+                                            </div> --}}
 
                                             <div class="button-box">
                                                 <button type="submit"

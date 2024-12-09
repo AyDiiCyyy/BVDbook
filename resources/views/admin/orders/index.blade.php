@@ -127,10 +127,10 @@ button[type="submit"] {
                     <tr>
                         <th scope="col">Tên người dùng</th>
                         <th scope="col">Mã đơn hàng</th>
+                        <th scope="col">Tổng số tiền</th> 
+                        <th scope="col">Ngày đặt đơn</th> 
                         <th scope="col">Phương thức thanh toán</th>
                         <th scope="col">Trạng thái thanh toán</th> 
-                        <th scope="col">Tổng số tiền</th>
-                        <th scope="col">Ngày đặt đơn</th> 
                         <th scope="col">Trạng thái đơn hàng</th>
                         <th scope="col">Hành động</th>
                     </tr>
@@ -138,12 +138,14 @@ button[type="submit"] {
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td>{{ $order->user->name }}</td>
+                            <td>{{ $order->name }}</td>
                             <td class="text-uppercase ">{{ $order->order_code }}</td>
-                            <td>{{ $order->payment == 0 ? 'Ship COD' : 'Thanh toán online' }}</td> 
-                            <td id="payment-status-{{ $order->id }}">{{ $order->payment_status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }}</td> 
                             <td>{{ number_format($order->total_money, 0, ',', '.') }} đ</td>
                             <td>{{ $order->created_at->format('d/m/Y') }}</td> 
+                            <td>{{ $order->payment == 0 ? 'Ship COD' : 'Thanh toán online' }}</td> 
+                            <td id="payment-status-{{ $order->id }}">{{ $order->payment_status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán' }} </td> 
+                            
+                          
                             <td>
                                 <select class="form-select status-select" data-id="{{ $order->id }}" data-current-status="{{ $order->status }}">
                                     @if ($order->payment == 1 && $order->payment_status == 0) // Thanh toán online và chưa thanh toán

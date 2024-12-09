@@ -19,7 +19,11 @@
             <div class="category-list {{ $loop->first ? 'mb-30px' : '' }}">
                 <div class="category-thumb">
                     <a href="shop-4-column.html">
+                        @if ($item->image!='')
+                        <img src="{{ asset($item->image) }}" alt="" />
+                        @else
                         <img src="{{ asset('client/assets/images/category/1.png') }}" alt="" />
+                        @endif
                     </a>
                 </div>
                 <div class="desc-listcategoreis">

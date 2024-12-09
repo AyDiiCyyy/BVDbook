@@ -12,10 +12,10 @@
             <div class="col-8 d-lg-block d-none">
                 <div class="header-right-nav">
                     <ul>
-                        <li class="border-color-black">
+                        {{-- <li class="border-color-black">
                             <a href="wishlist.html"><i class="ion-android-favorite-outline"></i>Sản phẩm yêu thích
                                 (0)</a>
-                        </li>
+                        </li> --}}
                     </ul>
                     <!-- Header Top Language Currency -->
                     {{-- <div class="header-top-set-lan-curr d-flex justify-content-end">

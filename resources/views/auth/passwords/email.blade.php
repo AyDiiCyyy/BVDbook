@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- Giao diện breadcrumb từ file trên -->
-    <section class="breadcrumb-area" style="margin-top: -50px">
+    <section class="breadcrumb-area" style="margin-top: -50px; padding: 110px 0;">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

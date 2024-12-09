@@ -108,7 +108,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control auto-resize" name="long_description" rows="1" style="overflow:hidden;">{{ old('long_description', $product->long_description) }}</textarea>
+                                            <textarea class="form-control auto-resize" name="long_description" rows="3" style="overflow:hidden;">{{ old('long_description', $product->long_description) }}</textarea>
                                         </div>
 
 
