@@ -629,20 +629,20 @@
         });
 //comment
 $(document).ready(function() {
-    // Xử lý sự kiện submit của form bình luận
+ 
     $('#comment-form').on('submit', function(e) {
-        e.preventDefault(); // Ngăn chặn hành động mặc định của form
+        e.preventDefault(); 
 
-        // Gửi yêu cầu AJAX để thêm bình luận
+      
         $.ajax({
-            url: $(this).attr('action'), // Lấy URL từ thuộc tính action của form
+            url: $(this).attr('action'), 
             method: "POST",
-            data: $(this).serialize(), // Lấy dữ liệu từ form
+            data: $(this).serialize(), 
             success: function(response) {
-                // Lấy thông tin người dùng từ session
-                const userName = response.user_name; // Tên người dùng
-                const userAvatar = response.user_avatar; // Avatar người dùng
-                const createdAt = response.created_at; // Thời gian tạo bình luận
+                
+                const userName = response.user_name; 
+                const userAvatar = response.user_avatar; 
+                const createdAt = response.created_at; 
 
                 // Thêm bình luận mới vào danh sách bình luận
                 $('#review-wrapper').prepend(`
@@ -668,35 +668,35 @@ $(document).ready(function() {
                     </div>
                 `);
 
-                // Cập nhật số lượng bình luận
+                
                 $('#review-count').text(`(${response.count})`);
 
-                // Hiển thị thông báo thành công
+               
                 Swal.fire({
                     title: "Thành công!",
                     text: "Bình luận của bạn đã được gửi thành công.",
                     icon: "success",
                     confirmButtonText: "OK",
                 }).then(() => {
-                    // Ẩn tiêu đề và form bình luận, thay thế bằng thông báo
+                   
                     $('#comment-form').parent().html(`
                         <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện trải nghiệm mua hàng.</p>
                     `);
-                    // Ẩn tiêu đề "Đánh giá sản phẩm"
+                   
                     $('h3:contains("Đánh giá sản phẩm")').hide();
                 });
 
-                // Reset form
+                
                 $('#comment-form')[0].reset();
             },
             error: function(xhr) {
-                // Xử lý lỗi
+               
                 let errorMessage = "Có lỗi xảy ra, vui lòng thử lại sau!";
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 }
 
-                // Hiển thị thông báo thất bại
+               
                 Swal.fire({
                     title: "Thất bại!",
                     text: errorMessage,
