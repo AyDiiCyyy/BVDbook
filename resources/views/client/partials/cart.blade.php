@@ -68,7 +68,7 @@
                                                 </td>
                                                 <td class="product-price-cart">
                                                     <span
-                                                        class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
+                                                        class="amount">{{ number_format($cartItem->products->sale ?? $cartItem->products->price, 0, '.', '.') }}₫</span>
                                                 </td>
                                                 <td class="product-quantity">
                                                     <div class="input-group quantity-wrapper" style="width: 120px;">
@@ -84,7 +84,7 @@
                                                 </td>
                                                 <td class="product-subtotal-{{ $cartItem->id }}"
                                                     data-id="{{ $cartItem->id }}">
-                                                    {{ number_format($cartItem->products->price * $cartItem->quantity, 0, '.', '.') }}₫
+                                                    {{ number_format($cartItem->total_price, 0, '.', '.') }}₫
                                                 </td>
                                                 <td class="product-remove">
                                                     <a href="#" class="remove-item" data-id="{{ $cartItem->id }}"><i
@@ -100,6 +100,7 @@
                                         <h4>Tổng tiền : <span
                                                 id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}đ</span>
                                             <h4>
+
                                                 <h4>Phí giao hàng :
                                                     <span>{{ number_format($shippingFee, 0, '.', '.') }}đ</span>
                                                 </h4>
@@ -268,9 +269,9 @@
                         console.log(response);
                         $('#cart-right').html(response.cart_html); // Cập nhật phần tử giỏ hàng
                         $('#cart-count').text(response
-                        .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
+                            .cart_count); // Cập nhật số lượng sản phẩm trong giỏ hàng
                         $(".item-quantity-tag").text(response
-                        .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
+                            .total_quantity); // Cập nhật số lượng sản phẩm bên ngoài giỏ hàng
 
                     },
                     error: function() {
