@@ -251,7 +251,7 @@
                                     @foreach ($products as $product)
                                         <li><span class="order-middle-left">{{ $product->products->name }} X
                                                 {{ $product->quantity }}</span> <span
-                                                class="order-price">{{ number_format($product->products->price * $product->quantity, 0, '.', '.') }}₫
+                                                class="order-price">{{ number_format(($product->products->sale??$product->products->price) * $product->quantity, 0, '.', '.') }}₫
                                             </span></li>
                                     @endforeach
                                 </ul>

@@ -28,7 +28,7 @@ class CheckoutController extends Controller
             }
             $sum = 0;
             foreach ($products as $product) {
-                $sum += $product->products->price * $product->quantity;
+                $sum += ($product->products->sale??$product->products->price) * $product->quantity;
             }
             $vouchersId = $user
                 ->user_vouchers()
@@ -61,7 +61,7 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $products = $user->Carts;
         foreach ($products as $product) {
-            $sum += $product->products->price * $product->quantity;
+            $sum += ($product->products->sale??$product->products->price) * $product->quantity;
         }  // tính giá tổng của giỏ hàng hiện tại
 
         if ($voucher) {
@@ -138,7 +138,7 @@ class CheckoutController extends Controller
         $user = Auth::user();
         $products = $user->Carts;
         foreach ($products as $product) {
-            $sum += $product->products->price * $product->quantity;
+            $sum += ($product->products->sale??$product->products->price) * $product->quantity;
         }  // tính giá tổng của giỏ hàng hiện tại
 
         if ($voucher) {
