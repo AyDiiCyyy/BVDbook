@@ -22,7 +22,7 @@
                         </div>
                         <div class="card-body">
                             <table class="table table-striped">
-                                <thead>
+                                <thead class="text-center align-middle">
                                     <tr>
                                         <th scope="col">Ảnh sản phẩm</th>
                                         <th scope="col">Tên sản phẩm</th>
@@ -37,14 +37,14 @@
                                     @endphp
                                     @foreach ($order->OrderDetails as $detail)
                                         @php
-                                            $amount = $detail->unit_price * $detail->quantity;
+                                            $amount = $detail->price * $detail->quantity;
                                             $totalAmount += $amount;
                                         @endphp
                                         <tr>
                                             <td><img src="{{ asset($detail->product->image) }}" alt="{{ $detail->product->name }}" class="img-fluid" style="max-width: 100px;"></td>
                                             <td>{{ $detail->product->name }}</td>
                                             <td>{{ $detail->quantity }}</td>
-                                            <td>{{ number_format($detail->unit_price, 0, ',', '.') }} đ</td>
+                                            <td>{{ number_format($detail->price, 0, ',', '.') }} đ</td>
                                             <td>{{ number_format($amount, 0, ',', '.') }} đ</td>
                                         </tr>
                                     @endforeach

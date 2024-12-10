@@ -116,7 +116,11 @@
                             <td><img src="{{ asset($product->image) }}" alt="" class="img-fluid rounded shadow"
                                     width="100" height="80"></td>
                             <td>{{ number_format($product->price, 0, '.', '.') }}₫</td>
+                            @if ($product->sale)
                             <td>{{ number_format($product->sale, 0, '.', '.') }}₫</td>
+                            @else
+                            <td>Không có khuyến mãi</td>
+                            @endif
                             <td>
                                 <ul class="list-unstyled" style="margin: 0">
                                     @foreach ($product->ProductCategories as $item)

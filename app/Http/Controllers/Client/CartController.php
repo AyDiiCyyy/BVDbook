@@ -47,6 +47,9 @@ class CartController extends Controller
             ->where('product_id', $product->id)
             ->first();
 
+        // Lấy giá sản phẩm, nếu có giá sale thì dùng giá sale
+        $price = $product->sale > 0 ? $product->sale : $product->price;
+
         if ($cartItem) {
             // Nếu có rồi, cộng thêm số lượng
             $total_cart_item = $cartItem->quantity + $validated['quantity'];
@@ -58,11 +61,9 @@ class CartController extends Controller
 
             $cartItem->update([
                 'quantity' => $total_cart_item,
-                'total_price' => $total_cart_item * $product->price,
-                //'updated_at' => Carbon::now(),
+                'total_price' => $total_cart_item * $price,
             ]);
         } else {
-
             if ($validated['quantity'] > $product->quantity) {
                 return response()->json(['status' => 'error', 'message' => 'Số lượng sản phẩm vượt quá số lượng tồn kho'], 400);
             }
@@ -72,11 +73,11 @@ class CartController extends Controller
                 'user_id' => $user->id,
                 'product_id' => $product->id,
                 'quantity' => $validated['quantity'],
-                'total_price' => $product->price * $validated['quantity'],
+                'total_price' => $price * $validated['quantity'],
             ]);
         }
 
-        //$totalQuantity = Cart::where('user_id', $user->id)->count();
+        // Tính tổng số lượng và tổng giá trị của giỏ hàng
         $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity');
         $totalPrice = Cart::where('user_id', $user->id)->sum('total_price');
 
@@ -86,10 +87,8 @@ class CartController extends Controller
             'cart_item' => $cartItem,  // In chi tiết của item đã cập nhật
             'total_price' => $totalPrice,  // Trả về tổng giá trị của giỏ hàng
             'total_quantity' => $totalQuantity  // Trả về tổng số lượng giỏ hàng
-
         ]);
     }
-
     public function showCart()
     {
         // Kiểm tra người dùng đã đăng nhập hay chưa
@@ -104,20 +103,22 @@ class CartController extends Controller
             ->where('user_id', $user->id)
             ->get();
 
-        // Tính tổng giá trị giỏ hàng
-        $subtotal = $cartItems->sum(function ($cartItem) {
-            return $cartItem->products ? $cartItem->products->price * $cartItem->quantity : 0;
-        });
 
-        // Tính phí vận chuyển
+        //Tính tổng giá trị giỏ hàng
+        $subtotal = $cartItems->sum('total_price');
+
+        //Tính phí vận chuyển
         $shippingFee = 0;
 
-        // Tính tổng giá trị
+        //Tính tổng giá trị
         $totalPrice = $subtotal + $shippingFee;
         $totalQuantity = $cartItems->count();
 
+
+        //dd($cartItems, $subtotal, $totalPrice);
+
         // Truyền dữ liệu vào view
-        return view('client.partials.cart', compact('cartItems', 'subtotal', 'shippingFee', 'totalPrice', 'messages', 'totalQuantity'));
+        return view('client.partials.cart', compact('cartItems', 'subtotal', 'totalPrice', 'totalQuantity', 'shippingFee', 'messages',));
     }
 
     public function updateCart(Request $request)
@@ -141,11 +142,14 @@ class CartController extends Controller
 
         $product = Product::find($cartItem->product_id);
 
+        // Lấy giá sản phẩm, nếu có giá sale thì dùng giá sale
+        $price = $product->sale > 0 ? $product->sale : $product->price;
+
         // Cập nhật số lượng sản phẩm
         if ($action == "plus") {
-            $cart_item_quantity = $quantity += 1;
+            $cart_item_quantity = $quantity + 1;
         } else {
-            $cart_item_quantity = $quantity -= 1;
+            $cart_item_quantity = $quantity - 1;
         }
 
         // Kiểm tra số lượng tồn kho
@@ -156,7 +160,7 @@ class CartController extends Controller
             ]);
         }
 
-        $cart_item_price = $product->price * $cart_item_quantity;
+        $cart_item_price = $price * $cart_item_quantity;
 
         $cartItem->quantity = $cart_item_quantity;
         $cartItem->total_price = $cart_item_price;
@@ -203,9 +207,7 @@ class CartController extends Controller
         $cartItems = Cart::with('products')->where('user_id', Auth::id())->get();
 
         // Tính lại tổng giá trị giỏ hàng
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->products ? $item->products->price * $item->quantity : 0;
-        });
+        $subtotal = $cartItems->sum('total_price');
 
         // Phí vận chuyển và thuế
         $shippingFee = 0;
@@ -232,8 +234,7 @@ class CartController extends Controller
             return $cartItem->quantity; // Lấy số lượng của từng sản phẩm trong giỏ hàng
         });
         $messages = $this->checkCartStatus();
-        $cart_html = view('client.partials.cartright', compact('cartItems', 'messages'))->render();
-
+        $cart_html = view('client.partials.cartright', compact('cartItems',  'messages'))->render();
         // Trả về view giỏ hàng dưới dạng HTML
         return response()->json([
             'cart_html' => $cart_html,
@@ -250,42 +251,19 @@ class CartController extends Controller
         foreach ($cartItems as $item) {
             $product = Product::withTrashed()->find($item->product_id); // Lấy cả sản phẩm bị xóa mềm
 
-            if (!$product || $product->deleted_at || $product->quantity == 0 || $product->active == 0) {
-                // Thêm thông báo vào mảng
-                if ($product && $product->deleted_at) {
-                    $messages[] = 'Sản phẩm ' . $item->product_name . ' đã bị xóa bởi nhà cung cấp.';
-                } elseif ($product && $product->quantity == 0) {
-                    $messages[] = 'Sản phẩm ' . $item->product_name . ' đã hết hàng.';
-                } elseif ($product && $product->active == 0) {
-                    $messages[] = 'Sản phẩm ' . $item->product_name . ' hiện không hoạt động.';
-                } else {
-                    $messages[] = 'Sản phẩm không tồn tại.';
-                }
-
-                // Xóa sản phẩm không hợp lệ khỏi giỏ hàng
-                $item->delete();
+            if (!$product || $product->deleted_at) {
+                $messages[] = [
+                    'product_id' => $item->product_id,
+                    'message' => 'Sản phẩm này đã bị xóa.'
+                ];
+            } elseif ($product->quantity == 0) {
+                $messages[] = [
+                    'product_id' => $item->product_id,
+                    'message' => 'Sản phẩm này hiện đã hết hàng.'
+                ];
             }
         }
 
         return $messages;
     }
-
-    // public function getCartQuantity()
-    // {
-    //     if (!Auth::check()) {
-    //         return response()->json(['total_quantity' => 0]);
-    //     }
-
-    //     // Lấy tất cả các sản phẩm khác nhau trong giỏ hàng của người dùng, không tính số lượng
-    //     $cartItems = Cart::where('user_id', Auth::id())
-    //         ->distinct('product_id')
-    //         ->get();
-
-    //     dd($cartItems);
-
-    //     // Đếm số sản phẩm khác nhau trong giỏ hàng (không dựa trên số lượng)
-    //     $totalQuantity = $cartItems->count();
-
-    //     return response()->json(['total_quantity' => $totalQuantity]);
-    // }
 }

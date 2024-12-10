@@ -209,6 +209,8 @@
                                                         class="card-body d-flex justify-content-between align-items-center">
                                                         <div>
                                                             <h5 class="card-title mb-1">{{ $voucher->name }}</h5>
+                                                            <p class="card-text text-muted mt-3">Giảm:  {{ number_format($voucher->discount_amount, 0, '.', '.') }} VND
+                                                            </p>
                                                             <p class="card-text text-muted">Cho đơn hàng từ
                                                                 {{ number_format($voucher->min_order_amount, 0, '.', '.') }}
                                                                 VND, áp
@@ -249,7 +251,7 @@
                                     @foreach ($products as $product)
                                         <li><span class="order-middle-left">{{ $product->products->name }} X
                                                 {{ $product->quantity }}</span> <span
-                                                class="order-price">{{ number_format($product->products->price * $product->quantity, 0, '.', '.') }}₫
+                                                class="order-price">{{ number_format(($product->products->sale??$product->products->price) * $product->quantity, 0, '.', '.') }}₫
                                             </span></li>
                                     @endforeach
                                 </ul>

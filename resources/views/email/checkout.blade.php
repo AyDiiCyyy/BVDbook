@@ -103,7 +103,7 @@
         <div class="card">
             <h4 class="card-title">Thông tin đơn hàng</h4>
             <p><strong>Mã đơn hàng:</strong> <span style="color: #16a085;">{{ $order->order_code }}</span></p>
-            <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i:s') }}</p>
+            <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
             <p><strong>Phương thức thanh toán:</strong> <span style="color: #8e44ad;">
                 {{ $order->payment == 0 ? 'Thanh toán khi nhận hàng' : 'Thanh toán VNPay' }}
             </span></p>
