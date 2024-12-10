@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Mail\CheckoutEmail;
 use App\Models\Order;
+use App\Models\UserVoucher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -67,8 +68,10 @@ class CheckoutController extends Controller
             if ($voucher->min_order_amount >= $request->sum) {
                 return response()->json(['status' => 'error', 'message' => 'Đơn hàng của bạn không đủ điều kiện sử dụng mã giảm giá!']);
             }
-            $check_tk = $user
-                ->user_vouchers()
+            $id_voucher = $user
+                ->user_vouchers()->pluck('id')->toArray();
+                $check_tk = UserVoucher::query()
+                ->whereIn('id', $id_voucher)
                 ->where('voucher_id', $voucher->id)
                 ->where('user_id', $user->id)
                 ->first(); // check trong tk ng dùng có mã giảm vừa nhập k
@@ -142,8 +145,10 @@ class CheckoutController extends Controller
             if ($voucher->min_order_amount >= $request->sum) {
                 return response()->json(['status' => 'error', 'message' => 'Đơn hàng của bạn không đủ điều kiện sử dụng mã giảm giá!']);
             }
-            $check_tk = $user
-                ->user_vouchers()
+            $id_voucher = $user
+                ->user_vouchers()->pluck('id')->toArray();
+                $check_tk = UserVoucher::query()
+                ->whereIn('id', $id_voucher)
                 ->where('voucher_id', $voucher->id)
                 ->where('user_id', $user->id)
                 ->first(); // check trong tk ng dùng có mã giảm vừa nhập k
@@ -265,9 +270,9 @@ class CheckoutController extends Controller
                 // thêm sp vào order-detail
                 $order->OrderDetails()->create([
                     'product_id' => $product->id,
-                    'price' => $product->price,
+                    'price' => $product->sale??$product->price,
                     'quantity' => $cart->quantity,
-                    'unit_price' => $product->price * $cart->quantity,
+                    'unit_price' => ($product->sale??$product->price) * $cart->quantity,
                 ]);
                 // xoá giỏ hàng
                 $cart->delete();

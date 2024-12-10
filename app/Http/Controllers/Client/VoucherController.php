@@ -27,7 +27,7 @@ class VoucherController extends Controller
     public function list () {
         $user = Auth::user();
         $id = $user->user_vouchers()->pluck('id')->toArray(); // id bảng trung gian trong kho của ng dùng 
-        $user_voucher = UserVoucher::whereIn('id',$id)->whereIn('active',[1,2])->pluck('voucher_id')->toArray(); // những id voucher đã có trong kho
+        $user_voucher = UserVoucher::whereIn('id',$id)->whereIn('active',[1])->pluck('voucher_id')->toArray(); // những id voucher đã có trong kho
         
         $voucher = Voucher::query()
         ->whereIn('id',$user_voucher)

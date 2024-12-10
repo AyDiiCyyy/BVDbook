@@ -73,7 +73,7 @@
                                                     @endphp
                                                     @foreach ($order->OrderDetails as $detail)
                                                         @php
-                                                            $amount = $detail->unit_price * $detail->quantity;
+                                                            $amount = $detail->price * $detail->quantity;
                                                             $totalAmount += $amount;
                                                         @endphp
                                                         <tr>
@@ -82,7 +82,7 @@
                                                                     style="max-width: 100px;"></td>
                                                             <td>{{ $detail->product->name }}</td>
                                                             <td>{{ $detail->quantity }}</td>
-                                                            <td>{{ number_format($detail->unit_price, 0, ',', '.') }} đ
+                                                            <td>{{ number_format($detail->price, 0, ',', '.') }} đ
                                                             </td>
                                                             <td>{{ number_format($amount, 0, ',', '.') }} đ</td>
                                                             @if ($order->status == 4 && $order->payment_status == 1 && $detail->active == 0)
