@@ -100,7 +100,7 @@
                                         <h4>Tổng tiền : <span
                                                 id="subtotal">{{ number_format($subtotal, 0, '.', '.') }}đ</span>
                                             <h4>
-
+                                                {{-- {{dd($subtotal)}} --}}
                                                 <h4>Phí giao hàng :
                                                     <span>{{ number_format($shippingFee, 0, '.', '.') }}đ</span>
                                                 </h4>

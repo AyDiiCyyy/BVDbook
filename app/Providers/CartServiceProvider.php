@@ -33,9 +33,7 @@ class CartServiceProvider extends ServiceProvider
                 $totalQuantity = Cart::where('user_id', $user->id)->sum('quantity'); // Tính tổng số lượng trong giỏ hàng
 
                 // Tính tổng giá trị giỏ hàng
-                $subtotal = $cartItems->sum(function ($cartItem) {
-                    return $cartItem->products ? $cartItem->products->price * $cartItem->quantity : 0;
-                });
+                $subtotal = $cartItems->sum('total_price');
 
                 // Phí vận chuyển và thuế
                 $shippingFee = 0;
