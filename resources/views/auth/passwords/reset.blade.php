@@ -1,7 +1,7 @@
 @extends('layouts.auth')
 
 @section('content')
-    <section class="breadcrumb-area" style="margin-top: -50px">
+    <section class="breadcrumb-area" style="margin-top: -50px; padding: 110px 0;">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">

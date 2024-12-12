@@ -156,6 +156,7 @@
                                 <label>Họ và Tên</label>
                                 <input id="name_ajax" type="text" placeholder="Nhập tên nhận hàng" name="name"
                                     value="{{ $user->name }}" />
+                                <div class="error-message text-danger" id="error-name"></div>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12">
@@ -163,6 +164,7 @@
                                 <label>Số điện thoại</label>
                                 <input id="phone_ajax" type="text" placeholder="Nhập số điện thoại nhận hàng"
                                     name="phone" value="{{ $user->phone }}" />
+                                <div class="error-message text-danger" id="error-phone"></div>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12">
@@ -170,13 +172,15 @@
                                 <label>Địa chỉ nhận hàng</label>
                                 <input id="address_ajax" type="text" placeholder="Nhập địa chỉ nhận hàng của bạn"
                                     name="address" value="{{ $user->address }}" />
+                                <div class="error-message text-danger" id="error-address"></div>
                             </div>
                         </div>
                         <div class="col-lg-12 col-md-12">
                             <div class="billing-info mb-20px">
                                 <label>Email</label>
-                                <input id="email_ajax" type="email" placeholder="Nhập email nếu có" name="email"
+                                <input id="email_ajax" type="email" placeholder="Nhập email của bạn" name="email"
                                     value="{{ $user->email }}" />
+                                <div class="error-message text-danger" id="error-email"></div>
                             </div>
                         </div>
                     </div>
@@ -205,6 +209,10 @@
                                                         class="card-body d-flex justify-content-between align-items-center">
                                                         <div>
                                                             <h5 class="card-title mb-1">{{ $voucher->name }}</h5>
+                                                            <p class="card-text text-muted mt-3">Giảm:
+                                                                {{ number_format($voucher->discount_amount, 0, '.', '.') }}
+                                                                VND
+                                                            </p>
                                                             <p class="card-text text-muted">Cho đơn hàng từ
                                                                 {{ number_format($voucher->min_order_amount, 0, '.', '.') }}
                                                                 VND, áp
@@ -245,7 +253,7 @@
                                     @foreach ($products as $product)
                                         <li><span class="order-middle-left">{{ $product->products->name }} X
                                                 {{ $product->quantity }}</span> <span
-                                                class="order-price">{{ number_format($product->products->price * $product->quantity, 0, '.', '.') }}₫
+                                                class="order-price">{{ number_format(($product->products->sale ?? $product->products->price) * $product->quantity, 0, '.', '.') }}₫
                                             </span></li>
                                     @endforeach
                                 </ul>
@@ -302,6 +310,58 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     $(document).ready(function() {
+
+        function validateFields() {
+            var isValid = true;
+
+            // Xóa lỗi cũ
+            $(".error-message").text("");
+
+            // Kiểm tra Họ và Tên
+            var name = $("#name_ajax").val().trim();
+            if (name === "") {
+                $("#error-name").text("Họ và Tên không được để trống.");
+                isValid = false;
+            } else if (name.length < 3) {
+                $("#error-name").text("Họ và Tên phải có ít nhất 3 ký tự.");
+                isValid = false;
+            }
+
+            // Kiểm tra Số điện thoại
+            var phone = $("#phone_ajax").val().trim();
+            var phoneRegex = /^[0-9]{10,11}$/; // Số điện thoại chỉ gồm 10-11 chữ số
+            if (phone === "") {
+                $("#error-phone").text("Số điện thoại không được để trống.");
+                isValid = false;
+            } else if (!phoneRegex.test(phone)) {
+                $("#error-phone").text("Số điện thoại không hợp lệ.");
+                isValid = false;
+            }
+
+            // Kiểm tra Địa chỉ
+            var address = $("#address_ajax").val().trim();
+            if (address === "") {
+                $("#error-address").text("Địa chỉ không được để trống.");
+                isValid = false;
+            } else if (address.length < 5) {
+                $("#error-address").text("Địa chỉ phải có ít nhất 5 ký tự.");
+                isValid = false;
+            }
+
+            // Kiểm tra Email
+            var email = $("#email_ajax").val().trim();
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Định dạng email cơ bản
+            if (email === "") {
+                $("#error-email").text("Email không được để trống.");
+                isValid = false;
+            } else if (!emailRegex.test(email)) {
+                $("#error-email").text("Email không hợp lệ.");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
         function showLoading() {
             document.getElementById("loading").style.display = "flex";
             document.body.style.overflow = "hidden"; // Chặn cuộn chuột
@@ -332,8 +392,12 @@
                             style: 'currency',
                             currency: 'VND'
                         }));
-                        var sum = $('#sum_ajax').text(parseFloat(response.sum - response.voucher
-                            .discount_amount).toLocaleString('vi-VN', {
+                        var sumValue = response.sum - response.voucher.discount_amount;
+                        if (sumValue < 0) {
+                            sumValue = 0;
+                        }
+
+                        $('#sum_ajax').text(parseFloat(sumValue).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }));
@@ -399,8 +463,12 @@
                             style: 'currency',
                             currency: 'VND'
                         }));
-                        var sum = $('#sum_ajax').text(parseFloat(response.sum - response.voucher
-                            .discount_amount).toLocaleString('vi-VN', {
+                        var sumValue = response.sum - response.voucher.discount_amount;
+                        if (sumValue < 0) {
+                            sumValue = 0;
+                        }
+
+                        $('#sum_ajax').text(parseFloat(sumValue).toLocaleString('vi-VN', {
                             style: 'currency',
                             currency: 'VND'
                         }));
@@ -454,64 +522,77 @@
             var address = $('#address_ajax').val();
             var email = $('#email_ajax').val();
             var selectedPayment = $('input[name="payment"]:checked').val();
-            // if (selectedPayment == 0) {
-            //     console.log('Thanh toán khi nhận hàng được chọn.');
-            // } else if (selectedPayment == 1) {
-            //     console.log('Thanh toán VNPay được chọn.');
-            // } else {
-            //     console.log('Chưa có phương thức thanh toán nào được chọn.');
-            // }
-            $.ajax({
-                url: '{{ route('pay') }}',
-                type: "POST",
-                data: {
-                    name: name,
-                    phone: phone,
-                    address: address,
-                    email: email,
-                    payment: selectedPayment,
-                    sum: {{ $sum }},
-                    redirect: 'có cái nịt',
-                    _token: csrfToken,
-                },
-                beforeSend: function() {
-                    showLoading(); // Hiển thị hiệu ứng trước khi gửi request
-                },
-                success: function(response) {
-                    if (response.status == 'success') {
-                        Swal.fire({
-                            title: "Đặt hàng thành công!",
-                            text: "Đơn hàng của bạn đang được xử lý! Vui lòng kiểm tra email để xem thông tin chi tiết",
-                            icon: "success",
-                            confirmButtonText: "OK",
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = '{{ route('client.account.orders') }}';
-                            }
-                        });
-                    } else if (response.status == 'url') {
-                        // console.log(response.url);
 
-                        window.location.href = response.url;
-                    } else {
-                        Swal.fire({
-                            title: "Đặt hàng thất bại!",
-                            text: 'Đã có lỗi trong quá trình đặt hàng',
-                            icon: "error",
-                            confirmButtonText: "OK",
-                        });
+            if (validateFields()) {
+                $.ajax({
+                    url: '{{ route('pay') }}',
+                    type: "POST",
+                    data: {
+                        name: name,
+                        phone: phone,
+                        address: address,
+                        email: email,
+                        payment: selectedPayment,
+                        sum: {{ $sum }},
+                        redirect: 'có cái nịt',
+                        _token: csrfToken,
+                    },
+                    beforeSend: function() {
+                        showLoading(); // Hiển thị hiệu ứng trước khi gửi request
+                    },
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            Swal.fire({
+                                title: "Đặt hàng thành công!",
+                                text: "Đơn hàng của bạn đang được xử lý! Vui lòng kiểm tra email để xem thông tin chi tiết",
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            }).then((result) => {
+                                if (result.isConfirmed || result.dismiss === Swal
+                                    .DismissReason.backdrop) {
+                                    window.location.href =
+                                        '{{ route('client.account.orders') }}';
+                                }
+                            });
+                        } else if (response.status == 'url') {
+                            // console.log(response.url);
+
+                            window.location.href = response.url;
+                        } else if (response.status == '0d') {
+                            Swal.fire({
+                                title: "Thanh toán thành công!",
+                                text: `Thanh toán đơn hàng ${response.order.order_code} thành công`,
+                                icon: "success",
+                                confirmButtonText: "OK",
+                            }).then((result) => {
+                                if (result.isConfirmed || result.dismiss === Swal
+                                    .DismissReason.backdrop) {
+                                    // Chỉ điều hướng khi người dùng nhấn "OK"
+                                    window.location.href =
+                                        '{{ route('client.account.orders') }}';
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Đặt hàng thất bại!",
+                                text: 'Đã có lỗi trong quá trình đặt hàng',
+                                icon: "error",
+                                confirmButtonText: "OK",
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Status: " + status);
+                        console.error("Error: " + error);
+                        console.error("Response Text: " + xhr.responseText);
+                    },
+                    complete: function() {
+                        hideLoading(); // Ẩn hiệu ứng sau khi xử lý xong
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error("Status: " + status);
-                    console.error("Error: " + error);
-                    console.error("Response Text: " + xhr.responseText);
-                },
-                complete: function() {
-                    hideLoading(); // Ẩn hiệu ứng sau khi xử lý xong
-                }
 
-            });
+                });
+            }
+
         }
         $("#btn_voucher_ajax").click(function() {
             checkVoucher();
@@ -521,6 +602,9 @@
         })
         $("#pay_ajax").click(function() {
             pay();
+        });
+        $("#name_ajax, #phone_ajax, #address_ajax, #email_ajax").on("input", function() {
+            validateFields();
         });
     });
 </script>

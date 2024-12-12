@@ -138,7 +138,7 @@ button[type="submit"] {
                 <tbody>
                     @foreach ($orders as $order)
                         <tr>
-                            <td>{{ $order->user->name }} </td>
+                            <td>{{ $order->name }}</td>
                             <td class="text-uppercase ">{{ $order->order_code }}</td>
                             <td>{{ number_format($order->total_money, 0, ',', '.') }} đ</td>
                             <td>{{ $order->created_at->format('d/m/Y') }}</td> 

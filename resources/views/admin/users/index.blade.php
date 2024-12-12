@@ -69,9 +69,9 @@
                     <tr>
                         <th scope="col">STT</th>
                         <th scope="col">Tên người dùng</th>
+                        <th scope="col" class="avatar-column"> Ảnh đại diện</th>
                         <th scope="col">Email</th>
                         <th scope="col">Số điện thoại</th>
-                        <th scope="col" class="avatar-column"> Ảnh đại diện</th>
                         <th scope="col">Vai trò</th>
                         <th scope="col">Trạng thái</th>
                         
@@ -82,13 +82,6 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->email }}</td>
-                            @if ($user->phone == null)
-                                <td>Tài khoản này chưa cập nhật số điện thoại</td>
-                            @else
-                            <td>{{ $user->phone }}</td>       
-                            @endif
-                         
                             <td>
                                 @if ($user->avatar)
                                 {{-- lấy ảnh từ storage --}}
@@ -100,6 +93,14 @@
                                     <img src="{{ asset('assets/img/user2-160x160.jpg') }}" alt="User  Image" class="avatar-circle">
                                 @endif
                             </td>
+                            <td>{{ $user->email }}</td>
+                            @if ($user->phone == null)
+                                <td>Tài khoản này chưa cập nhật số điện thoại</td>
+                            @else
+                            <td>{{ $user->phone }}</td>       
+                            @endif
+                         
+                            
                            
                             <td>{{ $user->role == 1 ? 'Người dùng' : 'Admin' }}</td>
                             @if ($user->role == 0)

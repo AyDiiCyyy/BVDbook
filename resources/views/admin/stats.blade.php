@@ -26,22 +26,31 @@
             <div class="container-fluid"> <!--begin::Row-->
                 {{-- Row Lọc --}}
                 <div class="row">
-                    <div class="row mb-4 justify-content-center align-items-center">
+                    <div class="row mb-4 ">
                         <!-- Bộ lọc -->
-                        <div class="col-md-3 d-flex flex-column align-items-center">
+                        <div class="col-2">
                             <label for="filter" class="form-label fw-bold text-uppercase">Lọc theo</label>
-                            <select class="form-select w-75 fw-bold" id="filter">
-                                <option value="default" id="filterDefault">Chọn Ngày/Tháng/Năm</option>
+                            <select class="form-select w-100 fw-bold" id="filter">
+                                <option value='default' id="optionDefault"> Chọn Thể Loại Lọc</option>
                                 <option value="14day">14 ngày gần nhất</option>
                                 <option value="day">Ngày</option>
                                 <option value="month">Tháng</option>
                                 <option value="year">Năm</option>
+                                <option value="changeTime">Tùy chỉnh thời gian</option>
                             </select>
                         </div>
                         <!-- Nhập ngày/tháng/năm -->
-                        <div class="col-md-3 d-flex flex-column align-items-center">
+                        <div class="col-2" id="optionDate">
                             <label id="dynamicLabel" class="form-label fw-bold text-uppercase">Chọn Ngày </label>
-                            <input type="date" class="form-control w-75" id="dynamicInput">
+                            <input type="date" class="form-control w-100" id="dynamicInput">
+                        </div>
+                        <div class="col-2" id="fromDate">
+                            <label id="startDateLabel" class="form-label fw-bold text-uppercase">Từ Ngày </label>
+                            <input type="date" class="form-control w-100" id="startDate">
+                        </div>
+                        <div class="col-2" id="toDate">
+                            <label id="endDateLabel" class="form-label fw-bold text-uppercase">Đến Ngày </label>
+                            <input type="date" class="form-control w-100" id="endDate">
                         </div>
                     </div>
                 </div>
@@ -51,7 +60,7 @@
                     <div class="col-lg-4 col-6">
                         <div class="small-box text-bg-warning">
                             <div class="inner">
-                                <h3> {{ number_format($revenueTotal, 0, '.', '.') ?? 0 }} VNĐ</h3>
+                                <h3> {{ number_format($revenueTotal, 0, '.', '.') ?? 0 }} VNĐ </h3>
                                 <p class="fw-bold"> Tổng doanh thu đơn hàng</p>
                             </div>
                             <svg xmlns="http://www.w3.org/2000/svg" class="small-box-icon" viewBox="0 0 512 512">
@@ -73,9 +82,6 @@
                                 <path
                                     d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z">
                                 </path>
-
-
-
                             </svg>
                         </div> <!--end::Small Box Widget 1-->
                     </div>
@@ -203,6 +209,8 @@
     </main>
 @endsection
 @section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
         integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -226,7 +234,9 @@
             const defaultBestSellerTop10 = @json($bestSellerTop10);
             const defaultCompletedOrder = @json($completedOrder);
             const defaultCancelOrder = @json($cancelOrder);
-
+            $('#optionDate').hide();
+            $('#fromDate').hide();
+            $('#toDate').hide();
             // Hiển thị mặc định khi chưa lọc
             if (defaultLabels && defaultRevenue) {
                 updateBarChart({
@@ -245,15 +255,17 @@
                 rateCompletedAndCancel(defaultCompletedOrder, defaultCancelOrder,
                     'Tỷ lệ đơn hàng đã giao và đã hủy')
             }
+
             // 14 ngày xử lý AJAX
             $('#filter').change(function() {
                 var filterValue = $(this).val();
                 // Cập nhật label và kiểu input theo lựa chọn
                 if (filterValue == '14day') {
-                    $('#filterDefault').hide();
-                    $('#cartTitle').text('Doanh thu  14 ngày gần nhất');
-                    $('#dynamicLabel').hide();
-                    $('#dynamicInput').hide();
+                    $('#cartTitle').text('Doanh thu 14 ngày gần nhất');
+                    $('#optionDefault').hide();
+                    $('#optionDate').hide();
+                    $('#fromDate').hide();
+                    $('#toDate').hide();
 
                     // Gửi AJAX lấy dữ liệu 14 ngày gần nhất
                     $.ajax({
@@ -300,24 +312,39 @@
                         }
                     });
                 } else if (filterValue == 'day') {
-                    $('#filterDefault').hide();
                     $('#cartTitle').text('Doanh thu theo ngày ').show();
+                    $('#optionDefault').hide();
                     $('#dynamicLabel').text('Chọn Ngày').show();
                     $('#dynamicInput').attr('type', 'date').removeAttr('min max step').show();
+                    $('#optionDate').show();
+                    $('#fromDate').hide();
+                    $('#toDate').hide();
                 } else if (filterValue == 'month') {
-                    $('#filterDefault').hide();
                     $('#cartTitle').text('Doanh thu theo tháng').show();
+                    $('#optionDefault').hide();
                     $('#dynamicLabel').text('Chọn Tháng').show();
                     $('#dynamicInput').attr('type', 'month').removeAttr('min max step').show();
+                    $('#optionDate').show();
+                    $('#fromDate').hide();
+                    $('#toDate').hide();
                 } else if (filterValue == 'year') {
-                    $('#filterDefault').hide();
                     $('#cartTitle').text('Doanh thu theo năm').show();
                     $('#dynamicLabel').text('Chọn Năm').show();
+                    $('#optionDefault').hide();
                     $('#dynamicInput').attr('type', 'number')
                         .attr('min', '1900')
                         .attr('max', '2100')
                         .attr('step', '1')
                         .attr('placeholder', 'Nhập Năm').show();
+                    $('#optionDate').show();
+                    $('#fromDate').hide();
+                    $('#toDate').hide();
+                } else if (filterValue == 'changeTime') {
+                    $('#cartTitle').text('Doanh thu theo khoảng thời gian');
+                    $('#optionDefault').hide();
+                    $('#optionDate').hide();
+                    $('#fromDate').show();
+                    $('#toDate').show();
                 }
             });
 
@@ -375,6 +402,73 @@
                     toastr.error("Vui lòng chọn cả ngày và lọc theo!");
                 }
             });
+            $('#startDate, #endDate').change(function() {
+                const startDate = $('#startDate').val();
+                const endDate = $('#endDate').val();
+                const filter = $('#filter').val();
+                const today = new Date(); // Lấy ngày hiện tại
+                const startDateObj = new Date(startDate); // Chuyển đổi startDate sang đối tượng Date
+                const endDateObj = new Date(endDate); // Chuyển đổi endDate sang đối tượng Date
+                // Kiểm tra nếu endDate lớn hơn hôm nay
+                if (endDateObj  > today) {
+                    $('#endDate').val();
+                    toastr.error('Ngày kết thúc không được lớn hơn ngày hiện tại!');
+                    return;
+                }
+                if (startDateObj  > today) {
+                    $('#startDate').val();
+                    toastr.error('Ngày bắt đầu không được lớn hơn ngày hiện tại!');
+                    return;
+                }
+                // Kiểm tra nếu startDate lớn hơn endDate
+                if (startDateObj > endDateObj) {
+                    toastr.error('Ngày bắt đầu không được lớn hơn ngày kết thúc!');
+                    return;
+                }
+                if (startDate && endDate) {
+                    $.ajax({                      
+                        url: '{{ route('admin.statistic.getRevenue') }}',
+                        method: 'POST',
+                        data: {
+                            filter: filter,
+                            startDate: startDate,
+                            endDate: endDate,
+                            _token: '{{ csrf_token() }}',
+                        },
+                        success: function(response) {
+                            if (response.labels && response.revenue) {
+                                updateBarChart({
+                                    labels: response.labels,
+                                    revenue: response.revenue,
+                                });
+                                updateRevenueInfo(response.revenue, filter);
+                            }
+                            if (response.registerUser !== undefined) {
+                                updateRegisterUser(response.registerUser,filter);
+                            }
+                            if (response.pendingOrder !== undefined) {
+                                pendingOrder(response.pendingOrder, filter);
+                            }
+                            if (response.orderProcessing !== undefined) {
+                                orderProcessing(response.orderProcessing,filter);
+                            }
+                            if (response.cancelConfirm !== undefined) {
+                                cancelConfirm(response.cancelConfirm,filter);
+                            }
+                            if (response.bestSellerTop10 !== undefined) {
+                                generateBestSellerTable(response.bestSellerTop10,filter);
+                            }
+                            if (response.completedOrder !== undefined && response.cancelOrder !==undefined) {
+                                rateCompletedAndCancel(response.completedOrder, response.cancelOrder,filter);
+                            }
+                            toastr.success('Dữ liệu đã được cập nhật thành công!');
+                        },
+                        error: function() {
+                            toastr.error('Đã xảy ra lỗi. Vui lòng thử lại.');
+                        }
+                    });
+                } 
+            });
         });
         // Top 10 Best Seller
         function generateBestSellerTable(data, filter) {
@@ -391,6 +485,9 @@
                     break;
                 case '14day':
                     label = 'Top 10 sản phẩm bán chạy 14 ngày gần nhất';
+                    break;
+                case 'changeTime':
+                    label = 'Top 10 sản phẩm bán chạy khoảng thời gian';
                     break;
                 default:
                     label = 'Top 10 sản phẩm bán chạy ';
@@ -441,6 +538,9 @@
                 case '14day':
                     label = 'Doanh thu 14 ngày gần nhất';
                     break;
+                case 'changeTime':
+                    label = 'Doanh thu theo khoảng thời gian';
+                    break;
                 default:
                     label = 'Doanh thu 14 ngày gần nhất';
                     break;
@@ -454,8 +554,8 @@
         }
         // Người dùng đăng ký 
         function updateRegisterUser(registerUser, filter) {
-             // Kiểm tra xem countStatus có hợp lệ không
-             if (registerUser === undefined || registerUser === null) {
+            // Kiểm tra xem countStatus có hợp lệ không
+            if (registerUser === undefined || registerUser === null) {
                 registerUser = 0; // Nếu không có dữ liệu, gán mặc định là 0
             }
 
@@ -474,6 +574,9 @@
                     break;
                 case '14day':
                     label = 'Người dùng đăng ký 14 ngày gần nhất';
+                    break;
+                case 'changeTime':
+                    label = 'Người dùng đăng ký khoảng thời gian ';
                     break;
                 default:
                     label = 'Người dùng đăng ký';
@@ -502,6 +605,9 @@
                 case '14day':
                     label = 'Đơn hàng chờ xác nhận 14 ngày gần nhất';
                     break;
+                case 'changeTime':
+                    label = 'Đơn hàng chờ xác nhận khoảng thời gian ';
+                    break;
                 default:
                     label = 'Đơn hàng chờ xác nhận ';
                     break;
@@ -528,6 +634,9 @@
                 case '14day':
                     label = 'Đơn hàng đang xử lý 14 ngày gần nhất';
                     break;
+                case 'changeTime':
+                    label = 'Đơn hàng đang xử lý khoảng thời gian ';
+                    break;
                 default:
                     label = 'Đơn hàng đang xử lý';
                     break;
@@ -553,6 +662,9 @@
                     break;
                 case '14day':
                     label = 'Đơn hàng chờ xác nhận hủy 14 ngày gần nhất';
+                    break;
+                case 'changeTime':
+                    label = 'Đơn hàng chờ xác nhận hủy khoảng thời gian ';
                     break;
                 default:
                     label = 'Đơn hàng chờ xác nhận hủy';
@@ -581,6 +693,9 @@
                     break;
                 case '14day':
                     label = 'Tỷ lệ đơn hàng đã giao và đã hủy 14 ngày gần nhất';
+                    break;
+                case 'changeTime':
+                    label = 'Tỷ lệ đơn hàng đã giao và đã hủy khoảng thời gian';
                     break;
                 default:
                     label = 'Tỷ lệ đơn hàng đã giao và đã hủy';

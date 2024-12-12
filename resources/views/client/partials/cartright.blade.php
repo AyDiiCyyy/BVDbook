@@ -20,7 +20,7 @@
                                 <span class="quantity-price">
                                     <p style="margin: 5px 0 0;">Số lượng: {{ $cartItem->quantity }}</p>
                                     Giá sản phẩm: <span
-                                        class="amount">{{ number_format($cartItem->products->price, 0, '.', '.') }}₫</span>
+                                        class="amount">{{ number_format($cartItem->products->sale??$cartItem->products->price, 0, '.', '.') }}₫</span>
                                 </span>
                             </div>
                         </li>

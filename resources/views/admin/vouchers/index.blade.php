@@ -53,9 +53,9 @@
                                     onchange="this.form.submit()">
                                     <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Tất cả trạng
                                         thái</option>
-                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Đang hoạt
+                                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Hoạt
                                         động</option>
-                                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Hết hạn
+                                    <option value="expired" {{ request('status') == 'expired' ? 'selected' : '' }}>Không hoạt động
                                     </option>
                                 </select>
                             </div>
@@ -90,13 +90,12 @@
                                 <td>{{ number_format($voucher->discount_amount) }} VND</td>
                                 <td>{{ $voucher->usage_limit }}</td>
                                 <td>{{ number_format($voucher->min_order_amount) }} VND</td>
-                                <td class="voucher-status" data-id="{{ $voucher->id }}" style="cursor: pointer;">
-                                    <button
-                                        class="toggle-status-btn btn btn-sm {{ $voucher->status === 'active' ? 'btn-success' : 'btn-danger' }} text-white"
-                                        data-id="{{ $voucher->id }}" data-status="{{ $voucher->status }}"
-                                        data-url="{{ route('admin.voucher.toggleStatus', $voucher->id) }}">
-                                        {{ $voucher->status === 'active' ? 'Còn hiệu lực' : 'Hết hiệu lực' }}
-                                    </button>
+                                <td>
+                                    @if ($voucher->status === 'active')
+                                        <span class="badge bg-success">Hoạt động</span>
+                                    @else
+                                        <span class="badge bg-danger">Không hoạt động</span>
+                                    @endif
                                 </td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->start)->format('d/m/Y') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($voucher->end)->format('d/m/Y') }}</td>
@@ -119,65 +118,4 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.voucher-status').forEach(cell => {
-                cell.addEventListener('click', function() {
-                    const voucherId = this.getAttribute('data-id');
-                    const button = this.querySelector('button'); // Lấy nút bên trong ô trạng thái
-
-                    fetch(`/admin/voucher/${voucherId}/toggle-status`, {
-                            method: 'PATCH',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Cập nhật nội dung và màu sắc của nút
-                                button.textContent = data.newStatus === 'Còn hiệu lực' ?
-                                    'Còn hiệu lực' : 'Hết hiệu lực';
-                                button.setAttribute('data-status', data.newStatus ===
-                                    'Còn hiệu lực' ? 'active' : 'expired');
-
-                                // Cập nhật màu sắc của nút
-                                if (data.newStatus === 'Còn hiệu lực') {
-                                    button.classList.remove('btn-danger');
-                                    button.classList.add('btn-success');
-                                } else {
-                                    button.classList.remove('btn-success');
-                                    button.classList.add('btn-danger');
-                                }
-                                Swal.fire({
-                                    title: "Thành công!",
-                                    text: "Thay đổi trạng thái voucher thành công",
-                                    icon: "success",
-                                    confirmButtonText: "OK",
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: "Thất bại!",
-                                    text: data.message,
-                                    icon: "error",
-                                    confirmButtonText: "OK",
-                                });
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Có lỗi xảy ra:', error);
-                            Swal.fire({
-                                title: "Lỗi!",
-                                text: "Không thể thay đổi trạng thái voucher.",
-                                icon: "error",
-                                confirmButtonText: "OK"
-                            });
-                        });
-                });
-            });
-        });
-    </script>
 @endsection

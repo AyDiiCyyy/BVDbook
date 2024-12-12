@@ -31,4 +31,6 @@ class Voucher extends Model
     public function UserVouchers (){
         return $this->hasMany(UserVoucher::class,'voucher_id','id');
     }
+
+    
 }

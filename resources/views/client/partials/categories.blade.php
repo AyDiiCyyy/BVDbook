@@ -18,8 +18,12 @@
             @foreach ($category as $item )
             <div class="category-list {{ $loop->first ? 'mb-30px' : '' }}">
                 <div class="category-thumb">
-                    <a href="shop-4-column.html">
-                        <img src="{{ asset('client/assets/images/category/1.png') }}" alt="" />
+                    <a href="{{ route('danhmucSanpham', ['slug'=>$item->slug]) }}">
+                        @if ($item->image!='')
+                        <img src="{{ asset('storage').'/'.$item->image }}" alt="" />
+                        @else
+                        <img src="{{ asset('storage/uploads/categories/1733812164_Group 1.png') }}" alt="" />
+                        @endif
                     </a>
                 </div>
                 <div class="desc-listcategoreis">

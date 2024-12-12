@@ -28,7 +28,7 @@ class StoreVoucherRequest extends FormRequest
             'min_order_amount' => 'required|numeric|min:1000|max:99999999',
             'usage_limit' => 'required|integer|min:1|max:2000000000',
             'description' => 'required|string|max:255',
-            'start' => 'required|date|after_or_equal:today',
+            'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start|after_or_equal:today'
         ];
     }
@@ -59,7 +59,6 @@ class StoreVoucherRequest extends FormRequest
             "description.required" => "Mô tả bắt buộc nhập",
             "start.required" => "Ngày bắt đầu bắt buộc nhập",
             "end.required" => "Ngày kết thúc bắt buộc nhập",
-            "start.after_or_equal" => "Ngày bắt đầu không được nhỏ hơn ngày hiện tại.",
             "end.after_or_equal" => "Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu và không được nhỏ hơn ngày hiện tại.",
         ];
     }

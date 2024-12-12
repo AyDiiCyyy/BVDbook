@@ -17,6 +17,8 @@ class StatsController extends Controller
     {
         $filter = $request->input('filter');
         $selectedDate = $request->input('date');
+        $startDate = $request->input('startDate');  // Ngày bắt đầu
+        $endDate = $request->input('endDate');  // Ngày kết thúc
         $revenue = [];
         $labels = [];
         try {
@@ -25,7 +27,87 @@ class StatsController extends Controller
                     'error' => 'Bộ lọc là bắt buộc.',
                 ], 400);
             }
-
+            if ($filter === 'changeTime' && $startDate && $endDate) {
+                // Kiểm tra nếu ngày bắt đầu không lớn hơn ngày kết thúc và ngày kết thúc không vượt quá ngày hiện tại
+                // if (Carbon::parse($startDate)->greaterThanOrEqualTo(Carbon::parse($endDate)) || Carbon::parse($endDate)->isFuture()) {
+                //     return response()->json(['error' => 'Ngày bắt đầu không được lớn hơn ngày kết thúc và ngày kết thúc không được vượt quá ngày hiện tại.'], 400);
+                // }
+        
+                // Doanh thu theo ngày được chọn
+                $revenue = Order::select(
+                    DB::raw('DATE(created_at) as day'),
+                    DB::raw('SUM(total_money) as revenue')
+                )
+                    ->where('status', 4)
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('payment_status', 1)
+                    ->groupBy('day')
+                    ->orderBy('day', 'asc')
+                    ->get();
+        
+                // Kiểm tra nếu có dữ liệu
+                if ($revenue->isNotEmpty()) {
+                    $labels = [];
+                    $revenues = [];
+                    foreach ($revenue as $item) {
+                        $labels[] = Carbon::parse($item->day)->translatedFormat('d/m/Y');
+                        $revenues[] = $item->revenue;
+                    }
+                } else {
+                    $revenues = [0];
+                    $labels = ['Không có dữ liệu'];
+                }
+        
+                // Trạng thái trong khoảng thời gian
+                $ordersCount = Order::query()
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->whereIn('status', [1, 2, 5])
+                    ->get()
+                    ->groupBy('status');
+        
+                // Người dùng đăng ký trong khoảng thời gian
+                $registerUser = User::where('users.created_at', '>=', $startDate)
+                                    ->where('users.created_at', '<=', $endDate)
+                                    ->count();
+        
+                // Top 10 sản phẩm bán chạy trong khoảng thời gian
+                $bestSellerTop10 = OrderDetail::query()
+                    ->join('products', 'order_details.product_id', '=', 'products.id')
+                    ->join('orders', 'order_details.order_id', '=', 'orders.id')
+                    ->select(
+                        'products.name as product_name',
+                        DB::raw('SUM(order_details.quantity) as total_sold'),
+                        DB::raw('SUM(order_details.price * order_details.quantity) as total_revenue')
+                    )
+                    ->where('orders.status', 4)
+                    ->whereBetween('orders.created_at', [$startDate, $endDate])
+                    ->groupBy('product_name', 'order_details.product_id')
+                    ->orderByDesc('total_sold')
+                    ->limit(10)
+                    ->get();
+        
+                // Tỷ lệ
+                $completedOrder = Order::query()
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('status', 4)
+                    ->count();
+                $cancelOrder = Order::query()
+                    ->whereBetween('created_at', [$startDate, $endDate])
+                    ->where('status', 6)
+                    ->count();
+        
+                return response()->json([
+                    'revenue' => $revenues,
+                    'labels' => $labels,
+                    'registerUser' => $registerUser,
+                    'pendingOrder' => $ordersCount->get(1, collect())->count(),
+                    'orderProcessing' => $ordersCount->get(2, collect())->count(),
+                    'cancelConfirm' => $ordersCount->get(5, collect())->count(),
+                    'bestSellerTop10' => $bestSellerTop10,
+                    'completedOrder' => $completedOrder,
+                    'cancelOrder' => $cancelOrder,
+                ]);
+            }
             // Lọc 14 ngày
             if ($filter === '14day') {
                 // Doanh thu 14 ngày

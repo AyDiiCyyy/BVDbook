@@ -103,7 +103,7 @@
         <div class="card">
             <h4 class="card-title">Thông tin đơn hàng</h4>
             <p><strong>Mã đơn hàng:</strong> <span style="color: #16a085;">{{ $order->order_code }}</span></p>
-            <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y H:i:s') }}</p>
+            <p><strong>Ngày đặt:</strong> {{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}</p>
             <p><strong>Phương thức thanh toán:</strong> <span style="color: #8e44ad;">
                 {{ $order->payment == 0 ? 'Thanh toán khi nhận hàng' : 'Thanh toán VNPay' }}
             </span></p>
@@ -122,7 +122,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $sum = 0;
+                    @endphp
                     @foreach ($order->OrderDetails as $item)
+                    @php
+                        $sum += ($item->price*$item->quantity)
+                    @endphp
                     <tr>
                         <td>{{ $item->Product->name }}</td>
                         <td>{{ $item->quantity }}</td>
@@ -138,7 +144,7 @@
         <div class="card order-summary">
             @if ($order?->Voucher?->id != 0)
             <p><strong>Tổng tiền:</strong> <span style="color: #e74c3c;">
-                {{ number_format($order->total_money + $order->Voucher->discount_amount, 0, '.', '.') }} VND
+                {{ number_format($sum, 0, '.', '.') }} VND
             </span></p>
             <p><strong>Giảm giá:</strong> <span style="color: #3498db;">
                 - {{ number_format($order->Voucher->discount_amount, 0, '.', '.') }} VND

@@ -4,6 +4,16 @@
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-file-upload/10.23.0/css/jquery.fileupload.css" rel="stylesheet" /> --}}
+    <style>
+        textarea.auto-resize {
+            resize: none;
+            /* Vô hiệu hóa khả năng thay đổi kích thước thủ công */
+            transition: height 0.2s ease;
+            /* Hiệu ứng mượt khi thay đổi chiều cao */
+            overflow: hidden;
+            /* Ẩn thanh cuộn dọc */
+        }
+    </style>
 @endsection
 @section('content')
     <main class="app-main"> <!--begin::App Content Header-->
@@ -96,7 +106,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Mô tả dài</label>
-                                            <textarea class="form-control" name="long_description" cols="" rows="">{{ old('long_description') }}</textarea>
+                                            <textarea class="form-control auto-resize" name="long_description" cols="" rows="3" style="overflow:hidden;">{{ old('long_description') }}</textarea>
                                         </div>
                                         
 
@@ -307,5 +317,24 @@
             //In slug ra textbox có id “slug”
             document.getElementById('convert_slug').value = slug;
         }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textareas = document.querySelectorAll('.auto-resize');
+    
+            textareas.forEach(textarea => {
+                // Hàm tự động thay đổi chiều cao
+                const autoResize = () => {
+                    textarea.style.height = 'auto'; // Đặt chiều cao về auto trước
+                    textarea.style.height = textarea.scrollHeight + 'px'; // Thay đổi chiều cao theo nội dung
+                };
+    
+                // Gọi hàm khi nội dung thay đổi
+                textarea.addEventListener('input', autoResize);
+    
+                // Gọi hàm một lần khi tải trang nếu có nội dung sẵn
+                autoResize();
+            });
+        });
     </script>
 @endsection

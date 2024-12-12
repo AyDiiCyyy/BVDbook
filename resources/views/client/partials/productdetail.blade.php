@@ -6,7 +6,7 @@
 
 @section('content')
     <!-- Breadcrumb Area start -->
-    <section class="breadcrumb-area" style="margin-top: -30px">
+    <section class="breadcrumb-area" style="margin-top: -30px; padding: 110px 0;">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -23,119 +23,125 @@
     </section>
     <!-- Breadcrumb Area End -->
     <!-- Shop details Area start -->
- <!-- Shop details Area start -->
- <section class="product-details-area mtb-60px" style="margin-top: -50px">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <div class="product-details-img product-details-tab">
-                    <div class="product-image" style="width:690px; height: 690px;">
-                        <img id="main-image" src="{{ asset($productDetail->image) }}" alt="" style="width: 100%; " />
-                    </div>
-                    <div id="gallery" class="product-dec-slider-2">
-                        <a class="active" href="javascript:void(0);" data-image="{{ asset($productDetail->image) }}">
-                            <img src="{{ asset($productDetail->image) }}" alt="" style="width: 100px; height: auto;" />
-                        </a>
-                        @foreach ($galleriesOfProduct as $gallery)
-                            <a href="javascript:void(0);" data-image="{{ asset($gallery) }}">
-                                <img src="{{ asset($gallery) }}" alt="" style="width: 100px; height: auto;" />
+    <!-- Shop details Area start -->
+    <section class="product-details-area mtb-60px" style="margin-top: -50px">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="product-details-img product-details-tab">
+                        <div class="product-image"
+                            style="width: 450px; height: 450px; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #f5f5f5; border-radius: 8px; border: 1px solid #ddd; margin: 0 auto;">
+                            <img id="main-image" src="{{ asset($productDetail->image) }}" alt=""
+                                style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+                        </div>
+                        <div id="gallery" class="product-dec-slider-2">
+                            <a class="active" href="javascript:void(0);" data-image="{{ asset($productDetail->image) }}">
+                                <img src="{{ asset($productDetail->image) }}" alt=""
+                                    style="width: 100px; height: 100px; object-fit: contain;" />
                             </a>
-                        @endforeach
+                            @foreach ($galleriesOfProduct as $gallery)
+                                <a href="javascript:void(0);" data-image="{{ asset($gallery) }}">
+                                    <img src="{{ asset($gallery) }}" alt=""
+                                        style="width: 100px; height: 100px; object-fit: contain;" />
+                                </a>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-12">
-                <div class="product-details-content">
-                    <h2 style="line-height: 30px">{{ $productDetail->name }}</h2>
-                    <p class="reference">Thuộc danh mục: <span>{{ implode(',', $categoriesOfProduct) }}</span></p>
-                    <div class="pro-details-rating-wrap">
-                        <div class="rating-product">
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
-                            <i class="ion-android-star"></i>
+                <div class="col-xl-6 col-lg-6 col-md-12">
+                    <div class="product-details-content">
+                        <h2 style="line-height: 30px">{{ $productDetail->name }}</h2>
+                        <p class="reference">Thuộc danh mục: <span>{{ implode(',', $categoriesOfProduct) }}</span></p>
+                        <div class="pro-details-rating-wrap">
+                            <div class="rating-product">
+                                <i class="ion-android-star"></i>
+                                <i class="ion-android-star"></i>
+                                <i class="ion-android-star"></i>
+                                <i class="ion-android-star"></i>
+                                <i class="ion-android-star"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="pricing-meta">
-                        <ul>
-                            @if ($productDetail->sale)
-                                <li class="old-price">
-                                    <small>
+                        <div class="pricing-meta">
+                            <ul>
+                                @if ($productDetail->sale)
+                                    <li class="old-price">
+                                        <small>
+                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                        </small>
+                                    </li>
+                                    <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
+                                        {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                    </li>
+                                    <li class="discount-price" style="margin: 22px 3px">
+                                        -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                    </li>
+                                @else
+                                    <li class="old-price not-cut ">
                                         {{ number_format($productDetail->price, 0, '.', '.') }}₫
-                                    </small>
-                                </li>
-                                <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                    {{ number_format($productDetail->sale, 0, '.', '.') }}₫
-                                </li>
-                                <li class="discount-price" style="margin: 22px 3px">
-                                    -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
-                                </li>
-                            @else
-                                <li class="old-price not-cut ">
-                                    {{ number_format($productDetail->price, 0, '.', '.') }}₫
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                    <p>{{ $productDetail->short_description }}</p>
-                    <div class="pro-details-quality mt-0px">
-                        <div class="cart-plus-minus">
-                            <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                    </li>
+                                @endif
+                            </ul>
                         </div>
-                        <div class="pro-details-cart btn-hover">
-                            <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
-                                Thêm Giỏ Hàng</a>
+                        <p>{{ $productDetail->short_description }}</p>
+                        <div class="pro-details-quality mt-0px">
+                            <div class="cart-plus-minus">
+                                <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                            </div>
+                            <div class="pro-details-cart btn-hover">
+                                <a href="#" class="add-to-cart-btn" data-product-id="{{ $productDetail->id }}"> +
+                                    Thêm Giỏ Hàng</a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="pro-details-wish-com">
-                        <div class="pro-details-wishlist">
-                            <a href="#"><i class="ion-android-favorite-outline"></i>Thêm vào danh sách yêu thích</a>
+                        <div class="pro-details-wish-com">
+                            <div class="pro-details-wishlist">
+                                <a href="#"><i class="ion-android-favorite-outline"></i>Thêm vào danh sách yêu
+                                    thích</a>
+                            </div>
+                            <div class="pro-details-compare">
+                                <a href="#"><i class="ion-ios-shuffle-strong"></i>Thêm vào so sánh sản phẩm</a>
+                            </div>
                         </div>
-                        <div class="pro-details-compare">
-                            <a href="#"><i class="ion-ios-shuffle-strong"></i>Thêm vào so sánh sản phẩm</a>
+                        <div class="pro-details-social-info">
+                            <span>Chia sẻ</span>
+                            <div class="social-info">
+                                <ul>
+                                    <li>
+                                        <a href="#"><i class="ion-social-facebook"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="ion-social-twitter"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="ion-social-google"></i></a>
+                                    </li>
+                                    <li>
+                                        <a href="#"><i class="ion-social-instagram"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div class="pro-details-social-info">
-                        <span>Chia sẻ</span>
-                        <div class="social-info">
+                        <div class="pro-details-policy">
                             <ul>
                                 <li>
-                                    <a href="#"><i class="ion-social-facebook"></i></a>
+                                    <img src="{{ asset('client/assets/images/icons/policy.png') }}" alt="" />
+                                    <span>Chính sách bảo mật (Đảm bảo quyền riêng tư cho người dùng và khách hàng khi sử
+                                        dụng trang web)</span>
                                 </li>
                                 <li>
-                                    <a href="#"><i class="ion-social-twitter"></i></a>
+                                    <img src="{{ asset('client/assets/images/icons/policy-2.png') }}" alt="" />
+                                    <span>Chính sách giao hàng (Miễn phí giao hàng khi đặt 3-5 sản phẩm) </span>
                                 </li>
-                                <li>
-                                    <a href="#"><i class="ion-social-google"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="ion-social-instagram"></i></a>
+                                <li><img src="{{ asset('client/assets/images/icons/policy-3.png') }}" alt="" />
+                                    <span>Chính sách đổi trả (Đổi trả 1 đổi 1 trong vòng 15 ngày)</span>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="pro-details-policy">
-                        <ul>
-                            <li>
-                                <img src="{{ asset('client/assets/images/icons/policy.png') }}" alt="" />
-                                <span>Chính sách bảo mật (Đảm bảo quyền riêng tư cho người dùng và khách hàng khi sử dụng trang web)</span>
-                            </li>
-                            <li>
-                                <img src="{{ asset('client/assets/images/icons/policy-2.png') }}" alt="" />
-                                <span>Chính sách giao hàng (Miễn phí giao hàng khi đặt 3-5 sản phẩm) </span>
-                            </li>
-                            <li><img src="{{ asset('client/assets/images/icons/policy-3.png') }}" alt="" />
-                                <span>Chính sách đổi trả (Đổi trả 1 đổi 1 trong vòng 15 ngày)</span>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- Shop details Area End -->
+    </section>
+    <!-- Shop details Area End -->
     <!-- Shop details Area End -->
     <!-- product details description area start -->
     <div class="description-review-area mb-60px">
@@ -149,7 +155,8 @@
                             <span id="review-count">({{ count($getListComments) }})</span></a>
                     @else
                         <a class="active" data-bs-toggle="tab" href="#des-details2">Chi tiết thêm sản phẩm</a>
-                        <a data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm <span id="review-count">({{ count($getListComments) }})</span></a>
+                        <a data-bs-toggle="tab" href="#des-details3">Đánh giá sản phẩm <span
+                                id="review-count">({{ count($getListComments) }})</span></a>
                     @endif
                 </div>
                 <div class="tab-content description-review-bottom">
@@ -183,7 +190,7 @@
                 @endif
                 <div class="row">
                     <div class="col-lg-7">
-                        <div class="review-wrapper" id="review-wrapper" >
+                        <div class="review-wrapper" id="review-wrapper">
                             @foreach ($getListComments as $comment)
                                 <div class="single-review">
                                     <div class="review-img">
@@ -217,14 +224,15 @@
                     </div>
                     <div class="col-lg-5">
                         <div class="ratting-form-wrapper pl-50">
-                          
-                            @if ($orderDetail )
-                                
+
+                            @if ($orderDetail)
                                 <h3>Đánh giá sản phẩm </h3>
                                 <div class="ratting-form mt-4">
-                                    <form id="comment-form" action="{{ route('client.product.comment', $productDetail->id) }}" method="POST">
+                                    <form id="comment-form"
+                                        action="{{ route('client.product.comment', $productDetail->id) }}"
+                                        method="POST">
                                         @csrf
-                                        <input type="hidden" name="oder_detail_id" value="{{$orderDetail->id}}">
+                                        <input type="hidden" name="oder_detail_id" value="{{ $orderDetail->id }}">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="rating-form-style form-submit">
@@ -236,7 +244,8 @@
                                     </form>
                                 </div>
                             @else
-                                <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện trải nghiệm mua hàng.</p>
+                                <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện
+                                    trải nghiệm mua hàng.</p>
                             @endif
                         </div>
                     </div>
@@ -289,22 +298,22 @@
                             </div>
                             <div class="pricing-meta">
                                 <ul>
-                                    @if ($productDetail->sale)
+                                    @if ($related->sale)
                                         <li class="old-price">
                                             <small>
-                                                {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                                {{ number_format($related->price, 0, '.', '.') }}₫
                                             </small>
 
                                         </li>
                                         <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($related->sale, 0, '.', '.') }}₫
                                         </li>
                                         <li class="discount-price">
-                                            -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                            -{{ number_format((($related->price - $related->sale) / $related->price) * 100, 0) }}%
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                            {{ number_format($related->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>
@@ -371,22 +380,22 @@
                             </div>
                             <div class="pricing-meta">
                                 <ul>
-                                    @if ($productDetail->sale)
+                                    @if ($product->sale)
                                         <li class="old-price">
                                             <small>
-                                                {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                                {{ number_format($product->price, 0, '.', '.') }}₫
                                             </small>
 
                                         </li>
                                         <li style="color:rgb(207, 41, 43)" class="old-price not-cut ">
-                                            {{ number_format($productDetail->sale, 0, '.', '.') }}₫
+                                            {{ number_format($product->sale, 0, '.', '.') }}₫
                                         </li>
                                         <li class="discount-price">
-                                            -{{ number_format((($productDetail->price - $productDetail->sale) / $productDetail->price) * 100, 0) }}%
+                                            -{{ number_format((($product->price - $product->sale) / $product->price) * 100, 0) }}%
                                         </li>
                                     @else
                                         <li class="old-price not-cut ">
-                                            {{ number_format($productDetail->price, 0, '.', '.') }}₫
+                                            {{ number_format($product->price, 0, '.', '.') }}₫
                                         </li>
                                     @endif
                                 </ul>
@@ -615,25 +624,25 @@
             }
 
         });
-//comment
-$(document).ready(function() {
- 
-    $('#comment-form').on('submit', function(e) {
-        e.preventDefault(); 
+        //comment
+        $(document).ready(function() {
 
-      
-        $.ajax({
-            url: $(this).attr('action'), 
-            method: "POST",
-            data: $(this).serialize(), 
-            success: function(response) {
-                
-                const userName = response.user_name; 
-                const userAvatar = response.user_avatar; 
-                const createdAt = response.created_at; 
+            $('#comment-form').on('submit', function(e) {
+                e.preventDefault();
 
-                // Thêm bình luận mới vào danh sách bình luận
-                $('#review-wrapper').prepend(`
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    method: "POST",
+                    data: $(this).serialize(),
+                    success: function(response) {
+
+                        const userName = response.user_name;
+                        const userAvatar = response.user_avatar;
+                        const createdAt = response.created_at;
+
+                        // Thêm bình luận mới vào danh sách bình luận
+                        $('#review-wrapper').prepend(`
                     <div class="single-review">
                         <div class="review-img">
                             <img class="rounded-circle" src="${userAvatar}" alt="" width="100" height="100" />
@@ -656,47 +665,47 @@ $(document).ready(function() {
                     </div>
                 `);
 
-                
-                $('#review-count').text(`(${response.count})`);
 
-               
-                Swal.fire({
-                    title: "Thành công!",
-                    text: "Bình luận của bạn đã được gửi thành công.",
-                    icon: "success",
-                    confirmButtonText: "OK",
-                }).then(() => {
-                   
-                    $('#comment-form').parent().html(`
+                        $('#review-count').text(`(${response.count})`);
+
+
+                        Swal.fire({
+                            title: "Thành công!",
+                            text: "Bình luận của bạn đã được gửi thành công.",
+                            icon: "success",
+                            confirmButtonText: "OK",
+                        }).then(() => {
+
+                            $('#comment-form').parent().html(`
                         <p>Bạn không thể bình luận cho sản phẩm này, hãy mua hàng và để lại đánh giá để cải thiện trải nghiệm mua hàng.</p>
                     `);
-                   
-                    $('h3:contains("Đánh giá sản phẩm")').hide();
-                });
 
-                
-                $('#comment-form')[0].reset();
-            },
-            error: function(xhr) {
-               
-                let errorMessage = "Có lỗi xảy ra, vui lòng thử lại sau!";
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                }
+                            $('h3:contains("Đánh giá sản phẩm")').hide();
+                        });
 
-               
-                Swal.fire({
-                    title: "Thất bại!",
-                    text: errorMessage,
-                    icon: "error",
-                    confirmButtonText: "OK",
+
+                        $('#comment-form')[0].reset();
+                    },
+                    error: function(xhr) {
+
+                        let errorMessage = "Có lỗi xảy ra, vui lòng thử lại sau!";
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+
+                        Swal.fire({
+                            title: "Thất bại!",
+                            text: errorMessage,
+                            icon: "error",
+                            confirmButtonText: "OK",
+                        });
+                    }
                 });
-            }
+            });
         });
-    });
-});
-$(document).ready(function() {
-
+        $(document).ready(function() {
+            // Thay đổi ảnh lớn khi nhấp vào ảnh nhỏ
             $('#gallery a').on('click', function() {
                 var newImage = $(this).data('image');
                 $('#main-image').attr('src', newImage);

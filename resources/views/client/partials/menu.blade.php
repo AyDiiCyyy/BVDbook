@@ -75,7 +75,10 @@
                             data-bs-toggle="dropdown"><i class="bi bi-person me-1"></i>{{ Auth::user()->name }} </a>
                         <ul class="dropdown-menu mt-2 ms-4">
                             <li><a class="dropdown-item" href="{{ route('my-account') }}">Tài Khoản</a></li>
-                            <li><a class="dropdown-item" href="#">Thanh toán</a></li>
+                            <li><a class="dropdown-item" href="{{ route('checkout') }}">Thanh toán</a></li>
+                            @if (Auth::user()->role == 0)
+                            <li><a class="dropdown-item" href="{{ route('admin.dashboard') }}">Trang admin</a></li>
+                            @endif
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

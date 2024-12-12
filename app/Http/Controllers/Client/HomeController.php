@@ -68,12 +68,13 @@ class HomeController extends Controller
 
     public function index()
     {
-        //sản phẩm nổi bật 
+        //sản phẩm nổi bật
         $product_noibat = Product::query()
             ->where('best', 1)
             ->where('active', 1)
             ->where('quantity', '>', 0)
             ->orderBy('order')
+            ->orderBy('id','desc')
             ->limit(10)
             ->get();
         $product2 = $product_noibat->chunk(2);
@@ -139,11 +140,11 @@ class HomeController extends Controller
         })->pluck('name')->toArray();
         // implode biến mảng thành chuỗi
         // Sản phẩm liên quan
-        $relatedProducts = Product::query()->where('id', '<>', $productDetail->id)->get();
+        $relatedProducts = Product::query()->where('id', '<>', $productDetail->id)->where('released',$productDetail->released)->where('active',1)->limit(10)->get();
         // Sản phẩm cùng danh mục
         $getProductsByCategory = Product::query()->whereHas('ProductCategories', function ($query) use ($productDetail) {
             $query->where('category_id', $productDetail->ProductCategories?->first()?->category_id);
-        })->where('id', '<>', $productDetail->id)->get();
+        })->where('id', '<>', $productDetail->id)->where('active',1)->limit(10)->get();
         // dd($getProductsByCategory);
 
         // Comment
@@ -152,10 +153,10 @@ class HomeController extends Controller
         ->with('user')
         ->orderBy('id', 'desc')
         ->get();
-      
+
         $orderDetail = OrderDetail::where('id', $request->oder_detail_id)
             ->where('active', 0)
-            ->first(); 
+            ->first();
 
         return view('client.partials.productdetail', compact('productDetail', 'galleriesOfProduct', 'categoriesOfProduct', 'relatedProducts', 'getProductsByCategory', 'getListComments', 'orderDetail'));
     }
@@ -181,19 +182,19 @@ class HomeController extends Controller
         $commentCount = Comment::where('product_id', $productId);
         $commentCount = Comment::where('product_id', $productId)->count();
 
-        
+
         $user = auth()->user();
 
         return response()->json([
             'content' => $comment->content,
             'user_name' => $user->name,
-            'user_avatar' => $user->avatar ?? asset('assets/img/user2-160x160.jpg'), 
-            'created_at' => $comment->created_at->format('Y/m/d H:i:s'), 
+            'user_avatar' => $user->avatar ?? asset('assets/img/user2-160x160.jpg'),
+            'created_at' => $comment->created_at->format('Y/m/d H:i:s'),
             'count' => $commentCount,
         ]);
     }
 
     return response()->json(['message' => 'Có lỗi xảy ra.'], 400);
 }
-  
+
 }

@@ -4,7 +4,7 @@
         <!-- left side -->
         <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
             <div class="feature-left">
-                <img src="{{ asset('client/assets/images/feature-bg/1.jpg') }}" alt="" class="img-responsive" />
+                <img src="{{ asset('storage/products/image 4.png') }}" alt="" class="img-responsive" />
             </div>
         </div>
         <!-- right side -->
