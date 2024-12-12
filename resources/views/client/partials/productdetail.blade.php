@@ -30,7 +30,7 @@
             <div class="col-xl-6 col-lg-6 col-md-12">
                 <div class="product-details-img product-details-tab">
                     <div class="product-image" style="width:690px; height: 690px;">
-                        <img id="main-image" src="{{ asset($productDetail->image) }}" alt="" style="width: 100%; height: auto;" />
+                        <img id="main-image" src="{{ asset($productDetail->image) }}" alt="" style="width: 100%; " />
                     </div>
                     <div id="gallery" class="product-dec-slider-2">
                         <a class="active" href="javascript:void(0);" data-image="{{ asset($productDetail->image) }}">
@@ -696,7 +696,7 @@ $(document).ready(function() {
     });
 });
 $(document).ready(function() {
-            // Thay đổi ảnh lớn khi nhấp vào ảnh nhỏ
+
             $('#gallery a').on('click', function() {
                 var newImage = $(this).data('image');
                 $('#main-image').attr('src', newImage);
