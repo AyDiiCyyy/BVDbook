@@ -122,7 +122,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $sum = 0;
+                    @endphp
                     @foreach ($order->OrderDetails as $item)
+                    @php
+                        $sum += ($item->price*$item->quantity)
+                    @endphp
                     <tr>
                         <td>{{ $item->Product->name }}</td>
                         <td>{{ $item->quantity }}</td>
@@ -138,7 +144,7 @@
         <div class="card order-summary">
             @if ($order?->Voucher?->id != 0)
             <p><strong>Tổng tiền:</strong> <span style="color: #e74c3c;">
-                {{ number_format($order->total_money + $order->Voucher->discount_amount, 0, '.', '.') }} VND
+                {{ number_format($sum, 0, '.', '.') }} VND
             </span></p>
             <p><strong>Giảm giá:</strong> <span style="color: #3498db;">
                 - {{ number_format($order->Voucher->discount_amount, 0, '.', '.') }} VND

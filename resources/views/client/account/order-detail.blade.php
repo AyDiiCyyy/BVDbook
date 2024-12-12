@@ -58,8 +58,8 @@
                                                     <tr>
                                                         <th style="width: 15%;">Ảnh sản phẩm</th>
                                                         <th style="width: 30%;">Tên sản phẩm</th>
-                                                        <th style="width: 10%;">Số lượng</th>
-                                                        <th style="width: 20%;">Đơn giá</th>
+                                                        <th style="width: 15%;">Số lượng</th>
+                                                        <th style="width: 15%;">Đơn giá</th>
                                                         <th style="width: 20%;">Thành tiền</th>
                                                         @if ($order->status == 4 && $order->payment_status == 1)
                                                             <th style="width: 15%;">Hành động</th>
@@ -127,19 +127,19 @@
                                                                 đ</strong></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Phương thức thanh toán:</td>
-                                                        <td><strong>{{ $order->payment == 1 ? 'Ship COD' : 'Thanh toán online' }}</strong>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Voucher giảm giá:</td>
                                                         <td><strong>{{ $order->Voucher ? number_format($order->Voucher->discount_amount, 0, ',', '.') . ' đ' : 'Không có' }}</strong>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td>Số tiền phải trả:</td>
-                                                        <td><strong>{{ number_format($totalAmount - ($order->Voucher ? $order->Voucher->discount_amount : 0), 0, ',', '.') }}
+                                                        <td><strong>{{ number_format($order->total_money, 0, ',', '.') }}
                                                                 đ</strong></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Phương thức thanh toán:</td>
+                                                        <td><strong>{{ $order->payment == 1 ? 'Ship COD' : 'Thanh toán online' }}</strong>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
