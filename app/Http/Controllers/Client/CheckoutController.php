@@ -257,7 +257,7 @@ class CheckoutController extends Controller
                 'address' => $request->address,
                 'payment' => $request->payment,
                 'shipping' => 1,
-                'total_money' => ($voucher?->id == null) ? $sum : $sum - $voucher->discount_amount,
+                'total_money' => ($voucher?->id == null) ? $sum : (($sum - $voucher->discount_amount)<0?0:$sum - $voucher->discount_amount),
                 'status' => 1,
                 'payment_status' => 0,
             ]);
@@ -286,6 +286,10 @@ class CheckoutController extends Controller
                 // thanh toán online
                 Mail::to($request->email)->send(new CheckoutEmail($order));
                 DB::commit();
+                if($order->total_money<=0){
+                    $order->update(['payment_status'=>1]);
+                    return response()->json(['status'=> '0d','order' => $order]);
+                }
                 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
                 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
