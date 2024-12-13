@@ -1,6 +1,28 @@
 @extends('layouts.auth')
 
 @section('content')
+<style>
+    /* CSS cho thẻ a và hiệu ứng logo */
+    .fxt-logo {
+        text-decoration: none;
+        color: #000000; /* Màu chữ trắng để nổi bật trên nền tối */
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease; /* Thêm hiệu ứng phóng to */
+    }
+    
+    .fxt-logo h2 {
+        margin: 0;
+        font-size: 2rem;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+    }
+    
+    /* Hiệu ứng khi hover */
+    .fxt-logo:hover {
+        transform: scale(1.1); /* Phóng to logo */
+    }
+    </style>
     <div id="preloader" class="preloader">
         <div class='inner'>
             <div class='line1'></div>
@@ -19,8 +41,7 @@
 			</div>
 			<div class="fxt-bg-color">
 				<div class="fxt-header">
-                    <a href="{{route('index')}}" class="fxt-logo"><img src="{{asset('assets/login/img/logo.jpg')}}" width="300px" alt="Logo')}}" ></a>
-
+                    <a href="{{route('index')}}" class="fxt-logo"><h2>BVD Book</h2></a>
 					<div class="fxt-page-switcher">
 						<a href="{{ route('login') }}" class="switcher-text switcher-text1 ">Đăng nhập</a>
 						<a href="{{ route('register') }}" class="switcher-text switcher-text2 active">Đăng ký</a>

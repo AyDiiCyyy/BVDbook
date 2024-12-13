@@ -98,7 +98,7 @@ class OrderCController extends Controller
     {
         $order = Order::find($id);
         $order = $order->update(['status'=>5]);
-        return redirect()->back()->with('status_succeed', 'Huỷ đơn thành công!');
+        return redirect()->back()->with('status_succeed', 'Huỷ đơn thành công, Vui lòng chờ admin xác nhận');
     }
 
     public function all()

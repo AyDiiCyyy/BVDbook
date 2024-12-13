@@ -13,6 +13,7 @@ class CommentController extends Controller
     public function index()
     {
         $products = Product::withCount('Comments')
+                            ->having('Comments_count', '>', 0)
                            ->orderBy('Comments_count', 'desc')
                            ->paginate(10);
     // dd($products);
@@ -41,7 +42,7 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
         $comment->delete();
         
-        return redirect()->route('admin.comments.index')->with('success', 'Bình luận đã bị xóa.');
+        return redirect()->back()->with('status_succeed', 'Bình luận đã bị xóa.');
     }
 
 }

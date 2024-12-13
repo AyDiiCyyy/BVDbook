@@ -20,7 +20,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark text-center align-middle">
                         <tr>
                             <th scope="col">User name</th>
                             <th scope="col">Ngày bình luận</th>
@@ -28,7 +28,7 @@
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center align-middle">
                         @foreach($comments as $comment)
                         <tr>
                     

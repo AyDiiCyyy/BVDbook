@@ -11,7 +11,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
+                    <thead class="thead-dark text-center align-middle">
                         <tr>
                             {{-- <th scope="col">ID</th> --}}
                             <th scope="col">Tên sản phẩm</th>
@@ -20,11 +20,11 @@
                             <th scope="col" class="d-flex justify-content-center">Hành động</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-center align-middle">
                         @foreach($products as $comment)
                         <tr>
                     
-                            <td><a href="{{ route('productDetail', ['slug' => $comment->slug ]) }}"> {{ $comment->name }}</a></td> 
+                            <td><a class="text-decoration-none text-dark" href="{{ route('productDetail', ['slug' => $comment->slug ]) }}"> {{ $comment->name }}</a></td> 
                             <td>{{ $comment->comments_count }} <i class="bi bi-chat-text"></i></td> 
                         
                             <td class="d-flex justify-content-center">
@@ -37,7 +37,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-4">
-                {{ $products->links('pagination::bootstrap-5') }}
+                {{ $products->links('pagination::bootstrap-4') }}
             </div>
         </div>
     </div>

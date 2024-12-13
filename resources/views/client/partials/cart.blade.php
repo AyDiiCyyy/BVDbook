@@ -38,7 +38,7 @@
                     <form action="#">
                         <div class="table-content table-responsive cart-table-content">
                             @if (isset($cartItems) && $cartItems->count() > 0)
-                                <table>
+                                <table style="width: 100%">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -70,8 +70,8 @@
                                                     <span
                                                         class="amount">{{ number_format($cartItem->products->sale ?? $cartItem->products->price, 0, '.', '.') }}₫</span>
                                                 </td>
-                                                <td class="product-quantity">
-                                                    <div class="input-group quantity-wrapper" style="width: 120px;">
+                                                <td class="product-quantity text-center align-middle" style="width: 0;">
+                                                    <div class="input-group quantity-wrapper" style="width: 120px; margin-left:15%">
                                                         <a href="#" class="btn btn-outline-secondary btn-sm minus"
                                                             data-id="{{ $cartItem->id }}" data-action="minus">−</a>
                                                         <input type="text"
