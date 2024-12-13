@@ -109,7 +109,7 @@
                 </table>
 
                 <div class="d-flex justify-content-center">
-                    {{ $vouchers->links() }}
+                    {{ $vouchers->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div> <!--end::Container-->

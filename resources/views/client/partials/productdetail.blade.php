@@ -92,7 +92,7 @@
                                     Thêm Giỏ Hàng</a>
                             </div>
                         </div>
-                        <div class="pro-details-wish-com">
+                        {{-- <div class="pro-details-wish-com">
                             <div class="pro-details-wishlist">
                                 <a href="#"><i class="ion-android-favorite-outline"></i>Thêm vào danh sách yêu
                                     thích</a>
@@ -100,7 +100,7 @@
                             <div class="pro-details-compare">
                                 <a href="#"><i class="ion-ios-shuffle-strong"></i>Thêm vào so sánh sản phẩm</a>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="pro-details-social-info">
                             <span>Chia sẻ</span>
                             <div class="social-info">
@@ -206,7 +206,7 @@
                                                 </div>
 
                                                 <div class="rating-product">
-                                                    <small>{{ $comment->created_at }}</small>
+                                                    <small>{{ $comment->created_at->format('d-m-Y H:i') }}</small>
 
                                                 </div>
                                             </div>
@@ -322,13 +322,8 @@
                         <div class="add-to-link">
                             <ul>
                                 <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $related->id }}"
-                                        href="#">Thêm Giỏ Hàng </a></li>
-                                <li>
-                                    <a href="#"><i class="ion-android-favorite-outline"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="ion-ios-shuffle-strong"></i></a>
-                                </li>
+                                        href="#">Thêm Giỏ Hàng </a>
+                                    </li>
                             </ul>
                         </div>
                     </article>
@@ -405,12 +400,6 @@
                             <ul>
                                 <li class="cart"><a class="add-to-cart cart-btn" data-product-id="{{ $product->id }}"
                                         href="#">Thêm Giỏ Hàng </a></li>
-                                <li>
-                                    <a href="#"><i class="ion-android-favorite-outline"></i></a>
-                                </li>
-                                <li>
-                                    <a href="#"><i class="ion-ios-shuffle-strong"></i></a>
-                                </li>
                             </ul>
                         </div>
                     </article>

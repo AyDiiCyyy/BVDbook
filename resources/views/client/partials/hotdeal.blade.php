@@ -56,8 +56,8 @@
                                     <a href="#" class="cart-btn add-to-cart" data-id="{{ $product->id }}">Thêm
                                         vào giỏ hàng</a>
                                 </li>
-                                <li><a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a></li>
-                                <li><a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a></li>
+                                {{-- <li><a href="wishlist.html"><i class="ion-android-favorite-outline"></i></a></li>
+                                <li><a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a></li> --}}
                             </ul>
                         </div>
                     </div>

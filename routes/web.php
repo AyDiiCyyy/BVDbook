@@ -112,9 +112,12 @@ Route::middleware(['auth', 'admin.role'])->group(function () {
             Route::get('/', [OrderController::class, 'index'])->name('index');
             Route::post('/change-status', [OrderController::class, 'changeActive'])->name('changeActive');
             Route::get('/show/{id}', [OrderController::class, 'show'])->name('show');
+        });   
+        Route::prefix('comments')->as('comments.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
+            Route::get('/show/{id}', [CommentController::class, 'show'])->name('show');
+            Route::post('/{id}', [CommentController::class, 'destroy'])->name('destroy');
         });
-        Route::resource('comments', CommentController::class);  // Các route cho CRUD bình luận
-        // Route::post('comments/{id}/restore', [CommentController::class, 'restore'])->name('comments.restore'); de khoi phuc cm
     });
 });
 
@@ -184,3 +187,7 @@ Route::middleware('auth')->group(function () {
         Route::post('cancel/{id}', 'cancel')->name('cancel');
     });
 });
+
+Route::get('doi-tra-hang', function(){
+    return view('client.page.refund');
+})->name('refund');

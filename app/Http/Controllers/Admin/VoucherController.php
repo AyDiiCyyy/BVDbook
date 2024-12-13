@@ -40,7 +40,7 @@ class VoucherController extends Controller
             $query->where('status', 'expired');
         }
 
-        $data['vouchers'] = $query->orderByDesc('id')->paginate(10);
+        $data['vouchers'] = $query->whereNot('id',0)->orderByDesc('id')->paginate(10);
         $data['status'] = $status;
         $data['search'] = $search;
 

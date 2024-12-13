@@ -9,7 +9,6 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class StatsController extends Controller
 {
@@ -17,22 +16,12 @@ class StatsController extends Controller
     {
         $filter = $request->input('filter');
         $selectedDate = $request->input('date');
-        $startDate = $request->input('startDate');  // Ngày bắt đầu
-        $endDate = $request->input('endDate');  // Ngày kết thúc
+        $startDate = Carbon::parse($request->input('startDate'))->startOfDay();
+        $endDate = Carbon::parse( $request->input('endDate'))->endOfDay();
         $revenue = [];
         $labels = [];
         try {
-            if (!$filter) {
-                return response()->json([
-                    'error' => 'Bộ lọc là bắt buộc.',
-                ], 400);
-            }
             if ($filter === 'changeTime' && $startDate && $endDate) {
-                // Kiểm tra nếu ngày bắt đầu không lớn hơn ngày kết thúc và ngày kết thúc không vượt quá ngày hiện tại
-                // if (Carbon::parse($startDate)->greaterThanOrEqualTo(Carbon::parse($endDate)) || Carbon::parse($endDate)->isFuture()) {
-                //     return response()->json(['error' => 'Ngày bắt đầu không được lớn hơn ngày kết thúc và ngày kết thúc không được vượt quá ngày hiện tại.'], 400);
-                // }
-        
                 // Doanh thu theo ngày được chọn
                 $revenue = Order::select(
                     DB::raw('DATE(created_at) as day'),
@@ -44,7 +33,7 @@ class StatsController extends Controller
                     ->groupBy('day')
                     ->orderBy('day', 'asc')
                     ->get();
-        
+
                 // Kiểm tra nếu có dữ liệu
                 if ($revenue->isNotEmpty()) {
                     $labels = [];
@@ -57,19 +46,19 @@ class StatsController extends Controller
                     $revenues = [0];
                     $labels = ['Không có dữ liệu'];
                 }
-        
+
                 // Trạng thái trong khoảng thời gian
                 $ordersCount = Order::query()
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->whereIn('status', [1, 2, 5])
                     ->get()
                     ->groupBy('status');
-        
+
                 // Người dùng đăng ký trong khoảng thời gian
                 $registerUser = User::where('users.created_at', '>=', $startDate)
-                                    ->where('users.created_at', '<=', $endDate)
-                                    ->count();
-        
+                    ->where('users.created_at', '<=', $endDate)
+                    ->count();
+
                 // Top 10 sản phẩm bán chạy trong khoảng thời gian
                 $bestSellerTop10 = OrderDetail::query()
                     ->join('products', 'order_details.product_id', '=', 'products.id')
@@ -85,7 +74,7 @@ class StatsController extends Controller
                     ->orderByDesc('total_sold')
                     ->limit(10)
                     ->get();
-        
+
                 // Tỷ lệ
                 $completedOrder = Order::query()
                     ->whereBetween('created_at', [$startDate, $endDate])
@@ -95,7 +84,7 @@ class StatsController extends Controller
                     ->whereBetween('created_at', [$startDate, $endDate])
                     ->where('status', 6)
                     ->count();
-        
+
                 return response()->json([
                     'revenue' => $revenues,
                     'labels' => $labels,
@@ -106,6 +95,8 @@ class StatsController extends Controller
                     'bestSellerTop10' => $bestSellerTop10,
                     'completedOrder' => $completedOrder,
                     'cancelOrder' => $cancelOrder,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate
                 ]);
             }
             // Lọc 14 ngày
