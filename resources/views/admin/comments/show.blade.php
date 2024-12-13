@@ -3,7 +3,16 @@
 @section('content')
 <div class="container mt-4">
     <h3 class="mb-4">Danh sách bình luận</h3>
-
+    <form method="GET" action="{{ route('admin.comments.show', $product->id) }}" class="mb-4">
+        <div class="row">
+            <div class="col-md-4">
+                <input type="date" name="filter_date" class="form-control" placeholder="Chọn ngày" value="{{ request('filter_date') }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Lọc</button>
+            </div>
+        </div>
+    </form>
     <div class="card">
         <div class="card-header">
             <h4 class="mb-0"></h4>

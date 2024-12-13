@@ -17,7 +17,7 @@
                             <th scope="col">Tên sản phẩm</th>
                             <th scope="col">Số lượng bình luận</th>
                           
-                            <th scope="col">Hành động</th>
+                            <th scope="col" class="d-flex justify-content-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
