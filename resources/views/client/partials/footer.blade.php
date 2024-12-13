@@ -51,7 +51,7 @@
                             <li><a href="about.html">Giới Thiệu BVDBook </a></li>
                             <li><a href="#">Chính sách bảo mật thanh toán</a></li>
                             <li><a href="contact.html">Liên hệ </a></li>
-                            <li><a href="#">Hệ thống trung tâm - nhà sách</a></li>
+                            <li><a href="#">Hệ thống trung tâm - nhà <br> sách</a></li>
                         </ul>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                     <h4 class="footer-herading">HỖ TRỢ</h4>
                     <div class="footer-links">
                         <ul>
-                            <li><a href="#">Chính sách đổi trả - hoàn tiền</a></li>
+                            <li><a href="{{ route('refund') }}">Chính sách đổi - trả - hoàn <br> tiền</a></li>
                             <li><a href="#">Chính sách bảo hành - bồi hoàn</a></li>
                             {{-- <li><a href="#">New Products</a></li>
                             <li><a href="#">Best Sales</a></li>

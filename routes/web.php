@@ -184,3 +184,7 @@ Route::middleware('auth')->group(function () {
         Route::post('cancel/{id}', 'cancel')->name('cancel');
     });
 });
+
+Route::get('doi-tra-hang', function(){
+    return view('client.page.refund');
+})->name('refund');
