@@ -13,34 +13,22 @@
                 <table class="table table-bordered table-striped">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">User</th>
-                            <th scope="col">Sản phẩm</th>
-                            <th scope="col">Nội dung</th>
-                            <th scope="col">Hành động</th>
+                            {{-- <th scope="col">ID</th> --}}
+                            <th scope="col">Tên sản phẩm</th>
+                            <th scope="col">Số lượng bình luận</th>
+                          
+                            <th scope="col" class="d-flex justify-content-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($comments as $comment)
+                        @foreach($products as $comment)
                         <tr>
-                            <td>{{ $comment->id }}</td>
-                            <td>{{ $comment->user->name }}</td> 
-                            <td>{{ $comment->product->name }}</td> 
-                            <td>{{ $comment->content }}</td>
+                    
+                            <td><a href="{{ route('productDetail', ['slug' => $comment->slug ]) }}"> {{ $comment->name }}</a></td> 
+                            <td>{{ $comment->comments_count }} <i class="bi bi-chat-text"></i></td> 
+                        
                             <td class="d-flex justify-content-center">
-                                @if($comment->deleted_at)
-                                    <!-- Button Khôi phục -->
-                                    {{-- <form action="{{ route('admin.comments.restore', $comment->id) }}" method="POST" class="d-inline">
-                                        @csrf
-                                        <button type="submit" class="btn btn-warning btn-sm">Khôi phục</button>
-                                    </form> --}}
-                                @else
-                                    <form action="{{ route('admin.comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bình luận này?');" class="d-inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                    </form>
-                                @endif
+                             <a href="{{route('admin.comments.show', $comment->id)}}"> <button class="btn btn-success"> Xem chi tiết</button></a> 
                             </td>
                         </tr>
                         @endforeach
@@ -49,7 +37,7 @@
             </div>
 
             <div class="d-flex justify-content-center mt-4">
-                {{ $comments->links('pagination::bootstrap-5') }}
+                {{ $products->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
