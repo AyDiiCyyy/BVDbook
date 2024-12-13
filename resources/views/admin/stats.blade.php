@@ -210,7 +210,6 @@
 @endsection
 @section('js')
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js"
         integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -347,11 +346,47 @@
                     $('#toDate').show();
                 }
             });
-
             // Ngày - Tháng - Năm xử lý AJAX
             $('#dynamicInput').change(function() {
                 const filter = $('#filter').val();
                 const date = $('#dynamicInput').val();
+                const today = new Date();
+                const dateObj = new Date(date); // Chuyển đổi giá trị ngày tháng năm sang đối tượng Date
+                // Validate cho ngày
+                if (filter === 'day') {
+                    // Kiểm tra ngày không được lớn hơn ngày hiện tại
+                    if (dateObj > today) {
+                        toastr.error("Ngày không được lớn hơn ngày hiện tại!");
+                        return;
+                    }
+                } else if (filter === 'month') {
+                    // Kiểm tra tháng không được lớn hơn tháng hiện tại
+                    const currentMonth = today.getMonth() +
+                        1; // Lấy tháng hiện tại (0-11, thêm 1 để đúng tháng)
+                    const selectedMonth = new Date(date + '-01').getMonth() +
+                        1; // Cộng thêm '-01' để tạo ra một ngày hợp lệ từ 'yyyy-mm'
+                    const selectedYear = new Date(date + '-01').getFullYear(); // Lấy năm từ 'yyyy-mm'
+
+                    if (selectedYear > today.getFullYear() || (selectedYear === today.getFullYear() &&
+                            selectedMonth > currentMonth)) {
+                        toastr.error("Tháng không được lớn hơn tháng hiện tại!");
+                        return;
+                    }
+                } // Validate cho năm
+                else if (filter === 'year') {
+                    const yearInput = "/^[0-9]+$/"; // Giá trị người dùng nhập vào (ví dụ có ký tự đặc biệt)
+                    const yearRegex = /^(19\d{2}|20\d{2})$/;
+                    if (!yearRegex.test(date) && !yearInput.test(date)) {
+                        toastr.error("Vui lòng chọn năm đúng định dạng ");
+                        return;
+                    }
+
+                    // Kiểm tra năm không được lớn hơn năm hiện tại
+                    if (parseInt(date) > today.getFullYear()) {
+                        toastr.error("Năm không được lớn hơn năm hiện tại!");
+                        return;
+                    }
+                }
                 if (filter && date) {
                     $.ajax({
                         url: '{{ route('admin.statistic.getRevenue') }}',
@@ -410,23 +445,26 @@
                 const startDateObj = new Date(startDate); // Chuyển đổi startDate sang đối tượng Date
                 const endDateObj = new Date(endDate); // Chuyển đổi endDate sang đối tượng Date
                 // Kiểm tra nếu endDate lớn hơn hôm nay
-                if (endDateObj  > today) {
-                    $('#endDate').val();
+                if (endDateObj > today) {
+                    $('#endDate').val('');
                     toastr.error('Ngày kết thúc không được lớn hơn ngày hiện tại!');
                     return;
                 }
-                if (startDateObj  > today) {
-                    $('#startDate').val();
+                // Kiểm tra nếu startDate lớn hơn hôm nay
+                if (startDateObj > today) {
+                    $('#startDate').val('');
                     toastr.error('Ngày bắt đầu không được lớn hơn ngày hiện tại!');
                     return;
                 }
                 // Kiểm tra nếu startDate lớn hơn endDate
                 if (startDateObj > endDateObj) {
+                    $('#startDate').val('');
                     toastr.error('Ngày bắt đầu không được lớn hơn ngày kết thúc!');
                     return;
                 }
+        
                 if (startDate && endDate) {
-                    $.ajax({                      
+                    $.ajax({
                         url: '{{ route('admin.statistic.getRevenue') }}',
                         method: 'POST',
                         data: {
@@ -444,22 +482,24 @@
                                 updateRevenueInfo(response.revenue, filter);
                             }
                             if (response.registerUser !== undefined) {
-                                updateRegisterUser(response.registerUser,filter);
+                                updateRegisterUser(response.registerUser, filter);
                             }
                             if (response.pendingOrder !== undefined) {
                                 pendingOrder(response.pendingOrder, filter);
                             }
                             if (response.orderProcessing !== undefined) {
-                                orderProcessing(response.orderProcessing,filter);
+                                orderProcessing(response.orderProcessing, filter);
                             }
                             if (response.cancelConfirm !== undefined) {
-                                cancelConfirm(response.cancelConfirm,filter);
+                                cancelConfirm(response.cancelConfirm, filter);
                             }
                             if (response.bestSellerTop10 !== undefined) {
-                                generateBestSellerTable(response.bestSellerTop10,filter);
+                                generateBestSellerTable(response.bestSellerTop10, filter);
                             }
-                            if (response.completedOrder !== undefined && response.cancelOrder !==undefined) {
-                                rateCompletedAndCancel(response.completedOrder, response.cancelOrder,filter);
+                            if (response.completedOrder !== undefined && response
+                                .cancelOrder !== undefined) {
+                                rateCompletedAndCancel(response.completedOrder, response
+                                    .cancelOrder, filter);
                             }
                             toastr.success('Dữ liệu đã được cập nhật thành công!');
                         },
@@ -467,7 +507,7 @@
                             toastr.error('Đã xảy ra lỗi. Vui lòng thử lại.');
                         }
                     });
-                } 
+                }
             });
         });
         // Top 10 Best Seller
