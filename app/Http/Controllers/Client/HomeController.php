@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\CategoryProduct;
 use App\Models\Comment;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -62,8 +63,9 @@ class HomeController extends Controller
                     break;
             }
         }
+        $totalProducts = $productsSortBy->count();
         $products = $productsSortBy->paginate(self::PAGINATION);
-        return view('client.page.productCategory', compact('category', 'products', 'sortBy', 'slug'));
+        return view('client.page.productCategory', compact('category', 'products', 'sortBy', 'slug','totalProducts'));
     }
 
     public function index()
@@ -101,10 +103,11 @@ class HomeController extends Controller
         //danh mục phổ biến
         $categories = Category::query()
             ->select('categories.*', DB::raw('COUNT(category_products.product_id) as product_count'))
+            ->where('status', 1)
             ->leftJoin('category_products', 'categories.id', '=', 'category_products.category_id')
             ->groupBy('categories.id')
             ->orderByDesc('product_count')
-            ->limit(5)
+            ->limit(6)
             ->get();
         $categories = $categories->chunk(2);
 
@@ -196,5 +199,29 @@ class HomeController extends Controller
 
     return response()->json(['message' => 'Có lỗi xảy ra.'], 400);
 }
+
+
+    public function search (Request $request){
+        $idCate= Category::where('slug',$request->category)->pluck('id')->first();
+        $products = Product::query();
+        if ($idCate) {
+            $products->whereHas('productCategories', function ($query) use ($idCate) {
+                $query->where('category_id', $idCate);
+            });
+        }
+        if($request->keyw){
+            $products = $products->where('name', 'LIKE', '%' . $request->keyw . '%');
+        }
+        $totalProducts = $products->where('active',1)->count();
+        $products = $products->paginate(8);
+        if($request->category){
+            $products = $products -> appends('category', $request->category);
+        }
+        if($request->keyw){
+            $products = $products -> appends('keyw', $request->keyw);
+        }
+
+        return view('client.page.productCategory',compact('products','totalProducts','request'));
+    }
 
 }

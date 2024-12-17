@@ -28,7 +28,7 @@
                 </div>
                 <div class="desc-listcategoreis">
                     <div class="name_categories">
-                        <h4>{{$item->name}}</h4>
+                        <h4 style="font-size: 15px">{{ Str::limit($item->name, 14, '...') }}</h4>
                     </div>
                     <span class="number_product">{{$item->product_count}} sản phẩm</span>
                     <a href="{{ route('danhmucSanpham', ['slug'=>$item->slug]) }}"> Mua ngay <i

@@ -138,7 +138,7 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Phương thức thanh toán:</td>
-                                                        <td><strong>{{ $order->payment == 1 ? 'Ship COD' : 'Thanh toán online' }}</strong>
+                                                        <td><strong>{{ $order->payment == 0 ? 'Ship COD' : 'Thanh toán online' }}</strong>
                                                         </td>
                                                     </tr>
                                                 </tbody>

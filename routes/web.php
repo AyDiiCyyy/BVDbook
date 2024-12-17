@@ -191,3 +191,5 @@ Route::middleware('auth')->group(function () {
 Route::get('doi-tra-hang', function(){
     return view('client.page.refund');
 })->name('refund');
+
+Route::get('search',[HomeController::class, 'search'])->name('search');

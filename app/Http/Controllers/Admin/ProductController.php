@@ -194,7 +194,7 @@ class ProductController extends Controller
                 'slug' => $request->slug,
                 'sku' => $request->sku,
                 'price' => $request->price,
-                'sale' => $request->sale ?? null,
+                'sale' => ($request->sale == 0) ? null : ($request->sale ?? null),
                 'short_description' => $request->short_description ?? '',
                 'long_description' => $request->long_description ?? '',
                 'author' => $request->author,

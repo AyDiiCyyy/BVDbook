@@ -195,7 +195,7 @@
                                 <div class="single-review">
                                     <div class="review-img">
                                         <img class="rounded-circle"
-                                            src="{{ $comment->user->avatar ?? asset('assets/img/user2-160x160.jpg') }} "
+                                            src="{{  $comment->user->avatar ? asset('storage/'.$comment->user->avatar) : asset('assets/img/user2-160x160.jpg') }} "
                                             alt="" width="100" height="100" />
                                     </div>
                                     <div class="review-content">
@@ -629,12 +629,15 @@
                         const userName = response.user_name;
                         const userAvatar = response.user_avatar;
                         const createdAt = response.created_at;
+                        const avatarSrc = userAvatar ? 
+            `{{ asset('storage/') }}/${userAvatar}` : 
+            `{{ asset('assets/img/user2-160x160.jpg') }}`;
 
                         // Thêm bình luận mới vào danh sách bình luận
                         $('#review-wrapper').prepend(`
                     <div class="single-review">
                         <div class="review-img">
-                            <img class="rounded-circle" src="${userAvatar}" alt="" width="100" height="100" />
+                             <img class="rounded-circle" src="${avatarSrc}" alt="" width="100" height="100" />
                         </div>
                         <div class="review-content">
                             <div class="review-top-wrap">
