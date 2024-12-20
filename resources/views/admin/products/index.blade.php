@@ -22,7 +22,7 @@
             <div class="container-fluid"> <!--begin::Row-->
                 <div class="row">
                     <div class="col-sm-6">
-                        <h3 class="mb-0">Table</h3>
+                        <h3 class="mb-0">Sản phẩm</h3>
                     </div>
 
                 </div> <!--end::Row-->

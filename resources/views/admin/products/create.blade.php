@@ -60,7 +60,7 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label">Slug</label>
+                                            <label class="form-label">Đường dẫn</label>
                                             <input type="text" class="form-control" name="slug" id="convert_slug"
                                                 value="{{ old('slug') }}">
                                             @error('slug')

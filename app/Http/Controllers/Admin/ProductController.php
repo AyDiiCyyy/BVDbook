@@ -65,6 +65,7 @@ class ProductController extends Controller
                 break;
             case 'price_asc':
                 $products = $products->orderBy('price', 'asc');
+                // từ bé đến lớn
                 break;
             case 'price_desc':
                 $products = $products->orderBy('price', 'desc');
@@ -194,7 +195,7 @@ class ProductController extends Controller
                 'slug' => $request->slug,
                 'sku' => $request->sku,
                 'price' => $request->price,
-                'sale' => $request->sale ?? null,
+                'sale' => ($request->sale == 0) ? null : ($request->sale ?? null),
                 'short_description' => $request->short_description ?? '',
                 'long_description' => $request->long_description ?? '',
                 'author' => $request->author,

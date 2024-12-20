@@ -8,10 +8,11 @@
                     <a class="active" data-bs-toggle="tab">
                         <i class="fa fa-th show_grid"></i>
                     </a>
-                    <p>Có {{ $category->CategoryProducts->count() }} sản phẩm</p>
+                    <p>Có {{ $totalProducts }} sản phẩm</p>
                 </div>
                 <!-- Left Side End -->
                 <!-- Right Side Start -->
+                @if ($slug??false)
                 <div class="select-shoing-wrap">
                     <div class="shot-product">
                         <p>Sắp Xếp Theo:</p>
@@ -26,11 +27,12 @@
                                 <option value="created_desc" @selected($sortBy == 'created_desc')>Mới nhất</option>
                                 <option value="created_asc" @selected($sortBy == 'created_asc')>Cũ nhất</option>
                                 <option value="discount_desc" @selected($sortBy == 'discount_desc')>Giảm giá nhiều nhất</option>
-                                <option value="popular" @selected($sortBy == 'popular')>Bán chạy nhất</option>
+                                {{-- <option value="popular" @selected($sortBy == 'popular')>Bán chạy nhất</option> --}}
                             </select>
                         </form>
                     </div>
                 </div>
+                @endif
                 <!-- Right Side End -->
             </div>
             <!-- Shop Top Area End -->
@@ -86,13 +88,13 @@
                                                 <li class="cart"><a class="cart-btn add-to-cart"
                                                         data-id="{{ $product->id }}" href="#">Thêm vào giỏ hàng
                                                     </a></li>
-                                                <li>
+                                                {{-- <li>
                                                     <a href="wishlist.html"><i
                                                             class="ion-android-favorite-outline"></i></a>
                                                 </li>
                                                 <li>
                                                     <a href="compare.html"><i class="ion-ios-shuffle-strong"></i></a>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </article>

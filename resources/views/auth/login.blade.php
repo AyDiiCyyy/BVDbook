@@ -51,6 +51,14 @@
 					</div>
 				</div>
                 <div class="fxt-form">
+                    @if(Session::has('message'))
+    <div class="alert alert-success">
+        {{ Session::get('message') }}
+        @php
+            Session::forget('message');
+        @endphp
+    </div>
+@endif
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
                         <div class="form-group fxt-transformY-50 fxt-transition-delay-1">
